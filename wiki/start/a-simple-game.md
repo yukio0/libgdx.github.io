@@ -217,7 +217,7 @@ For each of our assets we have a field in the `Drop` class so we can later refer
 
 Next we load the sound effect and the background music. libGDX differentiates between sound effects, which are stored in memory, and music, which is streamed from wherever it is stored. Music is usually too big to be kept in memory completely, hence the differentiation. As a rule of thumb, you should use a `Sound` instance if your sample is shorter than 10 seconds, and a `Music` instance for longer audio pieces.
 
-**Note:** libGDX supports MP3, OGG and WAV files. Which format you should use, depends on your specific needs, as each format has its own advantages and disadvantages. For example, WAV files are quite large compared to other formats, OGG files don’t work on RoboVM (iOS) nor with Safari (GWT), and MP3 files have issues with seemless looping.
+**Note:** libGDX supports MP3, OGG and WAV files. Which format you should use, depends on your specific needs, as each format has its own advantages and disadvantages. For example, WAV files are quite large compared to other formats, OGG files don’t work on RoboVM (iOS) nor with Safari (GWT), and MP3 files have issues with seamless looping.
 {: .notice--primary}
 
 Loading of a `Sound` or `Music` instance is done via `Gdx.audio.newSound()` and `Gdx.audio.newMusic()`. Both of these methods take a `FileHandle`, just like the `Texture` constructor.
