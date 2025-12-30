@@ -1,54 +1,54 @@
 ---
-title: "Set Up a Dev Env"
-description: "Before you can get your first libGDX project up and running, you need to set up your development environment. The first step in doing this is choosing an IDE: Android Studio, IntelliJ IDEA or Eclipse are among the most common choices for this."
+title: "開発環境の構築"
+description: "最初のlibGDXプロジェクトを立ち上げる前に、開発環境を構築する必要があります。最初のステップはIDEを選ぶことです。多くの人が選ぶIDEとしては、Android Studio、IntelliJ IDEA、Eclipseが挙げられます。"
 redirect_from:
   - /dev/setup/
 ---
 
-If this is your first time using libGDX, you're at the right place. The following steps detail how you can get your first libGDX project up and running.
+libGDXを初めて使う人は、まさにこのページが最適です。以下の手順では、最初のlibGDXプロジェクトを立ち上げる方法を説明します。
 
 {% include setup_flowchart.html current='0' %}
 
-Before you can get started with libGDX, you need to set up an IDE (Integrated Development Environment). It is basically an editor for your Java files, which makes developing Java applications considerably more convenient in various ways. **If you already have an IDE installed, you can skip to the next [step](/wiki/start/project-generation).**
+libGDXを始める前に、まずIDE（統合開発環境）を準備する必要があります。IDEとは、Javaファイルを編集するためのエディタで、Javaアプリケーション開発をさまざまな面で非常に便利にしてくれます。**すでにIDEをインストールしている場合は、次の[ステップ](/wiki/start/project-generation)に進んでください。**
 
-The Java world offers a lot of different IDEs. All of them will have minor advantages and disadvantages, but in the end they all do their job, so feel free to choose whichever you like most.
+Javaの世界には多くのIDEがあります。それぞれに小さな長所・短所はありますが、最終的にはどれも開発の役割を果たすので、好きなものを選んでください。
 
 ## (1.) Android Studio
-For newcomers wanting to not only target desktop, but mobile platforms as well, **we recommend Android Studio**.
+デスクトップだけでなくモバイルもターゲットにしたい初心者には、**Android Studioがおすすめです**。
 {: .notice--info}
 
-- JDK: is provided by Android Studio
-- IDE itself: [Android Studio](https://developer.android.com/studio)
-- Android: is offered out-of-the-box
-- For iOS: [RoboVM OSS IntelliJ plugin](https://mobivm.github.io)
+- JDK: Android Studioに同梱
+- IDE: [Android Studio](https://developer.android.com/studio)
+- Android対応: 標準でサポート
+- iOS対応: [RoboVM OSS IntelliJプラグイン](https://mobivm.github.io)
 
 ## (2.) IDEA
-- JDK 17 or 21: there are different distributions, but [Adoptium](https://adoptium.net/) should fit your needs
-- IDE itself: [IntelliJ IDEA](https://www.jetbrains.com/idea/download/) (the "Community" edition is sufficient)
-- For Android: [Android SDK](https://developer.android.com/tools/releases/platform-tools)
-- For iOS: [RoboVM OSS IntelliJ plugin](https://mobivm.github.io)
+- JDK 17または21: いくつかディストリビューションがありますが、[Adoptium](https://adoptium.net/)をおすすめします。
+- IDE: [IntelliJ IDEA](https://www.jetbrains.com/idea/download/) （Community版で十分です）
+- Android対応: [Android SDK](https://developer.android.com/tools/releases/platform-tools)
+- iOS対応: [RoboVM OSS IntelliJプラグイン](https://mobivm.github.io)
 
 ## (3.) Eclipse
-- JDK 17 or 21: there are different distributions, but [Adoptium](https://adoptium.net/) should fit your needs
-- IDE itself: [Eclipse](https://www.eclipse.org/downloads/)
-- Android: not officially supported, but you may have success with [Andmore](https://projects.eclipse.org/projects/tools.andmore) or tinkering around with an older [ADT](https://marketplace.eclipse.org/content/android-development-tools-eclipse) version
-- For iOS: [RoboVM OSS Eclipse plugin](https://mobivm.github.io)
+- JDK 17または21: いくつかディストリビューションがありますが、[Adoptium](https://adoptium.net/)をおすすめします。
+- IDE: [Eclipse](https://www.eclipse.org/downloads/)
+- Android対応: 公式にはサポートされていませんが、[Andmore](https://projects.eclipse.org/projects/tools.andmore)を使うか、古いバージョンの[ADT](https://marketplace.eclipse.org/content/android-development-tools-eclipse)を試してみるとうまくいくかもしれません。
+- iOS対応: [RoboVM OSS Eclipseプラグイン](https://mobivm.github.io)
 
 ## (4.) Other IDEs
-Of course, you can also use any other IDE for Java, e.g. NetBeans or Visual Studio Code. However, as those are not commonly used in the libGDX community, it may prove difficult to get any help if IDE-specific issues arise!
+もちろん、NetBeansなどのJava用IDEやVisual Studio Codeなどを使うこともできます。ただし、libGDXコミュニティではあまり一般的でないため、IDE固有の問題が発生した場合はサポートを受けにくいかもしれません！
 {: .notice--info}
-- [NetBeans](https://netbeans.apache.org/download/index.html) requires the NetBeans Gradle Plugin; Android and iOS are not officially supported
-- Visual Studio Code requires extensions to support Java; see the [Coding Pack for Java](https://code.visualstudio.com/docs/java/java-tutorial#_coding-pack-for-java); Android and iOS are not officially supported
-- AIDE only supports Android development on devices running Android 10 or older; libGDX's JAR files can be found [here](https://repo1.maven.org/maven2/com/badlogicgames/gdx/)
+- [NetBeans](https://netbeans.apache.org/download/index.html)はNetBeans Gradleプラグインが必要。AndroidおよびiOSは公式サポートされていません。
+- Visual Studio CodeはJava対応の拡張が必要です。[Coding Pack for Java](https://code.visualstudio.com/docs/java/java-tutorial#_coding-pack-for-java)を参照してください。AndroidおよびiOSは公式サポートされていません。
+- AIDEはAndroid 10以前の端末でのAndroid開発のみ対応しています。libGDXのJARファイルは[こちら](https://repo1.maven.org/maven2/com/badlogicgames/gdx/)から入手可能です。
 
-## (5.) No IDE
-It is also possible to develop libGDX applications entirely without any IDE, just using a simple editor like Notepad or [Vim](https://www.vim.org). This is **not** recommended, because IDEs provide some very convenient features, such as code completion and error checking. However, if you insist on doing so: libGDX applications are Gradle applications, so they can be built and executed via the command line.
+## (5.) IDEを使わない場合
+IDEをまったく使わず、Notepadや[Vim](https://www.vim.org)のようなシンプルなエディタだけでlibGDXアプリを開発することも可能です。しかし、IDEはコード補完やエラーチェックなど非常に便利な機能を提供するため、IDEを使わないことは推奨**しません**。どうしてもIDEを使わずに開発したい場合には、libGDXアプリはGradleプロジェクトなので、コマンドラインでビルドや実行が可能です。
 {: .notice--info}
 
-- JDK 17 or 21: there are different distributions, but [Adoptium](https://adoptium.net/) should fit your needs
-- For Android: [Android SDK](https://developer.android.com/tools/releases/platform-tools)
-- Set the ANDROID_HOME environment variable, or use gradle.properties
+- JDK 17または21: いくつかディストリビューションがありますが、[Adoptium](https://adoptium.net/)をおすすめします。
+- Android対応: [Android SDK](https://developer.android.com/tools/releases/platform-tools)
+- ANDROID_HOME環境変数を設定するか、gradle.propertiesを利用してください。
 
 <br/>
 
-**Now that you have a development environment, you can create your very first libGDX project. libGDX offers a setup tool for that, which generates all the necessary files. To get started with it, take a look [here](/wiki/start/project-generation).**
+**これで開発環境が準備できたので、最初のlibGDXプロジェクトを作成できます。libGDXにはプロジェクト生成ツールが用意されており、必要なファイルを自動で作成してくれます。使い方は[こちら](/wiki/start/project-generation)をご覧ください。**
