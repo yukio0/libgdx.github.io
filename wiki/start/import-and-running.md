@@ -1,20 +1,20 @@
 ---
-title: "Importing & Running a Project"
-description: "There are a number of steps involved in importing your libGDX project into the IDE of your choice."
+title: "プロジェクトのインポートと実行"
+description: "libGDXプロジェクトを使用するIDEにインポートするには、いくつかの手順があります。"
 redirect_from:
   - /dev/import-and-running/
   - /dev/import_and_running/
 ---
 
-Next up, you need to import your project into your IDE.
+次に、プロジェクトをIDEにインポートする必要があります。
 
 {% include setup_flowchart.html current='2' %}
 
 
-# Importing the Project
-If you have just generated the project in gdx-liftoff, you may click the option "Open in IntelliJ Idea" to get started right away. Otherwise, continue with the following steps:
+# プロジェクトのインポート
+gdx-liftoff でプロジェクトを生成した直後であれば、「Open in IntelliJ Idea」というオプションをクリックするだけで、すぐに作業を始められます。そうでない場合は、以下の手順に従ってください:
 
-1. In **IntelliJ IDEA or Android Studio**, you can choose to open the `build.gradle` file and select "Open as Project" to get started.
+1. **IntelliJ IDEA または Android Studio**では、`build.gradle`ファイルを開き、「Open as Project」を選択します。
 
    In **Eclipse**, choose `File -> Import... -> Gradle -> Existing Gradle Project` (make sure that your freshly generated project is not located inside of your workspace AND you don't have another project in your workspace with the same name).
 
