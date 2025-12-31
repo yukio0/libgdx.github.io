@@ -40,45 +40,45 @@ gdx-liftoff でプロジェクトを生成した直後であれば、「Open in 
   ![](/assets/images/dev/idea/4.png)
    {: .notice--primary}
 
-<b>Alternatively</b>, you can create a run configuration:
-1. Right-click your Lwjgl3Launcher class
-2. Select 'Run Lwjgl3Launcher.main()'. This should fail with missing assets, because we need to hook up the assets folder first:<br/>
+<b>別の方法として</b>、実行構成を作成することも出来ます:
+1. Lwjgl3Launcherクラスを右クリックしてください。
+2. Run Lwjgl3Launcher.main()を選択してください。ただし、アセットが未設定のため失敗します。そのため、アセットフォルダをまず設定します。:<br/>
   ![](/assets/images/dev/idea/5.png)
-3. Open up Run Configurations:<br/>
+3. 実行構成（Run Configuration）を開いてください:<br/>
   ![](/assets/images/dev/idea/0.png)
-4. Edit the Run Configuration that was just created by running the lwjgl3 project and set the working directory to point to your `assets` folder:<br/>
+4. lwjgl3プロジェクトを実行した際に自動作成された実行構成を編集し、作業ディレクトリ（Working Directory）を`assets`フォルダに設定してください。:<br/>
   ![](/assets/images/dev/idea/1.png)
 
-    On **macOS**, LWJGL3 projects require one extra step: Either, in your Run Configuration, set the VM Options to `-XstartOnFirstThread`. Or, add the following experimental line to the start of your `main()` method: `Lwjgl3ApplicationConfiguration.useGlfwAsync();` Additional information on this can be found [here](/news/2021/07/devlog-7-lwjgl3#do-i-need-to-do-anything-else).
+    **macOS**では、LWJGL3 プロジェクトに 追加の手順が 1 つ必要です。次のいずれかを行ってください。実行構成のVM Optionsに`-XstartOnFirstThread`を設定する、もしくは`main()`メソッドの先頭に次の実験的なコード行を追加してください。`Lwjgl3ApplicationConfiguration.useGlfwAsync();`これらについての追加情報は、[こちら](/news/2021/07/devlog-7-lwjgl3#do-i-need-to-do-anything-else)にあります。
     {: .notice--warning}
-5. Run your application using the run button
+5. 実行ボタンを押して、アプリを実行してください。
 
-### In Eclipse:
+### Eclipse:
 
-1. Double click the `projectname-lwjgl3 -> application -> run` task under `Gradle Tasks`.
+1. `Gradle Tasks`から`projectname-lwjgl3 -> application -> run`をダブルクリックします。
   ![](/assets/images/dev/eclipse/4.png)
 
-    If the window is not visible, show it under `Window -> Show View -> Other -> Gradle -> Gradle Tasks` 
+    ウィンドウが表示されない場合、`Window -> Show View -> Other -> Gradle -> Gradle Tasks`から表示してください。
     {: .notice--warning}
 
-<b>Alternatively</b>, you can create a run configuration:
-1. Right-click your lwjgl3 project -> Run as -> Run Configurations...
-2. On the right side, select Java Application: <br/>
+<b>別の方法として</b>、実行構成を作成することも出来ます:
+1. lwjgl3プロジェクトを右クリックし、`Run as -> Run Configurations...`をクリックしてください。
+2. 右側のJava Applicationを選択してください。<br/>
   ![](/assets/images/dev/eclipse/3.png)
-3. At the top left, click the icon to create a new run configuration:
+3. 左上のアイコンをクリックして、新しい実行構成を作成します。
   ![](/assets/images/dev/eclipse/0.png)
-4. As Main class select your `Lwjgl3Launcher` class
-5. After that, click on the Arguments tab
-6. At the bottom, under 'Working directory' select 'Other' -> Workspace...
+4. `Lwjgl3Launcher`クラスをメインクラスとして指定してください。
+5. Argumentsタブをクリックしてください。
+6. 下部にあるにある'Working directory'で'Other' -> Workspace...を選択してください。
   ![](/assets/images/dev/eclipse/1.png)
 
-   On **macOS**, LWJGL3 projects require one extra step: Either, in your Run Configuration, set the VM Options to `-XstartOnFirstThread`. Or, add the following experimental code snippet to your `main()` method: `Lwjgl3ApplicationConfiguration.useGlfwAsync();` Additional information on this can be found [here](/news/2021/07/devlog-7-lwjgl3#do-i-need-to-do-anything-else).
+   **macOS**では、LWJGL3 プロジェクトに 追加の手順が 1 つ必要です。次のいずれかを行ってください。実行構成のVM Optionsに`-XstartOnFirstThread`を設定する、もしくは`main()`メソッドの先頭に次の実験的なコード行を追加してください。`Lwjgl3ApplicationConfiguration.useGlfwAsync();`これらについての追加情報は、[こちら](/news/2021/07/devlog-7-lwjgl3#do-i-need-to-do-anything-else)にあります。
    {: .notice--warning}
 
-7. Then select your asset folder located in `assets`
+7. その後、`assets`内にあるアセットフォルダを選択してください。
 
-### In NetBeans:
-Right-click the lwjgl3 project -> Run
+### NetBeans:
+lwjgl3プロジェクトを右クリックし、Runをクリックしてください。
 
 <br/>
 
