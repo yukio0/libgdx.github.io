@@ -16,27 +16,27 @@ gdx-liftoff でプロジェクトを生成した直後であれば、「Open in 
 
 1. **IntelliJ IDEA または Android Studio**では、`build.gradle`ファイルを開き、「Open as Project」を選択します。
 
-   In **Eclipse**, choose `File -> Import... -> Gradle -> Existing Gradle Project` (make sure that your freshly generated project is not located inside of your workspace AND you don't have another project in your workspace with the same name).
+   **Eclipse**では、`File -> Import... -> Gradle -> Existing Gradle Project`を選択します（生成したプロジェクトが *workspace 内に存在しない* こと、また *同名のプロジェクトが workspace に存在しない* ことを確認してください）。
 
-   In **NetBeans** it is `File -> Open Project`.
+   **NetBeans**では、`File -> Open Project`を選択してください。
 
-2. You may need to refresh the Gradle project after the initial import if some dependencies weren't downloaded yet.
+2. 初回インポート時に依存関係がまだダウンロードされていない場合は、Gradle プロジェクトを更新してください。
 
-   In **IntelliJ IDEA/Android Studio**, the `Reimport all Gradle projects` button is a pair of circling arrows at the top left in the Gradle tool window, which can be opened with `View -> Tool Windows -> Gradle`.
+   **IntelliJ IDEA/Android Studio**では、`Reimport all Gradle projects`を開き、左上の`View -> Tool Windows -> Gradle`（循環する矢印）をクリックします。
 
-   In **Eclipse** right-click on your project `Gradle -> Refresh Gradle Project`.
+   **Eclipse**では、プロジェクトを右クリックし、`Gradle -> Refresh Gradle Project`を選択してください。
 
 <br/>
 
-# Getting it Running
-If you want to execute your freshly imported project, you have to follow different steps, depending on your IDE and the platform you are targeting.
-## Desktop
-### In IDEA/Android Studio:
-1. Extend the Gradle tab on the right side of your window.<br/>
-2. Expand the tasks of your project and then select: `lwjgl3 -> Tasks -> application -> run`:<br/>
+# 実行方法
+新しくインポートしたプロジェクトを実行するには、IDEとターゲットプラットフォームによって異なる手順を踏む必要があります。
+## デスクトップ
+### IDEA/Android Studio:
+1. 画面右側のGradleタブを開く。<br/>
+2. プロジェクトのタスクを展開し、`lwjgl3 -> Tasks -> application -> run`を選択してください。<br/>
   ![](/assets/images/dev/idea/3.png)
 
-   **In Android Studio 4.2**, tasks are no longer shown by default. Go to `Settings -> Experimental` and check `Configure all Gradle tasks during Gradle Sync`. Then sync the project via `File -> Sync Project with Gradle Files`:<br/>
+   **Android Studio 4.2**では、タスクがデフォルトでは表示されなくなりました。`Settings -> Experimental`から`Configure all Gradle tasks during Gradle Sync`にチェックを入れてください。その後、`File -> Sync Project with Gradle Files`からプロジェクトを同期します。:<br/>
   ![](/assets/images/dev/idea/4.png)
    {: .notice--primary}
 
