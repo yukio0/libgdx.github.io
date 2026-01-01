@@ -1,52 +1,54 @@
 ---
-title: "A Simple Game"
+title: "シンプルなゲーム"
 redirect_from:
   - /dev/simple-game/
   - /dev/simple_game/
 ---
 
-Let's make a game! Game design is hard, but if you break up the process into small, achievable goals, you'll be able to produce wonders. In this simple game tutorial, you will learn how to make a basic game from scratch. These are the essential skills that you will build on in future projects. You may watch the [video tutorial](https://youtu.be/aipDYyh1Mlc), however you should come back here for the code examples.
+ゲームを作ってみましょう！ゲームデザインは難しいものですが、作業の流れを小さく達成可能な目標に分解すれば、すばらしいものを生み出すことができます。このシンプルなゲームのチュートリアルでは、ゼロから基本的なゲームを作る方法を学びます。ここで身に付けるスキルは、今後のプロジェクトで土台となる重要なものです。[動画チュートリアル](https://youtu.be/aipDYyh1Mlc)を見ることもできますが、コード例についてはここに戻って確認してください。
 
 {% include embed-gwt.html dir='a-simple-game' width="800" height="500" %}
 
-As you can see with the live demo, we're going to make a basic game where you control a bucket to collect water droplets falling from the sky. There is no score or end goal. Just enjoy the experience! Here are the steps that we will use to split up the game design process:
+デモを見ると分かるように、空から落ちてくる水滴をバケツで集める、非常に基本的なゲームを作ります。スコアもゴールもありません。ただ体験を楽しんでください！ゲームデザインの工程を分割するために、以下の手順で進めていきます。
 
-  * [Prerequisites](#prerequisites)
-  * [Loading Assets](#loading-assets)
-  * [The Game Life Cycle](#the-game-life-cycle)
-  * [Rendering](#rendering)
-  * [Input Controls](#input-controls)
-  * [Game Logic](#game-logic)
-  * [Sound and Music](#sound-and-music)
-  * [Further Learning](#further-learning)
-  * [Full Example Code](#full-example-code)
+- [前提条件](#前提条件)
+- [アセットの読み込み](#アセットの読み込み)
+- [ゲームのライフサイクル](#ゲームのライフサイクル)
+- [レンダリング](#レンダリング)
+- [入力操作](#入力操作)
+  - [キーボード操作](#キーボード操作)
+  - [マウス、タッチ操作](#マウスタッチ操作)
+- [ゲームロジック](#ゲームロジック)
+- [効果音と音楽](#効果音と音楽)
+- [さらに学ぶには](#さらに学ぶには)
+- [完全なサンプルコード](#完全なサンプルコード)
 
-## Prerequisites
-There are a few things that you need to do before you begin this tutorial.
+## 前提条件
+このチュートリアルを始める前に、いくつか準備が必要です。
 
-  * Make sure to follow the [setup instructions](/wiki/start/setup) on libgdx.com to configure Java and your IDE. You need to know how to create a project and run it with the appropriate Gradle commands.
-  * Create a project in GDX-Liftoff with the following settings:
+  * [構築手順](/wiki/start/setup)に従い、JavaとIDEを準備してください。プロジェクトの作成方法と、適切なGradleコマンドでプロジェクトを実行する方法を理解している必要があります。
+  * GDX-Liftoffで、次の設定のプロジェクトを作成してください。
     * Project Name: Drop
     * Package: com.badlogic.drop
     * Main Class: Main
-  * Include the Core and Desktop platforms. You may include others, however they will not be discussed in this tutorial. Choosing other platforms at this stage can introduce new issues you are not prepared for.
-  * Use the ApplicationListener template
+  * CoreとDesktopプラットフォームを含めてください。他のプラットフォームを含めることもできますが、このチュートリアルでは扱いません。この段階で他のプラットフォームを選択すると、予期せぬ新たな問題が発生する可能性があります。
+  * ApplicationListenerテンプレートを使用してください。
 
-Open the project in your chosen IDE. If you have a knowledge of Java code, your experience in libGDX will be a lot easier. However, you should still be able to follow along in this tutorial even if you only have a minimal understanding of how code works.
+IDEでプロジェクトを開いてください。Javaコードの知識があれば、libGDXの学習がずっと楽になります。ただし、コードの仕組みを最低限しか理解していなくても、このチュートリアルを進めることはできます。
 
-Comments will be used throughout the code examples to explain the facets of this tutorial. You do not have to copy these comments when writing your code:
-
-```java
-// This is a comment. It will be ignored by the compiler.
-```
-
-However, it is good practice to make your own comments to explain confusing code or to label parts of your design.
+コード例の中では、チュートリアルの各要素を説明するためにコメントを使用します。コードを書く際に、これらのコメントを必ずしもコピーする必要はありません。
 
 ```java
-// Restrict bucket movement to the width of the viewport.
+// これはコメントです。コンパイラには無視されます。
 ```
 
-Import statements are an important part of Java programming. Thankfully, they are automatically added by modern IDE's as you type your code. They are omitted in the examples, but assume they are necessary in your code. They appear at the top of the file under the package statement.
+ただし、分かりにくいコードを説明したり、設計の区切りを示すために、自分でコメントを書くことは良い習慣です。
+
+```java
+// バケットの移動をビューポートの幅に制限します。
+```
+
+import文はJavaプログラミングにおいて重要な要素です。幸い、最近のIDEではコードを入力している途中で自動的に追加されます。例では省略していますが、実際のコードでは必要になることを前提としています。import文は package文の下、ファイルの先頭に記述されます。
 
 ```java
 import com.badlogic.gdx.ApplicationListener;
@@ -57,17 +59,17 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 ```
 
-There are times where something named in libGDX is named the same as something found in another package. As you type `Rectangle` in IDEA, for example, it will prompt you to press alt+enter to autocomplete the import. Always opt for the libGDX named class in the subsequent menu. These are usually in the package `com.badlogic.gdx`
+libGDX には、他のパッケージに存在するクラスと同じ名前のクラスが存在することがあります。例えば、IDEAで`Rectangle`と入力すると、alt+enterを押してimport文を補完するよう促されます。その際は、libGDXの名前を持つクラスを選択してください。多くの場合、パッケージ名は`com.badlogic.gdx`です。
 
 ![libGDX Rectangle class](/assets/images/dev/a-simple-game/1.png)
 
-Decimal numbers in OpenGL based games (like those made with libGDX) are usually described with floating point variables like `22.5f`. Forgetting the "f" can cause build errors. `float` is preferred over `double` (such as `22.5`) because it uses less memory, it's what's supported by most hardware, and it's what OpenGL usually expects. You can check what parameters a method expects by pressing `ctrl+p` in IDEA.
+OpenGLベースのゲーム（libGDX で作られたものなど）では、小数は通常`22.5f`のような浮動小数点数で表現されます。「f」を付け忘れるとビルドエラーになることがあります。`float`が`double`（例：`22.5`）より推奨されるのは、メモリ使用量が少なく、多くのハードウェアでサポートされ、OpenGLが通常`float`を期待するためです。IDEAでは、`ctrl+p`を押すことで、メソッドが期待する引数を確認できます。
 
 ![method parameters](/assets/images/dev/a-simple-game/2.png)
 
-Whenever you see ellipses `...` in the code examples below, assume that other code has been removed for brevity. Use the context of the lines you can see to figure out where you should be in the file. If you're completely lost, the complete example is listed at the bottom.
+コード例中に三点リーダー`...`が表示されている場合、説明を簡潔にするために他のコードが省略されていると考えてください。表示されている行の前後関係から、ファイル内の位置を判断してください。どうしても分からなくなった場合は、ページ下部に完全なサンプルコードがあります。
 
-Before we can test our game, we should set the size of the desktop window. Any configuration that needs to happen for the desktop version of your game needs to be set in the LWJGL3Launcher class. Find this file in the project folder:
+ゲームをテストする前に、デスクトップウィンドウのサイズを設定します。デスクトップ版の設定はすべて LWJGL3Launcherクラスで行います。プロジェクトフォルダ内で次のファイルを探してください。
 
 ![Lwjgl3Launcher](/assets/images/dev/a-simple-game/3.png)
 
@@ -79,15 +81,15 @@ private static Lwjgl3ApplicationConfiguration getDefaultConfiguration() {
     configuration.setTitle("Drop");
     configuration.useVsync(true);
     configuration.setForegroundFPS(Lwjgl3ApplicationConfiguration.getDisplayMode().refreshRate + 1);
-    configuration.setWindowedMode(800, 500); // this line changes the size of the window
+    configuration.setWindowedMode(800, 500); // この行でウィンドウのサイズを変更します。
     configuration.setWindowIcon("libgdx128.png", "libgdx64.png", "libgdx32.png", "libgdx16.png");
 
     return configuration;
 }
 ```
 
-## Loading Assets
-2D games made in libGDX need assets: images, audio, and other resources that comprise the project. In this case, we'll need a bucket, a raindrop, a background, a water drop sound effect, and music. If you're pretty resourceful, you can make these on your own. For simplicity's sake, you can download these examples which are optimized for this tutorial.
+## アセットの読み込み
+libGDXで作る2Dゲームには、プロジェクトを構成する画像、音声などのアセットが必要です。このゲームでは、バケツ、雨粒、背景、水滴が落ちる効果音、音楽が必要になります。とても器用な人であれば、自分で用意することもできますが、簡単のため、このチュートリアル用に最適化されたサンプルをダウンロードすることもできます。
 
 <a href="/assets/downloads/tutorials/simple-game/bucket.png?nomagnify" download="bucket.png">bucket.png</a><br>
 <a href="/assets/downloads/tutorials/simple-game/drop.png?nomagnify" download="drop.png">drop.png</a><br>
@@ -95,19 +97,19 @@ private static Lwjgl3ApplicationConfiguration getDefaultConfiguration() {
 <a href="/assets/downloads/tutorials/simple-game/drop.mp3?nomagnify" download="drop.mp3">drop.mp3</a><br>
 <a href="/assets/downloads/tutorials/simple-game/music.mp3?nomagnify" download="music.mp3">music.mp3</a>
 
-Just having these saved on your computer is not enough. These files need to be placed in the assets folder of your project. Look inside the project folder:
+これらのファイルをコンピュータに保存するだけでは不十分です。プロジェクト内のassetsフォルダに配置する必要があります。
 
 ![assets folder](/assets/images/dev/a-simple-game/4.png)
 
-There are many folders in here for the different backends that libGDX supports. Assets is a folder shared by all the backends. Whatever you save in here gets distributed with your game. For example, your desktop game will include these files inside your JAR distributable. This is what you give your users so they can play your game.
+ここには、libGDXがサポートしているさまざまなバックエンドごとに、多くのフォルダがあります。assetsフォルダは、すべてのバックエンドで共有されます。ここに保存したものは、ゲームと一緒に配布されます。例えば、デスクトップ版ではJARファイル内にこれらが含まれます。ここで生成されるものが、ユーザーがあなたのゲームを遊ぶためのファイルになります。
 
-Note that file name casing and extensions are important in libGDX. There is a difference between `drop.png`, `drop.mp3`, and `Drop.mp3`. And annoyingly, this usually doesn't break your game until you try to make a release. Always refer to the in-editor project browser as file extensions are hidden by default in the Windows File Explorer.
+注意として、libGDXでは、ファイル名の大文字小文字や拡張子が非常に重要です。`drop.png`、`drop.mp3`、`Drop.mp3`はすべて違うものとして扱われます。厄介なのは、リリースビルドを作るまで問題が表面化しないことが多い点です。Windowsのエクスプローラーでは、ファイル拡張子がデフォルトで非表示になるため、常にエディタ内のプロジェクトブラウザを参照してください。
 
-libGDX has an emphasis on code. Every asset you use must be loaded through code before you can use it in the rest of your game. This needs to happen when the game starts. Open the Core project > Main.java. This file is the main file we're going to work in.
+libGDXはコード重視のフレームワークです。使用するすべてのアセットは、ゲーム内で使う前に、コードで読み込む必要があります。アセットの読み込みはゲーム開始時に行う必要があります。CoreプロジェクトのMain.javaを開いてください。このファイルがこのチュートリアルで主に作業するファイルです。
 
 ![Main class](/assets/images/dev/a-simple-game/5.png)
 
-Declare your variables at the top of the file right underneath the `public class Main` line. You'll need a variable for every asset you plan to use:
+変数はファイル上部にある`public class Main`直下に宣言してください。使用するアセットごとに変数が必要です。
 
 ```java
 public class Main implements ApplicationListener {
@@ -118,7 +120,7 @@ public class Main implements ApplicationListener {
     Music music;
 ```
 
-However, you should not create these objects at the constructor or init level. This would fail because libGDX needs to load first. Enter the following code in the create method:
+ただし、コンストラクタや初期化時にオブジェクトを生成してはいけません。libGDXの初期化前に生成されてしまうため、正しく動作しません。createメソッドに以下のコードを入力してください。
 
 ```java
 @Override
@@ -129,9 +131,9 @@ public void create() {
 }
 ```
 
-This loads the assets into memory after libGDX has started. See that the background image is loaded as a texture. Textures are the way that games keep images in video ram. It's actually not efficient to have different textures for each element in the game. It should be one big Texture for them all. Learn about [TexturePacker](/wiki/tools/texture-packer) in the wiki. For now, we'll keep these as separate textures because it's easier to explain this way.
+libGDXの起動後にアセットをメモリに読み込みます。背景がテクスチャとして読み込まれている点に注目してください。テクスチャはゲームが画像をビデオメモリに保持する仕組みです。実際には、ゲーム内の各要素ごとに異なるテクスチャを用意するのは効率的ではありません。それらすべてを1つの大きなテクスチャにまとめるべきです。詳細はwikiの[TexturePacker](/wiki/tools/texture-packer)を参照してください。今回は説明を簡単にするため、個別のテクスチャを使用します。
 
-Similarly, we have Sound to handle the raindrop audio file in our project. Sounds are loaded completely into memory so they can be played quickly and repeatedly. Music, on the other hand, is too large to keep entirely in memory. It's streamed from the file in chunks. There is no precise rule about what should or should not be a sound versus a music, but you may consider any audio shorter than 10 seconds to be a sound.
+同様に、プロジェクト内の雨音音声ファイルを扱うために「Sound」があります。「Sound」はメモリに完全に読み込まれるため、素早く繰り返し再生できます。一方、「Music」はサイズが大きすぎてメモリに完全に保持できません。ファイルからチャンク単位でストリーミングされます。「Sound」と「Music」の明確な区別ルールはありませんが、10秒未満の音声は「Sound」と見なすことができます。
 
 ```java
 @Override
@@ -143,16 +145,16 @@ public void create() {
 }
 ```
 
-We have many assets to manage now. We should use an [AssetManager](/wiki/managing-your-assets) to handle them. That can be found in the wiki too. Again, that's outside the scope of this tutorial. Let's keep it simple.
+管理すべきアセットが多くなってきました。そういうときは[アセットマネージャ](/wiki/managing-your-assets)を使うべきです。アセットマネージャもwikiに記載されています。ただし、繰り返しになりますが、これは本チュートリアルの範囲外です。シンプルなままにしましょう。
 
-## The Game Life Cycle
-The work we've done so far is in the create method. Create executes immediately when the game is run, so of course it makes sense to load our assets there. What are these other methods for? The libGDX [life cycle](/wiki/app/the-life-cycle) lists these in more detail.
+## ゲームのライフサイクル
+これまでの作業はすべてcreateメソッドの中で行っています。createはゲームの実行時に最初に呼び出されるため、アセットをここで読み込むのは理にかなっています。では、他のメソッドは何のためにあるのでしょうか？libGDXの[ライフサイクル](/wiki/app/the-life-cycle)で詳細が説明されています。
 
-`create()`, `render()`, `resize(int width, int height)`, `pause()`, `resume()`, and `dispose()` are all included in your class because you are implementing the `ApplicationListener` interface. You will use these methods to create your game and all future games you make in libGDX. You'll find that a lot of advanced systems you can use abstract the direct use of these methods, however these remain at the foundation of your code.
+`ApplicationListener`インターフェースを実装しているため、`create()`、`render()`、`resize(int width, int height)`、`pause()`、`resume()`、`dispose()`はすべてこのクラスに含まれています。今後、libGDXでゲームを作るために、これらのメソッドは使うこととなります。多くの高度なシステムでは、これらのメソッドを直接使わない形で抽象化されていますが、それでもこれらはコードの基盤として存在し続けます。
 
-Most of the code in this example will be in the create and render methods. For example, we won't be using `dispose` because it's not necessary for us to clean up resources in a simple app like this. This is more relevant for games with multiple screens.
+今回の例ではコードの大部分は createメソッドと renderメソッド内に記述されます。今回のようなシンプルなアプリではリソースの解放が不要なため、`dispose`メソッドは使用しません。`dispose`メソッドは複数の画面を持つゲームでより重要になります。
 
-## Rendering
+## レンダリング
 Now let's talk about rendering. For the most part, all modern games just manipulate textures, drawing them to the screen to give you the final image you see: the frame.
 
 This process is repeated many times per second to give the illusion of motion. That's what we're going to do here. Let's start with some boilerplate code. What is meant by boilerplate code is that you'll use this same code again and again without much change. And you'll see this pattern in all the games you make. Declare new variables:
@@ -316,7 +318,7 @@ private void draw() {
 
 Ensure that your game shows the background and the bucket. We'll skip rendering the droplets for now and return to it when we have the logic to create them.
 
-## Input Controls
+## 入力操作
 It's not fun to have a game without some sort of movement or action on screen. Let's enable the player's ability to control the bucket. As you know, there are all sorts of ways to get input from a user. We'll focus on a few: the keyboard, mouse, and touch.
 
 We need some way of keeping track of where the player bucket is in the game world. Texture does not store any position state. Sure, you can tell SpriteBatch where to draw it every frame by using the provided overloaded methods. What if you want to rotate it? Resize it? These methods get incredibly complicated the more you want to do.
@@ -360,7 +362,7 @@ private void draw() {
 ```
 If you run the game again, there shouldn't be any difference in the output. That's good! If you don't see the bucket, make sure you adjusted the line indicated above correctly.
 
-### Keyboard
+### キーボード操作
 Now to capturing player input. This is how you detect if a player is pressing keys on the keyboard. This needs to happen in the input method
 
 ```java
@@ -423,7 +425,7 @@ private void input() {
 
 Run the game again to make sure you can move the bucket left and right with the keyboard.
 
-### Mouse and Touch Controls
+### マウス、タッチ操作
 Mouse and Touch controls are related. To react to the user clicking or tapping the screen, call the following method:
 
 ```java
@@ -485,7 +487,7 @@ private void input() {
 
 This converts the window coordinates to coordinates in our world space. This code actually supports mobile devices as well, however you should read about [some other input features](/wiki/input/event-handling) that libGDX provides you. Run the game and click the screen to move the bucket.
 
-## Game Logic
+## ゲームロジック
 The player can move left and right now, but they can go completely off the screen. We need to prevent the player from doing that. libGDX provides some helpful methods in the `MathUtils` class. We can achieve our goal by using the `clamp()` method. Remember that the left side of the screen starts at 0. This code detects if the bucket goes too far left. If it does, it snaps its position at the farthest it's allowed to go. Add the following lines to the logic method:
 
 ```java
@@ -806,7 +808,7 @@ private void logic() {
 
 `bucketRectangle.overlaps(dropRectangle)` checks if the bucket overlaps the drop. If it does, the Sprite will be removed from the list of drop Sprites. That means it will no longer be drawn or acted upon. It simply doesn't exist anymore, making it look like the bucket collected it. Make sure your game works as expected. You're almost done!
 
-## Sound and Music
+## 効果音と音楽
 It's very easy to add a line to play a sound effect now that we are at the end of our workflow. We want the drop sound (the sound effect loaded at the beginning of this tutorial) to play when the bucket collides with the drop. It should not play when the drop falls out of the level.
 
 ```java
@@ -859,7 +861,7 @@ public void create() {
 
 Make sure your speakers are on and try it out.
 
-## Further learning
+## さらに学ぶには
 So, you're at the final steps of making a game. You should test the game out. Tweak values to make the game easier or harder. This can be done by changing how fast the bucket moves and what rate the droplets spawn.
 
 If you want to let your friends and colleagues try your game out, you'll need to make a distributable that they can play. No one is going to want set up an IDE and copy your entire project just to play it. See the page on [Deploying your application](/wiki/deployment/deploying-your-application).
@@ -870,7 +872,7 @@ Game design is a constant journey of learning. The [wiki](/wiki/) goes further i
 
 This tutorial focused entirely on desktop development. There are many more considerations you must make before you explore Android, iOS, and HTML5 development. There is an extensive article on [considerations for HTML5](/wiki/html5-backend-and-gwt-specifics), for example. Java is not truly "write once, run anywhere" but libGDX takes you pretty close to that goal.
 
-## Full Example Code
+## 完全なサンプルコード
 The following is the full example code of the game described throughout this tutorial. It's here for reference if you get stuck on any of the steps. Don't cheat yourself by copying the whole thing! Learning how to program is mainly you asking yourself questions and trying to resolve issues on your own first.
 
 ```java
