@@ -83,64 +83,64 @@ lwjgl3プロジェクトを右クリックし、Runをクリックしてくだ�
 <br/>
 
 ## Android
-- **IDEA/Android Studio:** Right-click AndroidLauncher -> Run AndroidLauncher
-- **Eclipse:** Right-click Android project -> Run As -> AndroidApplication
-- **NetBeans:** Right-click Android project -> Run As -> AndroidApplication
+- **IDEA/Android Studio:** AndroidLauncherクラスを右クリックして、Run AndroidLauncherを選択してください。。
+- **Eclipse:** Androidプロジェクトを右クリックして、Run As -> AndroidApplicationを選択してください。。
+- **NetBeans:** Androidプロジェクトを右クリックして、Run As -> AndroidApplicationを選択してください。
 
 <br/>
 
 ## iOS
-### In IDEA/Android Studio
-1. Open Run/Debug Configurations
-2. Create a new run configuration for a RoboVM iOS application
+### IDEA/Android Studio
+1. 実行構成を開いてください。
+2. RoboVM iOSアプリケーション用の新しい実行構成を作成します。
 
     ![](/assets/images/dev/idea/2.png)
 
-3. Select the provisioning profile and simulator/device target
+3. プロビジョニングプロファイルと、シミュレータまたはデバイスのターゲットを選択してください。
 
-   Note: arm64 simulators are not working by default. Either use x86_64 or use the MetalANGLE RoboVM backend instead ("com.badlogicgames.gdx:gdx-backend-robovm-metalangle:$gdxVersion")
+   注意: arm64シミュレータはデフォルトでは動作しません。x86_64を使用するか、MetalANGLE RoboVMバックエンド("com.badlogicgames.gdx:gdx-backend-robovm-metalangle:$gdxVersion")を使用してください。
    {: .notice--warning}
-4. Run the created run configuration
+4. 作成した実行構成を実行してください。
 
-For more information on using and configuring the RoboVM IntelliJ IDEA plugin please see the [documentation](https://mobivm.github.io).
+RoboVM IntelliJ IDEAプラグインの使用方法や設定についての詳細は、[公式ドキュメント](https://mobivm.github.io)を参照してください。
 
-### In Eclipse
-- Right-click the iOS RoboVM project > Run As > RoboVM runner of your choice
+### Eclipse
+- iOS RoboVMプロジェクトを右クリックして、**Run As** → 使用したいRoboVMランナーを選択してください。
 
 ![](/assets/images/dev/eclipse/2.png)
 
-For more information on using and configuring the RoboVM IntelliJ IDEA plugin please see the [documentation](https://mobivm.github.io).
+RoboVM IntelliJ IDEAプラグインの使用方法や設定についての詳細は、[公式ドキュメント](https://mobivm.github.io)を参照してください。
 
 <br/>
 
 ## HTML
-HTML is best suited to be run on command line. You are welcome to manually setup GWT in the IDE of your choice if you are familiar with it, but the recommended way is to drop down to terminal or command prompt.
+HTMLターゲットは、コマンドラインから実行するのが最適です。GWTに慣れている場合は、任意のIDEで手動設定しても構いませんが、推奨される方法は ターミナル（またはコマンドプロンプト）を使うことです。
 
-The HTML target can be run in **Super Dev** mode, which allows you to recompile on the fly, and debug your application in browser.
+HTMLターゲットは**Super Dev モード** で実行でき、実行中に再コンパイルが可能で、ブラウザ上でデバッグも行えます。
 
-To do so, open up your favourite shell or terminal, change directory to the project directory and invoke the respective gradle task:
+お気に入りのシェルまたはターミナルを開き、プロジェクトディレクトリに移動し、対応するGradleタスクを実行してください。
 
 ```
 ./gradlew html:superDev
 ```
 
-**On Unix:** If you get a permission denied error, set the execution flag on the gradlew file: `chmod +x gradlew`
+**Unixの場合** 「permission denied」エラーが出る場合は、次のコマンドでgradlewファイルに実行権限を付与してください。`chmod +x gradlew`
 {: .notice--primary}
 
-You should see lots of text wizzing by, and if all goes well you should see the following line at the end:
+たくさんのテキストが高速で流れていくのが見えるはずです。すべてが順調に進めば、最後に次の行が表示されるはずです。
 
 ![](/assets/images/dev/html/0.png)
 
-You can then go to [`http://localhost:8080/index.html`](http://localhost:8080/index.html), to see your application running, with a recompile button.
+その後、[`http://localhost:8080/index.html`](http://localhost:8080/index.html)にアクセスすると、再コンパイルボタン付きでアプリケーションが起動します。
 
-For further info on configuring and debugging with SuperDev check the [GWT documentation](http://www.gwtproject.org/articles/superdevmode.html).
+Super Devの設定やデバッグ方法についての詳細は、[GWTドキュメント](http://www.gwtproject.org/articles/superdevmode.html)を参照してください。
 
 <br/>
 
-## Command Line
-All the targets can be run and deployed to via the command line interface.
+## コマンドライン
+すべてのターゲットは、コマンドラインインターフェースから実行およびデプロイできます。
 
-**Desktop:**
+**デスクトップ:**
 ```
 ./gradlew lwjgl3:run
 ```
@@ -150,7 +150,7 @@ All the targets can be run and deployed to via the command line interface.
 ./gradlew android:installDebug android:run
 ```
 
-The `ANDROID_HOME` environment variable needs to be pointing to a valid android SDK before you can do any command line wizardry for Android. On Windows, use: `set ANDROID_HOME=​C:/Path/To/Your/Android/Sdk`; on Linux and macOS: `export ANDROID_HOME=​/Path/To/Your/Android/Sdk`. Alternatively you can create a file called "local.properties" with the following content: `sdk.dir /Path/To/Your/Android/Sdk`.
+Android用のコマンドライン操作を行う前に、`ANDROID_HOME`環境変数に有効なAndroid SDKを指定する必要があります。Windowsでは、`set ANDROID_HOME=​C:/Path/To/Your/Android/Sdk`コマンドを実行してください。Linuxまたは、macOSでは`export ANDROID_HOME=​/Path/To/Your/Android/Sdk`コマンドを実行してください。または、`sdk.dir /Path/To/Your/Android/Sdk`という内容を含む「local.properties」ファイルを作成する方法もあります。
 
 **iOS:**
 ```
@@ -162,19 +162,19 @@ The `ANDROID_HOME` environment variable needs to be pointing to a valid android 
 ./gradlew html:superDev
 ```
 
-Then go to [`http://localhost:8080/index.html`](http://localhost:8080/index.html).
+その後、[`http://localhost:8080/index.html`](http://localhost:8080/index.html)にアクセスしてください。
 
-### Gradle tasks are failing?
-If whenever you invoke Gradle, the build or refresh fails to get more information, run the same command again and add the `--debug` parameter to the command, e.g.:
+### Gradleタスクが失敗している？
+Gradle を実行した際に、ビルドやリフレッシュが失敗して十分な情報が得られない場合は、同じコマンドに`--debug`パラメータを付けて再度実行してください。例：
 
 ```
 ./gradlew lwjgl3:run --debug
 ```
 
-This will provide you with a stacktrace and give you a better idea of why gradle is failing.
+これによりスタックトレースが表示され、Gradleが失敗している原因をより詳しく確認できます。
 
 
 <br/>
 
-# What to do next?
-Now that you're done with the set-up, you can get to do some real coding. Take a look at our post [A Simple Game](/wiki/start/a-simple-game) for a step-by-step guide.
+# 次は何をする？
+準備が完了したので、いよいよ本格的なコーディングに取り掛かりましょう。ステップバイステップで学べるガイド[シンプルなゲーム](/wiki/start/a-simple-game)を参照してください。
