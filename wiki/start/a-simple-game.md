@@ -155,9 +155,9 @@ public void create() {
 今回の例ではコードの大部分は createメソッドと renderメソッド内に記述されます。今回のようなシンプルなアプリではリソースの解放が不要なため、`dispose`メソッドは使用しません。`dispose`メソッドは複数の画面を持つゲームでより重要になります。
 
 ## レンダリング
-Now let's talk about rendering. For the most part, all modern games just manipulate textures, drawing them to the screen to give you the final image you see: the frame.
+それではレンダリングについて話しましょう。現代のゲームのほとんどは、テクスチャを操作し、それらを画面に描画することで、最終的に目に見える画像（フレーム）を表示しています。
 
-This process is repeated many times per second to give the illusion of motion. That's what we're going to do here. Let's start with some boilerplate code. What is meant by boilerplate code is that you'll use this same code again and again without much change. And you'll see this pattern in all the games you make. Declare new variables:
+この処理は1秒間に何度も繰り返され、その連続によって動いているように見える錯覚が生まれます。ここでも、まさにそれを行います。まずはボイラープレートコードから始めましょう。ボイラープレートコードとはほとんど変更することなく何度も使い回す定型コードのことです。これから作るすべてのゲームで、このパターンを見ることになるでしょう。新しい変数を宣言しましょう。
 
 ```java
 public class Main implements ApplicationListener {
@@ -167,7 +167,7 @@ public class Main implements ApplicationListener {
     FitViewport viewport;
 ```
 
-Initialize these variables in the create method:
+これらの変数をcreateメソッド内で初期化します。
 
 ```java
 @Override
@@ -179,23 +179,23 @@ public void create() {
 }
 ```
 
-A viewport controls how we see the game. It's like a window from our world into another: the game world. The viewport controls how big this "window" is and how it's placed on our screen. There are many kinds of viewports you can use. A simple one to understand is the FitViewport which will ensure that no matter what size our window is, the full game view will always be visible. The parameters determine how large our visible game world will be in game units. It will "fit" into the window. Each viewport also has a camera which controls what part of the game world is visible and at what zoom. Learn more about [viewports and cameras](/wiki/graphics/viewports) in the wiki.
+ビューポートは、私たちがゲームをどのように見るかを制御します。それはまるで、こちらの世界からゲーム世界を覗くための「窓」のようなものです。ビューポートはこの「窓」の大きさや、画面上での配置を制御します。使用できるビューポートにはさまざまな種類があります。理解しやすいものの一つがFitViewportです。これはウィンドウのサイズがどのように変わっても、ゲーム全体が常に画面内に収まるようにしてくれます。コンストラクタに渡すパラメータは、ゲーム内の単位でどれくらいの大きさのゲーム世界を表示するかを決めるものです。ゲーム世界はウィンドウのサイズに合わせて「フィット」されます。また、各ビューポートにはカメラが備えられており、ゲーム世界のどの部分をどの倍率で表示するかを制御します。詳しくは、wikiの[ビューポートとカメラ](/wiki/graphics/viewports)を参照してください。
 
-You should always remember to update the viewport in the resize method:
+resizeメソッド内では、必ずビューポートを更新することを忘れないでください。
 
 ```java
 @Override
 public void resize(int width, int height) {
-    viewport.update(width, height, true); // true centers the camera
+    viewport.update(width, height, true); // trueを渡すとカメラを画面中央に移動します
 }
 ```
 
-Our code is going to get more complex now. A good practice is to divide your code into separate methods. We'll prepare for this by adding new methods to be used inside the render method:
+これからコードはより複雑になっていきます。良い習慣として、コードを複数のメソッドに分割しましょう。その準備として、renderメソッド内で使うための新しいメソッドを追加します。
 
 ```java
 @Override
 public void render() {
-    // organize code into three methods
+    // コードを3つのメソッドに整理します
     input();
     logic();
     draw();
@@ -214,7 +214,7 @@ private void draw() {
 }
 ```
 
-We will focus on the `draw()` method for now.
+まずは `draw()`メソッドに注目します。
 
 ```java
 private void draw() {
@@ -227,25 +227,25 @@ private void draw() {
 }
 ```
 
-`ScreenUtils.clear(Color.BLACK);` clears the screen. It's a good practice to clear the screen every frame. Otherwise, you'll get weird graphical errors. You can use any color you want, but we'll just settle on Black this time.
+`ScreenUtils.clear(Color.BLACK);`は画面をクリアします。毎フレーム画面をクリアするのは良い習慣です。これを行わないと、奇妙な描画エラーが発生することがあります。使用する色は何色でも構いませんが、ここでは黒を使うことにします。
 
-Ever wonder why your favorite games sometimes have poor FPS or Frames Per Second? Stuttering gameplay is often related to the number of textures being rendered and the capabilities of your player's graphics card. There are tricks to alleviate this. For one, it is more efficient to send all your draw calls at once to the graphics processing unit (GPU). The process of drawing an individual texture is called a draw call. The SpriteBatch is how libGDX combines these draw calls together.
+お気に入りのゲームで、FPS（フレームレート）が低くなる理由を考えたことはありますか？ゲームがカクつく原因は描画されるテクスチャの数や、プレイヤーのグラフィックカードの性能に関係していることがよくあります。これを軽減するための工夫はいくつかあります。その一つが、描画命令をまとめてGPU（画像処理装置）に送ることです。個々のテクスチャを描画する処理はドローコールと呼ばれます。スプライトバッチはlibGDXがこれらのドローコールをまとめて処理するための仕組みです。
 
-`spriteBatch.setProjectionMatrix(viewport.getCamera().combined);` shows how the Viewport is applied to the SpriteBatch. This is necessary for the images to be shown in the correct place.
+`spriteBatch.setProjectionMatrix(viewport.getCamera().combined);`は、ビューポートがスプライトバッチにどのように適用されるかを示しています。これにより、画像が正しい位置に描画されるようになります。
 
-It is important to order the begin and end lines appropriately. You should never draw from a SpriteBatch outside of a begin and an end. If you do, you will get an error message.
+また、beginとendの正しい順番にすることは重要です。スプライトバッチをbeginとendの外で描画してはいけません。そうした場合はエラーメッセージが表示されます。
 
 ```java
 spriteBatch.begin();
-// add lines to draw stuff here
+// ここに描画処理を追加します。
 spriteBatch.end();
 ```
 
-So, let's do that. The coordinates we provide determine where the bucket will be drawn on the screen. The coordinates begin in the bottom left and grow to the right and up. Our game world is described in imaginary units best defined as meters. For reference our bucket is 100 pixels wide and 100 pixels tall. For simplicity, we will decide that 100 pixels will equal 1 meter, making our bucket 1x1 meters. This ratio of pixels per meter can be anything you want, but make sure whatever you choose is a simple value that makes sense in your game world. This is typically the size of your tiles or the height of the player character. Your game logic should really know nothing about pixels.
+では、実際にやってみましょう。ここで指定する座標は、バケツが画面上のどこに描画されるかを決定します。座標の原点は左下にあり、右方向に行くとx座標が増え、上方向に行くとy座標が増えていきます。このゲームでは、ゲーム世界を想像上の単位で表現します。この想像上の単位をメートルと考えるのがいいでしょう。参考までに、バケツの画像は幅100ピクセル、高さ100ピクセルです。簡単にするため、100ピクセルを1メートルと定義することにします。つまり、バケツの大きさは1×1メートルになります。1メートルあたり何ピクセルにするかという比率は、実際には自由に決められます。ただし、ゲーム世界にとって意味が分かりやすい、シンプルな値を選ぶようにしてください。通常、タイルの大きさやプレイヤーキャラクターの身長などになります。ゲームロジックはピクセルの存在を意識するべきではありません。
 
 ![Coordinate Plane](/assets/images/dev/a-simple-game/6.png)
 
-Add the line to draw the bucket:
+バケツを描画するための行を追加しましょう。
 
 ```java
 private void draw() {
@@ -254,17 +254,17 @@ private void draw() {
     spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
     spriteBatch.begin();
 
-    spriteBatch.draw(bucketTexture, 0, 0, 1, 1); // draw the bucket with width/height of 1 meter
+    spriteBatch.draw(bucketTexture, 0, 0, 1, 1); // 幅と高さを1メートルにしてバケツを描画します。
 
     spriteBatch.end();
 }
 ```
 
-This code should now draw our bucket at the bottom of the screen in the lower left corner. You can run this game by calling the appropriate Gradle command in IDEA or implement whatever steps are needed for your chosen development environment as listed in the [setup guide](/wiki/start/setup). If all things have gone well, you should see our brave, lone bucket sitting in the darkness of the void.
+このコードで、画面左下隅にバケツが描画されるはずです。IDEAで適切なGradleコマンドを実行するか、[環境構築ガイド](/wiki/start/setup)に記載されている使用している開発環境向けの手順を実行してゲームを起動してください。すべてがうまくいっていれば、虚無の闇の中に、我らが勇敢で孤独なバケツが佇んでいるのが見えるはずです。
 
 ![bucket in void](/assets/images/dev/a-simple-game/7.png)
 
-Let's cheer up this scene with the background. Drawing the background is similar to drawing the bucket. It is drawn at the width/height of the viewport to ensure that the entire view is covered:
+背景を追加して場面を盛り上げましょう。背景の描画方法は、バケツを描画したときとほぼ同じです。ビューポート全体を覆うように、背景はビューポートの幅と高さで描画します。
 
 ```java
 private void draw() {
@@ -273,28 +273,28 @@ private void draw() {
     spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
     spriteBatch.begin();
 
-    // store the worldWidth and worldHeight as local variables for brevity
+    // 可読性のため、worldWidthとworldHeightをローカル変数にします。
     float worldWidth = viewport.getWorldWidth();
     float worldHeight = viewport.getWorldHeight();
 
-    spriteBatch.draw(bucketTexture, 0, 0, 1, 1); // draw the bucket
-    spriteBatch.draw(backgroundTexture, 0, 0, worldWidth, worldHeight); // draw the background
+    spriteBatch.draw(bucketTexture, 0, 0, 1, 1); // バケツを描画します
+    spriteBatch.draw(backgroundTexture, 0, 0, worldWidth, worldHeight); // 背景を描画します
 
     spriteBatch.end();
 }
 ```
 
-You can run the game and you'll see the background.
+ゲームを実行すると、背景が表示されるはずです。
 
 ![background with no bucket](/assets/images/dev/a-simple-game/8.png)
 
-But what happened to our bucket? We need to talk about draw order. Drawing happens consecutively in the order you list it in code. This is what really happens:
+でも、バケツはどこへ行ってしまったのでしょう？描画順について説明する必要があります。描画はコードに書いた順番どおりに連続して行われます。実際には、次のような処理が起きています。
 
-1. The screen is cleared.
-2. The bucket is drawn to the back buffer.
-3. The background is drawn over everything. This final image is then shown on the screen. 
+1. 画面がクリアされる。
+2. バケツがバックバッファに描画される。
+3. 背景がすべての上に描画され、その最終結果が画面に表示される。
 
-This process is repeated every frame. To resolve this problem, we simply we need to reorder our draw calls.
+この一連の処理は、毎フレーム繰り返されます。この問題を解決するためには、単にドローコールの順番を入れ替えるだけです。
 
 ```java
 private void draw() {
@@ -306,9 +306,9 @@ private void draw() {
     float worldWidth = viewport.getWorldWidth();
     float worldHeight = viewport.getWorldHeight();
 
-    // rearrange these two lines
-    spriteBatch.draw(backgroundTexture, 0, 0, worldWidth, worldHeight); // draw the background
-    spriteBatch.draw(bucketTexture, 0, 0, 1, 1); // draw the bucket
+    // 次の2行を並び替えます
+    spriteBatch.draw(backgroundTexture, 0, 0, worldWidth, worldHeight); // 背景を描画します
+    spriteBatch.draw(bucketTexture, 0, 0, 1, 1); // バケツを描画します
 
     spriteBatch.end();
 }
@@ -316,7 +316,7 @@ private void draw() {
 
 ![background with bucket](/assets/images/dev/a-simple-game/9.png)
 
-Ensure that your game shows the background and the bucket. We'll skip rendering the droplets for now and return to it when we have the logic to create them.
+背景とバケツが正しく表示されていることを確認してください。水滴の描画は後ほど生成処理を実装したあとにします。
 
 ## 入力操作
 It's not fun to have a game without some sort of movement or action on screen. Let's enable the player's ability to control the bucket. As you know, there are all sorts of ways to get input from a user. We'll focus on a few: the keyboard, mouse, and touch.
