@@ -24,7 +24,7 @@
       * [Bulletラッパーでモデルを使用する](/wiki/extensions/physics/bullet/bullet-wrapper-using-models)
       * [Bulletラッパーの使い方](/wiki/extensions/physics/bullet/bullet-wrapper-using-the-wrapper)
     * [Box2d](/wiki/extensions/physics/box2d)
-  * [AI（人工知能）](/wiki/extensions/artificial-intelligence)
+  * [人工知能（AI）](/wiki/extensions/artificial-intelligence)
   * [Gdx freetype](/wiki/extensions/gdx-freetype)
   * [gdx pay](/wiki/extensions/gdx-pay)
 * [ファイル操作](/wiki/file-handling)
@@ -109,7 +109,7 @@
 * サードパーティサービス
   * [libGDXでのAdMob](/wiki/third-party/admob-in-libgdx)
   * [libGDXでのFirebase](/wiki/third-party/firebase-in-libgdx)
-  * [libGDXでのGoogle Mobile Ads (旧AdMobの代替)](/wiki/third-party/google-mobile-ads-in-libgdx)
+  * [libGDXでのGoogle Mobile Ads（旧AdMobの代替）](/wiki/third-party/google-mobile-ads-in-libgdx)
   * [libGDXでのGoogle Playゲームサービス](/wiki/third-party/google-play-games-services-in-libgdx)
   * [libGDXでのPollfish](/wiki/third-party/pollfish-in-libgdx)
   * [libGDXでのProGuardとDexGuard](/wiki/third-party/proguard-dexguard-and-libgdx)
@@ -128,4 +128,4 @@
   * [JSONの読み書き](/wiki/utils/reading-and-writing-json)
   * [XMLの読み書き](/wiki/utils/reading-and-writing-xml)
   * [リフレクション](/wiki/utils/reflection)
-  * [セーブゲームのシリアライズ](/wiki/utils/saved-game-serialization)
+  * [ゲームセーブのシリアライズ](/wiki/utils/saved-game-serialization)

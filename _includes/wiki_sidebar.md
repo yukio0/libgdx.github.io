@@ -1,180 +1,180 @@
 # Table of Contents
 
-## Getting Started
-* [Setting Up a Dev Environment](/wiki/start/setup)
-* [Creating Your First libGDX Project](/wiki/start/project-generation)
-* [Importing & Running It](/wiki/start/import-and-running)
-* [A Simple Game](/wiki/start/a-simple-game)
-* [Extending the Simple Game](/wiki/start/simple-game-extended)
-* [Demos & Tutorials](/wiki/start/demos-and-tutorials)
+## スタートガイド
+* [開発環境の構築](/wiki/start/setup)
+* [最初のlibGDXプロジェクトを作成する](/wiki/start/project-generation)
+* [プロジェクトのインポートと実行](/wiki/start/import-and-running)
+* [シンプルなゲーム](/wiki/start/a-simple-game)
+* [シンプルなゲームの拡張](/wiki/start/simple-game-extended)
+* [デモとチュートリアル](/wiki/start/demos-and-tutorials)
 
 ## Developer's Guide
-<details><summary>The Application Framework</summary>
+<details><summary>アプリケーションフレームワーク</summary>
 <div markdown="1">
-  * [The Application Framework](/wiki/app/the-application-framework)
-  * [The life-cycle](/wiki/app/the-life-cycle)
-  * [Modules overview](/wiki/app/modules-overview)
-  * [Starter classes and configuration](/wiki/app/starter-classes-and-configuration)
-  * [Querying](/wiki/app/querying)
-  * [Logging](/wiki/app/logging)
-  * [Threading](/wiki/app/threading)
-  * [Interfacing with platform specific code](/wiki/app/interfacing-with-platform-specific-code)
+  * [アプリケーションフレームワーク](/wiki/app/the-application-framework)
+  * [ライフサイクル](/wiki/app/the-life-cycle)
+  * [モジュールの概要](/wiki/app/modules-overview)
+  * [スタータークラスと設定](/wiki/app/starter-classes-and-configuration)
+  * [クエリ](/wiki/app/querying)
+  * [ログ出力](/wiki/app/logging)
+  * [スレッド処理](/wiki/app/threading)
+  * [プラットフォーム固有コードとの連携](/wiki/app/interfacing-with-platform-specific-code)
 </div>
 </details>
 
-<details><summary>Audio</summary>
+<details><summary>オーディオ</summary>
 <div markdown="1">
-* [Audio](/wiki/audio/audio)
-* [Playing PCM audio](/wiki/audio/playing-pcm-audio)
-* [Recording PCM audio](/wiki/audio/recording-pcm-audio)
-* [Sound effects](/wiki/audio/sound-effects)
-* [Streaming music](/wiki/audio/streaming-music)
+* [オーディオ](/wiki/audio/audio)
+* [PCMオーディオの再生](/wiki/audio/playing-pcm-audio)
+* [PCMオーディオの録音](/wiki/audio/recording-pcm-audio)
+* [効果音](/wiki/audio/sound-effects)
+* [音楽のストリーミング再生](/wiki/audio/streaming-music)
 </div>
 </details>
 
-<details><summary>Deployment</summary>
+<details><summary>デプロイ</summary>
 <div markdown="1">
-* [Deploying Your Application](/wiki/deployment/deploying-your-application)
-* [Bundling a JRE](/wiki/deployment/bundling-a-jre)
+* [アプリケーションのデプロイ](/wiki/deployment/deploying-your-application)
+* [JREのバンドル](/wiki/deployment/bundling-a-jre)
 </div>
 </details>
 
-<details><summary>Extensions</summary>
+<details><summary>拡張機能</summary>
 <div markdown="1">
-  * [Physics](/wiki/extensions/physics/physics)
+  * [物理演算](/wiki/extensions/physics/physics)
     * [Bullet Physics](/wiki/extensions/physics/bullet/bullet-physics)
-      * [Bullet Wrapper Contact callbacks](/wiki/extensions/physics/bullet/bullet-wrapper-contact-callbacks)
-      * [Bullet Wrapper Custom classes](/wiki/extensions/physics/bullet/bullet-wrapper-custom-classes)
+      * [Bulletラッパーの接触コールバック](/wiki/extensions/physics/bullet/bullet-wrapper-contact-callbacks)
+      * [Bulletラッパーのカスタムクラス](/wiki/extensions/physics/bullet/bullet-wrapper-custom-classes)
       * [Bullet Wrapper Debugging](/wiki/extensions/physics/bullet/bullet-wrapper-debugging)
       * [Bullet Wrapper Setup](/wiki/extensions/physics/bullet/bullet-wrapper-setup)
       * [Bullet Wrapper Using models](/wiki/extensions/physics/bullet/bullet-wrapper-using-models)
       * [Bullet Wrapper Using the wrapper](/wiki/extensions/physics/bullet/bullet-wrapper-using-the-wrapper)
     * [Box2d](/wiki/extensions/physics/box2d)
-  * [Artificial Intelligence](/wiki/extensions/artificial-intelligence)
+  * [人工知能（AI）](/wiki/extensions/artificial-intelligence)
   * [Gdx freetype](/wiki/extensions/gdx-freetype)
   * [gdx pay](/wiki/extensions/gdx-pay)
 </div>
 </details>
 
-[File handling](/wiki/file-handling)
+[ファイル操作](/wiki/file-handling)
 
-<details><summary>Graphics</summary>
+<details><summary>グラフィックス</summary>
 <div markdown="1">
-  * [Graphics](/wiki/graphics/graphics)
-  * 2D Graphics
-    * Bitmap Fonts
-      * [Bitmap fonts](/wiki/graphics/2d/fonts/bitmap-fonts)
-      * [Color Markup Language](/wiki/graphics/2d/fonts/color-markup-language)
-      * [Distance field fonts](/wiki/graphics/2d/fonts/distance-field-fonts)
+  * [グラフィックス](/wiki/graphics/graphics)
+  * 2Dグラフィックス
+    * ビットマップフォント
+      * [ビットマップフォント](/wiki/graphics/2d/fonts/bitmap-fonts)
+      * [カラーマークアップ言語](/wiki/graphics/2d/fonts/color-markup-language)
+      * [距離フィールドフォント](/wiki/graphics/2d/fonts/distance-field-fonts)
     * Scene2d
       * [Scene2d.ui](/wiki/graphics/2d/scene2d/scene2d-ui)
       * [Scene2d](/wiki/graphics/2d/scene2d/scene2d)
-      * [Skin](/wiki/graphics/2d/scene2d/skin)
-      * [Table](/wiki/graphics/2d/scene2d/table)
-    * [2D Animation](/wiki/graphics/2d/2d-animation)
-    * [2D ParticleEffects](/wiki/graphics/2d/2d-particleeffects)
-    * [Clipping, with the use of scissorstack](/wiki/graphics/2d/clipping-with-the-use-of-scissorstack)
+      * [スキン](/wiki/graphics/2d/scene2d/skin)
+      * [テーブル](/wiki/graphics/2d/scene2d/table)
+    * [2Dアニメーション](/wiki/graphics/2d/2d-animation)
+    * [2Dパーティクルエフェクト](/wiki/graphics/2d/2d-particleeffects)
+    * [シザースタックを使った切り抜き](/wiki/graphics/2d/clipping-with-the-use-of-scissorstack)
     * [ImGui](/wiki/graphics/2d/imgui)
-    * [Masking](/wiki/graphics/2d/masking)
-    * [Ninepatches](/wiki/graphics/2d/ninepatches)
-    * [Orthographic camera](/wiki/graphics/2d/orthographic-camera)
-    * [Packing atlases at runtime](/wiki/graphics/2d/packing-atlases-at-runtime)
+    * [マスキング](/wiki/graphics/2d/masking)
+    * [ナインパッチ](/wiki/graphics/2d/ninepatches)
+    * [正射影カメラ](/wiki/graphics/2d/orthographic-camera)
+    * [実行時アトラスパッキング](/wiki/graphics/2d/packing-atlases-at-runtime)
     * [Pixmaps](/wiki/graphics/2d/pixmaps)
     * [SpriteBatch, TextureRegions, and Sprites](/wiki/graphics/2d/spritebatch-textureregions-and-sprites)
-    * [Texture Compression](/wiki/graphics/2d/texture-compression)
-    * [Tile maps](/wiki/graphics/2d/tile-maps)
-  * [3D Graphics](/wiki/graphics/3d/3d-graphics)
-    * [3D animations and skinning](/wiki/graphics/3d/3d-animations-and-skinning)
-    * [3D Particle Effects](/wiki/graphics/3d/3d-particle-effects)
-    * [3D Picking](/wiki/graphics/3d/3d-picking)
-    * [Decals](/wiki/graphics/3d/decals)
-    * [Importing Blender models in LibGDX](/wiki/graphics/3d/importing-blender-models-in-libgdx)
-    * [Material and environment](/wiki/graphics/3d/material-and-environment)
+    * [テクスチャ圧縮](/wiki/graphics/2d/texture-compression)
+    * [タイルマップ](/wiki/graphics/2d/tile-maps)
+  * [3Dグラフィックス](/wiki/graphics/3d/3d-graphics)
+    * [3Dアニメーションとスキニング](/wiki/graphics/3d/3d-animations-and-skinning)
+    * [3Dパーティクルエフェクト](/wiki/graphics/3d/3d-particle-effects)
+    * [3Dピッキング](/wiki/graphics/3d/3d-picking)
+    * [デカール](/wiki/graphics/3d/decals)
+    * [Blenderモデルのインポート](/wiki/graphics/3d/importing-blender-models-in-libgdx)
+    * [質感と環境](/wiki/graphics/3d/material-and-environment)
     * [ModelBatch](/wiki/graphics/3d/modelbatch)
     * [ModelBuilder, MeshBuilder and MeshPartBuilder](/wiki/graphics/3d/modelbuilder-meshbuilder-and-meshpartbuilder)
     * [ModelCache](/wiki/graphics/3d/modelcache)
-    * [Models](/wiki/graphics/3d/models)
-    * [Quick start](/wiki/graphics/3d/quick-start)
-    * [Virtual Reality (VR)](/wiki/graphics/3d/virtual-reality)
-  * OpenGL Utility Classes
-    * [Frame buffer objects](/wiki/graphics/opengl-utils/frame-buffer-objects)
-    * [Meshes](/wiki/graphics/opengl-utils/meshes)
-    * [Rendering shapes](/wiki/graphics/opengl-utils/rendering-shapes)
-    * [Shaders](/wiki/graphics/opengl-utils/shaders)
-  * [Clearing the screen](/wiki/graphics/clearing-the-screen)
-  * [Continuous and Non Continuous Rendering](/wiki/graphics/continuous-and-non-continuous-rendering)
-  * [Integrating libgdx and the device camera](/wiki/graphics/integrating-libgdx-and-the-device-camera)
-  * [OpenGL (ES) Support](/wiki/graphics/opengl-es-support)
-  * [Profiling](/wiki/graphics/profiling)
-  * [Querying and Configuring Graphics (monitors, display modes, vsync, display cutouts)](/wiki/graphics/querying-and-configuring-graphics)
-  * [Taking a Screenshot](/wiki/graphics/taking-a-screenshot)
-  * [Viewports](/wiki/graphics/viewports)
+    * [モデル](/wiki/graphics/3d/models)
+    * [クイックスタート](/wiki/graphics/3d/quick-start)
+    * [バーチャルリアリティ（VR）](/wiki/graphics/3d/virtual-reality)
+  * OpenGLユーティリティクラス
+    * [フレームバッファ](/wiki/graphics/opengl-utils/frame-buffer-objects)
+    * [メッシュ](/wiki/graphics/opengl-utils/meshes)
+    * [図形のレンダリング](/wiki/graphics/opengl-utils/rendering-shapes)
+    * [シェーダー](/wiki/graphics/opengl-utils/shaders)
+  * [画面のクリア](/wiki/graphics/clearing-the-screen)
+  * [連続レンダリングと非連続レンダリング](/wiki/graphics/continuous-and-non-continuous-rendering)
+  * [libGDXとデバイスカメラの統合](/wiki/graphics/integrating-libgdx-and-the-device-camera)
+  * [OpenGL (ES)サポート](/wiki/graphics/opengl-es-support)
+  * [プロファイリング](/wiki/graphics/profiling)
+  * [クエリとグラフィックスの設定 （モニター、ディスプレイモード、VSync、ディスプレイカットアウト）](/wiki/graphics/querying-and-configuring-graphics)
+  * [スクリーンショットの取得](/wiki/graphics/taking-a-screenshot)
+  * [ビューポート](/wiki/graphics/viewports)
 </div>
 </details>
 
-[HTML5 Backend and GWT Specifics](/wiki/html5-backend-and-gwt-specifics)
+[HTML5バックエンドとGWT固有機能](/wiki/html5-backend-and-gwt-specifics)
 
 
-<details><summary>Input Handling</summary>
+<details><summary>入力処理</summary>
 <div markdown="1">
-  * [Input Handling](/wiki/input/input-handling)
-  * [Accelerometer](/wiki/input/accelerometer)
-  * [Back and menu key catching](/wiki/input/back-and-menu-key-catching)
-  * [Compass](/wiki/input/compass)
-  * [Configuration and Querying](/wiki/input/configuration-and-querying)
-  * [Controllers](/wiki/input/controllers)
-  * [Cursor Visibility and Catching](/wiki/input/cursor-visibility-and-catching)
-  * [Event handling](/wiki/input/event-handling)
-  * [Gesture detection](/wiki/input/gesture-detection)
-  * [Gyroscope](/wiki/input/gyroscope)
-  * [Mouse, Touch and Keyboard](/wiki/input/mouse-touch-and-keyboard)
-  * [Polling](/wiki/input/polling)
-  * [Simple text input](/wiki/input/simple-text-input)
-  * [Vibrator](/wiki/input/vibrator)
+  * [入力処理](/wiki/input/input-handling)
+  * [加速度センサー](/wiki/input/accelerometer)
+  * [バックキーとメニューキーの取得](/wiki/input/back-and-menu-key-catching)
+  * [コンパス](/wiki/input/compass)
+  * [構成とクエリ](/wiki/input/configuration-and-querying)
+  * [コントローラー](/wiki/input/controllers)
+  * [カーソルの表示と取得](/wiki/input/cursor-visibility-and-catching)
+  * [イベント処理](/wiki/input/event-handling)
+  * [ジェスチャー検出](/wiki/input/gesture-detection)
+  * [ジャイロスコープ](/wiki/input/gyroscope)
+  * [マウス、タッチ、キーボード](/wiki/input/mouse-touch-and-keyboard)
+  * [ポーリング](/wiki/input/polling)
+  * [簡易テキスト入力](/wiki/input/simple-text-input)
+  * [振動機能](/wiki/input/vibrator)
 </div>
 </details>
 
-[Internationalization and Localization](/wiki/internationalization-and-localization)
+[国際化とローカライズ](/wiki/internationalization-and-localization)
 
-<details><summary>Using libGDX With Other JVM Languages</summary>
+<details><summary>他のJVM言語でlibGDXを使う</summary>
 <div markdown="1">
-  * [Using libGDX With Other JVM Languages](/wiki/jvm-langs/using-libgdx-with-other-jvm-languages)
-  * [Using libgdx with Clojure](/wiki/jvm-langs/using-libgdx-with-clojure)
-  * [Using libGDX with Kotlin](/wiki/jvm-langs/using-libgdx-with-kotlin)
-  * [Using libgdx with Python](/wiki/jvm-langs/using-libgdx-with-python)
-  * [Using libgdx with Scala](/wiki/jvm-langs/using-libgdx-with-scala)
+  * [他のJVM言語でlibGDXを使う](/wiki/jvm-langs/using-libgdx-with-other-jvm-languages)
+  * [ClojureでlibGDXを使う](/wiki/jvm-langs/using-libgdx-with-clojure)
+  * [KotlinでlibGDXを使う](/wiki/jvm-langs/using-libgdx-with-kotlin)
+  * [PythonでlibGDXを使う](/wiki/jvm-langs/using-libgdx-with-python)
+  * [ScalaでlibGDXを使う](/wiki/jvm-langs/using-libgdx-with-scala)
 </div>
 </details>
 
-[Managing your assets](/wiki/managing-your-assets)
+[アセット管理](/wiki/managing-your-assets)
 
-<details><summary>Math Utilities</summary>
+<details><summary>数学ユーティリティ</summary>
 <div markdown="1">
-  * [Math Utilities](/wiki/math-utils/math-utilities)
-  * [Circles, planes, rays, etc.](/wiki/math-utils/circles-planes-rays-etc)
-  * [Interpolation](/wiki/math-utils/interpolation)
-  * [Path interface and Splines](/wiki/math-utils/path-interface-and-splines)
-  * [Vectors, matrices, quaternions](/wiki/math-utils/vectors-matrices-quaternions)
+  * [数学ユーティリティ](/wiki/math-utils/math-utilities)
+  * [円、平面、光線など](/wiki/math-utils/circles-planes-rays-etc)
+  * [補間](/wiki/math-utils/interpolation)
+  * [Pathインターフェースとスプライン](/wiki/math-utils/path-interface-and-splines)
+  * [ベクトル、行列、四元数](/wiki/math-utils/vectors-matrices-quaternions)
 </div>
 </details>
 
-[Networking](/wiki/networking)
+[ネットワーク](/wiki/networking)
 
-[Preferences](/wiki/preferences)
+[プリファレンス](/wiki/preferences)
 
-<details><summary>Third Party Services</summary>
+<details><summary>サードパーティサービス</summary>
 <div markdown="1">
-  * [Admob in libgdx](/wiki/third-party/admob-in-libgdx)
-  * [Firebase in libGDX](/wiki/third-party/firebase-in-libgdx)
-  * [Google Mobile Ads in Libgdx (replaces deprecated AdMob)](/wiki/third-party/google-mobile-ads-in-libgdx)
-  * [Google Play Games Services in LibGDX](/wiki/third-party/google-play-games-services-in-libgdx)
-  * [Pollfish in libgdx](/wiki/third-party/pollfish-in-libgdx)
-  * [ProGuard DexGuard and libGDX](/wiki/third-party/proguard-dexguard-and-libgdx)
-  * [Smaato in libGDX](/wiki/third-party/smaato-in-libgdx)
+  * [libGDXでのAdMob](/wiki/third-party/admob-in-libgdx)
+  * [libGDXでのFirebase](/wiki/third-party/firebase-in-libgdx)
+  * [GlibGDXでのGoogle Mobile Ads（旧AdMobの代替）](/wiki/third-party/google-mobile-ads-in-libgdx)
+  * [libGDXでのGoogle Playゲームサービス](/wiki/third-party/google-play-games-services-in-libgdx)
+  * [libGDXでのPollfish](/wiki/third-party/pollfish-in-libgdx)
+  * [libGDXでのProGuardとDexGuard](/wiki/third-party/proguard-dexguard-and-libgdx)
+  * [libGDXでのSmaato](/wiki/third-party/smaato-in-libgdx)
 </div>
 </details>
 
-<details><summary>Tools</summary>
+<details><summary>ツール</summary>
 <div markdown="1">
   * [2D Particle Editor](/wiki/tools/2d-particle-editor)
   * [Flame](/wiki/graphics/3d/3d-particle-effects)
@@ -186,25 +186,25 @@
 </div>
 </details>
 
-<details><summary>Utilities</summary>
+<details><summary>ユーティリティ</summary>
 <div markdown="1">
-* [Collections](/wiki/utils/collections)
+* [コレクション](/wiki/utils/collections)
 * [jnigen](/wiki/utils/jnigen)
-* [Reading and writing JSON](/wiki/utils/reading-and-writing-json)
-* [Reading and writing XML](/wiki/utils/reading-and-writing-xml)
-* [Reflection](/wiki/utils/reflection)
-* [Saved game serialization](/wiki/utils/saved-game-serialization)
+* [JSONの読み書き](/wiki/utils/reading-and-writing-json)
+* [XMLの読み書き](/wiki/utils/reading-and-writing-xml)
+* [リフレクション](/wiki/utils/reflection)
+* [ゲームセーブのシリアライズ](/wiki/utils/saved-game-serialization)
 </div>
 </details>
 
-## Articles
-* [Getting Help](/wiki/articles/getting-help)
-* [External Tutorials](/wiki/articles/external-tutorials)
-* [Coordinate Systems](/wiki/articles/coordinate-systems)
-* [Memory Management](/wiki/articles/memory-management)
-* [Updating Your libGDX Version](/wiki/articles/updating-libgdx)
-* [Dependency Management with Gradle: Adding Extensions and Third-Party Libraries](/wiki/articles/dependency-management-with-gradle)
-* [Maven Integration](/wiki/articles/maven-integration)
-* [Creating Asset Project in Eclipse](/wiki/articles/creating-a-separate-assets-project-in-eclipse)
-* [Java Development Kit - Selection](/wiki/articles/java-development-kit-selection)
-* [Console Support?](/wiki/articles/console-support)
+## ## 記事
+* [サポートを受けるには](/wiki/articles/getting-help)
+* [外部チュートリアル](/wiki/articles/external-tutorials)
+* [座標系](/wiki/articles/coordinate-systems)
+* [メモリ管理](/wiki/articles/memory-management)
+* [libGDXのバージョン更新](/wiki/articles/updating-libgdx)
+* [Gradleによる依存関係管理： 拡張機能とサードパーティライブラリの追加](/wiki/articles/dependency-management-with-gradle)
+* [Maven統合](/wiki/articles/maven-integration)
+* [Eclipseでのアセットプロジェクト作成](/wiki/articles/creating-a-separate-assets-project-in-eclipse)
+* [JDKの選択](/wiki/articles/java-development-kit-selection)
+* [ゲーム機対応](/wiki/articles/console-support)

@@ -23,7 +23,7 @@ search: false
 * [座標系](/wiki/articles/coordinate-systems)
 * [メモリ管理](/wiki/articles/memory-management)
 * [libGDXのバージョン更新](/wiki/articles/updating-libgdx)
-* [Gradleによる依存関係管理: 拡張機能とサードパーティライブラリの追加](/wiki/articles/dependency-management-with-gradle)
+* [Gradleによる依存関係管理： 拡張機能とサードパーティライブラリの追加](/wiki/articles/dependency-management-with-gradle)
 * [Maven統合](/wiki/articles/maven-integration)
 * [Eclipseでのアセットプロジェクト作成](/wiki/articles/creating-a-separate-assets-project-in-eclipse)
 * [JDKの選択](/wiki/articles/java-development-kit-selection)
