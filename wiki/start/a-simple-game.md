@@ -63,7 +63,7 @@ libGDX には、他のパッケージに存在するクラスと同じ名前の�
 
 ![libGDX Rectangle class](/assets/images/dev/a-simple-game/1.png)
 
-OpenGLベースのゲーム（libGDX で作られたものなど）では、小数は通常`22.5f`のような浮動小数点数で表現されます。「f」を付け忘れるとビルドエラーになることがあります。`float`が`double`（例：`22.5`）より推奨されるのは、メモリ使用量が少なく、多くのハードウェアでサポートされ、OpenGLが通常`float`を期待するためです。IDEAでは、`ctrl+p`を押すことで、メソッドが期待する引数を確認できます。
+OpenGLベースのゲーム（libGDX で作られたものなど）では、小数は通常`22.5f`のような浮動小数点リテラルで表現されます。「f」を付け忘れるとビルドエラーになることがあります。`float`が`double`（例：`22.5`）より推奨されるのは、メモリ使用量が少なく、多くのハードウェアでサポートされ、OpenGLが通常`float`を期待するためです。IDEAでは、`ctrl+p`を押すことで、メソッドが期待する引数を確認できます。
 
 ![method parameters](/assets/images/dev/a-simple-game/2.png)
 
@@ -145,7 +145,7 @@ public void create() {
 }
 ```
 
-管理すべきアセットが多くなってきました。そういうときは[アセットマネージャ](/wiki/managing-your-assets)を使うべきです。アセットマネージャもwikiに記載されています。ただし、繰り返しになりますが、これは本チュートリアルの範囲外です。シンプルなままにしましょう。
+管理すべきアセットが多くなってきました。そういうときは[アセット管理](/wiki/managing-your-assets)を使うべきです。アセット管理もwikiに記載されています。ただし、繰り返しになりますが、これは本チュートリアルの範囲外です。シンプルなままにしましょう。
 
 ## ゲームのライフサイクル
 これまでの作業はすべてcreateメソッドの中で行っています。createはゲームの実行時に最初に呼び出されるため、アセットをここで読み込むのは理にかなっています。では、他のメソッドは何のためにあるのでしょうか？libGDXの[ライフサイクル](/wiki/app/the-life-cycle)で詳細が説明されています。
@@ -233,7 +233,7 @@ private void draw() {
 
 `spriteBatch.setProjectionMatrix(viewport.getCamera().combined);`は、ビューポートがスプライトバッチにどのように適用されるかを示しています。これにより、画像が正しい位置に描画されるようになります。
 
-また、beginとendの正しい順番にすることは重要です。スプライトバッチをbeginとendの外で描画してはいけません。そうした場合はエラーメッセージが表示されます。
+また、beginとendは必ず正しい順序で呼んでください。スプライトバッチをbeginとendの外で描画してはいけません。そうした場合はエラーメッセージが表示されます。
 
 ```java
 spriteBatch.begin();
@@ -809,7 +809,7 @@ private void logic() {
 `bucketRectangle.overlaps(dropRectangle)`はバケツと雨粒が重なっているかどうかを判定します。もし重なっていれば、その雨粒のスプライトは雨粒リストから削除されます。リストから削除されたスプライトはもう描画されることもなく、ロジックの処理対象にもなりません。完全に存在しなくなり、バケツが雨粒をキャッチしたように見えます。ゲームが意図した通りに動いているかを確認してください。ゲーム作成の完了はあと一歩です！
 
 ## 効果音と音楽
-It's very easy to add a line to play a sound effect now that we are at the end of our workflow. We want the drop sound (the sound effect loaded at the beginning of this tutorial) to play when the bucket collides with the drop. It should not play when the drop falls out of the level.
+一連の作業の終盤まで来た今、効果音を再生する行を追加するのはとても簡単です。バケツが雨粒と衝突したときに、チュートリアルの冒頭で読み込んだ雨粒の効果音を再生したいと思います。ただし、雨粒が画面の外に落ちただけの場合には再生しないようにする必要があります。
 
 ```java
 private void logic() {
@@ -834,7 +834,7 @@ private void logic() {
         if (dropSprite.getY() < -dropHeight) dropSprites.removeIndex(i);
         else if (bucketRectangle.overlaps(dropRectangle)) {
             dropSprites.removeIndex(i);
-            dropSound.play(); // Play the sound
+            dropSound.play(); // 効果音を鳴らします
         }
     }
 
@@ -846,7 +846,7 @@ private void logic() {
 }
 ```
 
-The music should play at the beginning of the game. It needs to loop continuously until the player is done playing the game. The file is also a little loud, so it should play at half volume. Volume is a value from 0f to 1f with 1f being the normal volume of the file.
+ゲーム開始と同時に音楽を再生しましょう。この音楽はプレイヤーがゲームを遊んでいる間、ずっとループ再生される必要があります。また、この音楽ファイルは少し音量が大きいので、音量は半分（0.5f）に設定します。音量は0fから1fの範囲で指定し、1fが元の音量です。
 
 ```java
 @Override
@@ -859,21 +859,21 @@ public void create() {
 }
 ```
 
-Make sure your speakers are on and try it out.
+スピーカーがオンになっていることを確認して、実際に動かしてみてください。
 
 ## さらに学ぶには
-So, you're at the final steps of making a game. You should test the game out. Tweak values to make the game easier or harder. This can be done by changing how fast the bucket moves and what rate the droplets spawn.
+さあ、いよいよゲーム作成の最終段階です。実際にゲームを動かしてテストしてみましょう。ゲームの難易度は数値調整で大きく変わります。例えば、バケツの移動速度と雨粒の生成間隔を変更することでゲーム難易度を変更できます。
 
-If you want to let your friends and colleagues try your game out, you'll need to make a distributable that they can play. No one is going to want set up an IDE and copy your entire project just to play it. See the page on [Deploying your application](/wiki/deployment/deploying-your-application).
+友人や同僚にあなたのゲームを遊んでもらいたいなら、プレイ可能な配布用の形式でゲームを作成する必要があります。ゲームを遊ぶために、IDEを準備してプロジェクト全体をコピーするような手間をかける人は誰もいないでしょう。[アプリケーションのデプロイ](/wiki/deployment/deploying-your-application)のページを参考にしてください。
 
-Now that you've completed the simple game, it's time to [extend the simple game](/wiki/start/simple-game-extended). This project managed to put all of its code in a single class. This was in the service of making it simple, but it is a terrible way to organize code. The next tutorial will teach you about the Game class and how to implement Screen to arrange your project. It will also cover other important improvements to your game. For example, these instructions skipped the use of the dispose() method because it's not relevant for single page project. When working with multiple screens, you may want to dispose of resources from the last screen to release the memory for new resources in your game.
+シンプルなゲームの作成が完了したので、次は[シンプルなゲームの拡張](/wiki/start/simple-game-extended)に挑戦してみましょう。このプロジェクトはすべてのコードを単一のクラスに収めました。これは簡単にするためでしたが、コードを整理する方法としては最悪の方法です。次のチュートリアルでは、Gameクラスとプロジェクトを構成するためのScreenの実装方法について説明します。また、ゲームにおけるその他の重要な改善点についても取り上げます。例えば、これらの手順では dispose() メソッドの使用を省略しました。これは1つの画面しかないプロジェクトには関係がないためです。複数の画面を扱う場合、新しいリソースのためにメモリを解放するため、前の画面のリソースを破棄したい場合があります。
 
-Game design is a constant journey of learning. The [wiki](/wiki/) goes further in depth regarding all the subjects you have learned here. Look into [collections](/wiki/utils/collections), [TexturePacker](/wiki/tools/texture-packer), [AssetManager](/wiki/managing-your-assets), [audio](/wiki/audio/audio), [memory management](/wiki/articles/memory-management), and [user input](/wiki/input/input-handling).
+ゲームデザインは絶え間ない学びの旅です。今回ここで学んだ内容について、[wiki](/wiki/)ではさらに深く掘り下げた解説が用意されています。[コレクション](/wiki/utils/collections)、[TexturePacker](/wiki/tools/texture-packer)、[アセット管理](/wiki/managing-your-assets)、[オーディオ](/wiki/audio/audio)、[メモリ管理](/wiki/articles/memory-management)、[入力処理](/wiki/input/input-handling)をご覧してください。
 
-This tutorial focused entirely on desktop development. There are many more considerations you must make before you explore Android, iOS, and HTML5 development. There is an extensive article on [considerations for HTML5](/wiki/html5-backend-and-gwt-specifics), for example. Java is not truly "write once, run anywhere" but libGDX takes you pretty close to that goal.
+このチュートリアルはデスクトップ向け開発に完全に焦点を当てていました。しかし、Android、iOS、HTML5といった他のプラットフォームに進む前には、さらに多くの点を考慮する必要があります。例えば、[HTML5開発における考慮事項](/wiki/html5-backend-and-gwt-specifics)について詳細な記事があります。Javaは真の意味では「Write once, run anywhere」な言語ではありませんが、libGDXはその理想にかなり近づけてくれる存在です。
 
 ## 完全なサンプルコード
-The following is the full example code of the game described throughout this tutorial. It's here for reference if you get stuck on any of the steps. Don't cheat yourself by copying the whole thing! Learning how to program is mainly you asking yourself questions and trying to resolve issues on your own first.
+以下はこのチュートリアル全体を通して作ってきたゲームの完全なサンプルコードです。どこかの手順で詰まってしまったときの参照用として置いてあります。全部丸写しするようなことはやめましょう！プログラミングを学ぶとは、自分自身に問いを投げて、まず自分で問題を解決しようと試みることです。
 
 ```java
 package com.badlogic.drop;
