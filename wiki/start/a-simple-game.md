@@ -426,7 +426,7 @@ private void input() {
 もう一度ゲームを実行して、キーボード操作でバケツを左右に動かせるか確認してください。
 
 ### マウス、タッチ操作
-Mouse and Touch controls are related. To react to the user clicking or tapping the screen, call the following method:
+マウス操作とタッチ操作は密接に関係しています。ユーザーが画面をクリック、またはタップしたことに反応するためには、次のメソッドを呼び出します。
 
 ```java
 private void input() {
@@ -439,13 +439,13 @@ private void input() {
         bucketSprite.translateX(-speed * delta);
     }
 
-    if (Gdx.input.isTouched()) { // If the user has clicked or tapped the screen
-        // todo:React to the player touching the screen
+    if (Gdx.input.isTouched()) { // ユーザーが画面をクリック、またはタップした場合
+        // TODO: ユーザーが画面をクリック、またはタップしたときの処理を書く
     }
 }
 ```
 
-Now the player has clicked the screen, but where did they click? We can use the methods Gdx.input.getX() and Gdx.input.getY() for this. Unfortunately, these values are in window coordinates which don't correlate to our selected pixels per meter. The coordinates are also upside down because Window coordinates start from the top left. We need to declare a Vector2 object to do some math.
+さて、プレイヤーが画面をクリックしたことは分かりました。しかし「どこをクリックしたのか？」はまだ分かりません。これを知るために、Gdx.input.getX()メソッドとGdx.input.getY()メソッドを使います。しかしながら、これらの値はウィンドウ座標で取得されるため、私たちが決めた「1メートルあたりのピクセル数」とは対応していません。さらに、ウィンドウ座標は左上が原点になっているため、ゲーム世界の座標系とは上下が逆になっています。計算用としてVector2オブジェクトを宣言する必要があります。
 
 ```java
 public class Main implements ApplicationListener {
@@ -453,7 +453,7 @@ public class Main implements ApplicationListener {
     Vector2 touchPos;
 ```
 
-Initialize the Vector2:
+次にVector2を初期化します。
 
 ```java
 @Override
@@ -464,7 +464,7 @@ public void create() {
 }
 ```
 
-Notice that we have created a single instance variable for the Vector2 instead of creating it locally. By reusing this Vector2, we prevent the game from triggering the garbage collector frequently which causes lag spikes in the game. This is how we use the Vector2 to move the bucket:
+ここで注目してほしいのは、Vector2をローカル変数として毎回生成するのではなく、インスタンス変数としてひとつだけ作成している点です。Vector2を再利用することで、ゲームが頻繁にガベージコレクタ（GC）を動かし、それによってゲームラグが起きることを防ぎます。次のコードが、Vector2を使ってバケツを移動させる方法です。
 
 ```java
 private void input() {
@@ -478,46 +478,46 @@ private void input() {
     }
 
     if (Gdx.input.isTouched()) {
-        touchPos.set(Gdx.input.getX(), Gdx.input.getY()); // Get where the touch happened on screen
-        viewport.unproject(touchPos); // Convert the units to the world units of the viewport
-        bucketSprite.setCenterX(touchPos.x); // Change the horizontally centered position of the bucket
+        touchPos.set(Gdx.input.getX(), Gdx.input.getY()); // 画面上でタッチ（クリック）された位置を取得します
+        viewport.unproject(touchPos); // ウィンドウ座標をゲーム世界の座標に変換します
+        bucketSprite.setCenterX(touchPos.x); // バケツの中心をタッチ（クリック）された位置のX座標に来るように変更します
     }
 }
 ```
 
-This converts the window coordinates to coordinates in our world space. This code actually supports mobile devices as well, however you should read about [some other input features](/wiki/input/event-handling) that libGDX provides you. Run the game and click the screen to move the bucket.
+これはウィンドウ座標をゲーム世界の座標に変換する処理です。このコードはモバイル端末にも対応していますが、libGDXが提供する[そのほかの入力機能](/wiki/input/event-handling)も確認してください。ゲームを実行し、画面をクリック（またはタップ）してバケツが動くか試してみましょう。
 
 ## ゲームロジック
-The player can move left and right now, but they can go completely off the screen. We need to prevent the player from doing that. libGDX provides some helpful methods in the `MathUtils` class. We can achieve our goal by using the `clamp()` method. Remember that the left side of the screen starts at 0. This code detects if the bucket goes too far left. If it does, it snaps its position at the farthest it's allowed to go. Add the following lines to the logic method:
+プレイヤーは左右に動かすことができるようになりましたが、今のままだと画面の外まで移動できてしまいます。それは防ぐ必要があります。libGDXは役立つメソッドがある`MathUtils`クラスを提供しています。ここでは`clamp()`メソッドを使って目的を達成します。画面の左端は0から始まることを思い出してください。このコードはバケツが左に行きすぎていないかをチェックします。もし行きすぎていた場合、移動できる最も左の位置に留めます。次の行をlogicメソッドに追加してください。
 
 ```java
 private void logic() {
-    // Store the worldWidth and worldHeight as local variables for brevity
+    // 可読性のため、worldWidthとworldHeightをローカル変数にします
     float worldWidth = viewport.getWorldWidth();
     float worldHeight = viewport.getWorldHeight();
 
-    // Clamp x to values between 0 and worldWidth
+    // x座標を0からworldWidthの範囲に収めます
     bucketSprite.setX(MathUtils.clamp(bucketSprite.getX(), 0, worldWidth));
 }
 ```
 
-Try the game out. This kind of works, but it lets the bucket go just a little too far right. In fact, it's one whole unit too far to the right. This is because the bucket sprite has an origin on the bottom left of the image. To resolve this, we need to subtract the width of the bucket from the right edge.
+実際にゲームを動かしてみてください。ある程度はうまく動きますが、右方向に関してはバケツが少しだけ行きすぎてしまいます。これはバケツのスプライトの原点がバケツ画像の左下にあるためです。この問題を解決するには、バケツの幅を右端の制限から差し引く必要があります。
 
 ```java
 private void logic() {
     float worldWidth = viewport.getWorldWidth();
     float worldHeight = viewport.getWorldHeight();
 
-    // Store the bucket size for brevity
+    // 可読性のため、バケツのサイズをローカル変数にします
     float bucketWidth = bucketSprite.getWidth();
     float bucketHeight = bucketSprite.getHeight();
 
-    // Subtract the bucket width
+    // バケツの幅を差し引きます
     bucketSprite.setX(MathUtils.clamp(bucketSprite.getX(), 0, worldWidth - bucketWidth));
 }
 ```
 
-Now to spawn the rain drops. We will have more than one raindrop, so we need a list to keep track of them. Thankfully, libGDX has many useful [collections](/wiki/utils/collections) to help with this. Declare the list:
+次は、雨粒を生成していきましょう。雨粒は1つだけではなく、複数存在するため、管理するためのリストが必要になります。幸いなことに、libGDXにはこの目的に使える便利な[コレクション](/wiki/utils/collections)が数多く用意されています。まずは、そのリストを宣言しましょう。
 
 ```java
 public class Main implements ApplicationListener {
@@ -525,7 +525,7 @@ public class Main implements ApplicationListener {
     Array<Sprite> dropSprites;
 ```
 
-Initialize the list:
+次にリストを初期化します。
 
 ```java
 public void create() {
@@ -535,7 +535,7 @@ public void create() {
 }
 ```
 
-As before, it is advised to organize your code into methods. Create a new method to create a droplet. Place it after your draw method.
+これまでと同様に、コードはメソッドごとに整理することをおすすめします。雨粒を生成するための新しいメソッドを作成しましょう。drawメソッドの後に配置してください。
 
 ```java
 private void draw() {
@@ -543,18 +543,18 @@ private void draw() {
 }
 
 private void createDroplet() {
-    // create local variables for convenience
+    // 使いやすくするためのローカル変数を作成します
     float dropWidth = 1;
     float dropHeight = 1;
     float worldWidth = viewport.getWorldWidth();
     float worldHeight = viewport.getWorldHeight();
     
-    // create the drop sprite
+    // 雨粒のスプライトを作成します
     Sprite dropSprite = new Sprite(dropTexture);
     dropSprite.setSize(dropWidth, dropHeight);
     dropSprite.setX(0);
     dropSprite.setY(worldHeight);
-    dropSprites.add(dropSprite); // Add it to the list
+    dropSprites.add(dropSprite); // リストに追加します
 }
 
 @Override
@@ -563,9 +563,9 @@ public void pause() {
 }
 ```
 
-The size is the same as the player. Setting the y position at the top of the screen will make it appear as if it's falling from the sky. The `dropSprites.add(dropSprite);` line adds the drop to the list of drops that we can manage in our render loop. 
+サイズはバケツと同じです。y座標を画面の一番上に設定することで、雨粒が空から落ちてくるように見せることができます。`dropSprites.add(dropSprite);`の行では、雨粒を「renderループの中で制御できる雨粒リスト」に追加しています。
 
-We'll call `createDroplet()` in the create method.
+次に、create()メソッドの中で`createDroplet()`を呼び出しましょう。
 
 ```java
 public void create() {
@@ -576,7 +576,7 @@ public void create() {
 }
 ```
 
-Drawing each drop is pretty simple. Add the sprite drawing code to the draw method:
+雨粒を1つずつ描画するのはとても簡単です。次のように、スプライトの描画処理をdrawメソッドに追加してください。
 
 ```java
 private void draw() {
@@ -591,7 +591,7 @@ private void draw() {
     spriteBatch.draw(backgroundTexture, 0, 0, worldWidth, worldHeight);
     bucketSprite.draw(spriteBatch);
 
-    // draw each sprite
+    // 各雨粒のスプライトを描画します
     for (Sprite dropSprite : dropSprites) {
         dropSprite.draw(spriteBatch);
     }
@@ -600,7 +600,7 @@ private void draw() {
 }
 ```
 
-If you run the program now, you'll see nothing happen. That's because the droplet doesn't have any movement code. Begin coding the logic for the droplets after the bucket logic:
+この時点でプログラムを実行しても、何も起こらないように見えるはずです。雨粒にまだ動きの処理が書かれていないためです。バケツのロジックの後に、雨粒のロジックを書き始めましょう。
 
 ```java
 private void logic() {
@@ -611,16 +611,16 @@ private void logic() {
 
     bucketSprite.setX(MathUtils.clamp(bucketSprite.getX(), 0, worldWidth - bucketWidth));
 
-    float delta = Gdx.graphics.getDeltaTime(); // retrieve the current delta
+    float delta = Gdx.graphics.getDeltaTime(); // 現在のデルタタイムを取得します
 
-    // loop through each drop
+    // 各雨粒についてループ処理を行います
     for (Sprite dropSprite : dropSprites) {
-        dropSprite.translateY(-2f * delta); // move the drop downward every frame
+        dropSprite.translateY(-2f * delta); // 毎フレーム、雨粒を下方向に移動させます
     }
 }
 ```
 
-We have a problem here. The rain drop only spawns on the left side every time. You could change the position, of course, but there is no variability. No randomness. We need it to be a random position between 0 and the width of the world.
+ここで問題があります。雨粒は毎回画面の左側だけにしか生成されていません。位置を変更することはできますが、それでは変化がなく、ランダム性がありません。必要なのはゲーム世界の幅の中でランダムな位置に雨粒を生成することです。
 
 ```java
 private void createDroplet() {
@@ -631,19 +631,19 @@ private void createDroplet() {
     
     Sprite dropSprite = new Sprite(dropTexture);
     dropSprite.setSize(dropWidth, dropHeight);
-    dropSprite.setX(MathUtils.random(0f, worldWidth - dropWidth)); // Randomize the drop's x position
+    dropSprite.setX(MathUtils.random(0f, worldWidth - dropWidth)); // 雨粒のX座標をランダムに設定します
     dropSprite.setY(worldHeight);
     dropSprites.add(dropSprite);
 }
 ```
 
-Again, we're subtracting the width of the sprite so none of the raindrops appear outside of the view. Success!
+バケツのときと同様に、スプライトの幅を差し引いています。こうすることで、雨粒が画面の外に生成されることがなくなります。成功です！
 
-That's only one droplet though. When it rains, we should have multiple droplets over the course of time. Let's move the droplet spawning code to the logic method. This will make droplets repeatedly every frame. Cut the line from the create method:
+しかしながら、雨粒は1つだけです。雨が降るとき、時間の経過とともに複数の雨粒が降ってくるべきです。そこで、雨粒を生成するコードをlogicメソッドに移動しましょう。こうすることで、毎フレーム雨粒が生成されるようになります。createメソッドから次の行を切り取ってください。
 
 ![Cut the droplet](/assets/images/dev/a-simple-game/13.png)
 
-Paste it into the logic method:
+それをlogicメソッドの中に貼り付けます。
 
 ```java
 private void logic() {
@@ -660,16 +660,16 @@ private void logic() {
         dropSprite.translateY(-2f * delta);
     }
 
-    // paste the line here
+    // ここに貼り付けます
     createDroplet();
 }
 ```
 
-If you run this, you'll see that we have a catastrophe! There are too many droplets.
+これを実行すると、大惨事が起きていることが分かるはずです！雨粒が多すぎます。
 
 ![too many droplets](/assets/images/dev/a-simple-game/14.png)
 
-There should be a delay between each spawn. Whenever we need something to be done repeatedly over time with a delay, we can create a timer. Declare a new variable to store the time:
+雨粒が生成されるたびに少し間隔があるべきです。このように「一定間隔で、繰り返し何かを行いたい」場合、タイマーを使うのが定石です。経過時間を保持するための新しい変数を宣言しましょう。
 
 ```java
 public class Main implements ApplicationListener {
@@ -677,7 +677,7 @@ public class Main implements ApplicationListener {
     float dropTimer;
 ```
 
-`dropTimer` will keep track of how much time has elapsed between each spawn. Modify the code in the logic method:
+`dropTimer`は雨粒が生成されてから次に生成されるまでに、どれだけ時間が経過したかを追跡するための変数です。次に、logicメソッド内のコードを次のように修正します。
 
 ```java
 private void logic() {
@@ -694,27 +694,27 @@ private void logic() {
         dropSprite.translateY(-2f * delta);
     }
 
-    dropTimer += delta; // Adds the current delta to the timer
-    if (dropTimer > 1f) { // Check if it has been more than a second
-        dropTimer = 0; // Reset the timer
-        createDroplet(); // Create the droplet
+    dropTimer += delta; // 現在のデルタタイムをタイマーに加算します
+    if (dropTimer > 1f) { // 1秒以上経過したかを確認します
+        dropTimer = 0; // タイマーをリセットします
+        createDroplet(); // 新しい雨粒を生成します
     }
 }
 ```
 
-`dropTimer` accumulates the time that passes between every frame. If it's been more than a second, it will update the recorded time and proceed to create the droplet. This works as expected now.
+`dropTimer`はフレームごとの経過時間を蓄積していきます。その合計が1秒を超えた場合、記録されている時間を更新し、新しい雨粒の生成へと進みます。これで期待どおりの挙動になりました。
 
 ![3 droplets](/assets/images/dev/a-simple-game/15.png)
 
-These droplets will fall off the screen never to be seen again. Java doesn't forget though. These droplets will remain in memory forever. If you [profile](https://visualvm.github.io/) your game you'll see that we have a memory leak.
+これらの雨粒は画面の外へ落ちていき、二度と表示されることはありません。しかしながら、Javaは忘れてくれません。画面から消えた雨粒たちは、メモリ上にはずっと残り続けてしまいます。ゲームを[プロファイル](https://visualvm.github.io/)で解析してみると、メモリリークが発生していることが確認できるはずです。
 
 ![memory profile](/assets/images/dev/a-simple-game/16.png)
 
-If the player would leave the game on for a really long time, it will crash. So, we should remove the drop sprite from the list when it falls off screen. We need to make some considerable modifications to the logic for loop. Erase your loop in the logic method:
+プレイヤーがゲームを非常に長い時間起動したままにしていたら、最終的にはクラッシュしてしまいます。そのため、画面の外に落ちた雨粒のスプライトは、リストから削除する必要があります。これを行うにはlogicメソッド内のforループの処理を大きく書き換える必要があります。logicメソッドの中にある現在のループを削除してください。
 
 ![erase lines](/assets/images/dev/a-simple-game/17.png)
 
-Replace it with the loop indicated below:
+次のループに置き換えてください。
 
 ```java
 private void logic() {
@@ -727,15 +727,15 @@ private void logic() {
 
     float delta = Gdx.graphics.getDeltaTime();
 
-    // Loop through the sprites backwards to prevent out of bounds errors
+    // 配列の範囲外エラーを防ぐため、後ろから順にスプライトを処理します
     for (int i = dropSprites.size - 1; i >= 0; i--) {
-        Sprite dropSprite = dropSprites.get(i); // Get the sprite from the list
+        Sprite dropSprite = dropSprites.get(i); // リストからスプライトを取得します
         float dropWidth = dropSprite.getWidth();
         float dropHeight = dropSprite.getHeight();
 
         dropSprite.translateY(-2f * delta);
 
-        // if the top of the drop goes below the bottom of the view, remove it
+        // 雨粒の上端が画面の下端より下に行ったら削除します
         if (dropSprite.getY() < -dropHeight) dropSprites.removeIndex(i);
     }
 
@@ -747,9 +747,9 @@ private void logic() {
 }
 ```
 
-Removing items in a list while you are iterating through it can cause some unforeseen bugs. That's why we are iterating through the list backwards so you don't skip any indexes. Make sure to learn about other [collections](/wiki/utils/collections#specialized-lists) available like the SnapshotArray and the DelayedRemovalArray for more complex projects.
+リストを走査している最中に要素を削除すると、予期しないバグを引き起こすことがあります。そのため、リストを後ろから順にループすることで、インデックスを飛ばしてしまわないようにしています。より複雑なプロジェクトでは、SnapshotArrayやDelayedRemovalArrayなど、ほかの[コレクション](/wiki/utils/collections#specialized-lists)についてもぜひ学んでおいてください。
 
-We have made great progress, however the drops don't interact with the bucket. This is where we incorporate some rudimentary collision detection. This can be achieved with the Rectangle class. We need two rectangles to make comparisons. One for the bucket and one to be reused with every drop.
+ここまでで大きな前進を遂げましたが、まだ雨粒はバケツと相互作用していません。そこで基本的な衝突検出を組み込みます。これは長方形（Rectangle）クラスを使うことで実現できます。比較のために、2つの長方形が必要になります。1つはバケツ用、そしてもう1つは、すべての雨粒に対して使い回すためのものです。
 
 ```java
 public class Main implements ApplicationListener {
@@ -768,7 +768,7 @@ public void create() {
 }
 ```
 
-The code now sets the rectangles to the position and dimensions of the Sprites.
+このコードでは、スプライトの位置と大きさをそのまま長方形に反映させています。
 
 ```java
 private void logic() {
@@ -780,7 +780,7 @@ private void logic() {
     bucketSprite.setX(MathUtils.clamp(bucketSprite.getX(), 0, worldWidth - bucketWidth));
 
     float delta = Gdx.graphics.getDeltaTime();
-    // Apply the bucket position and size to the bucketRectangle
+    // バケツの位置とサイズをbucketRectangle（バケツ用長方形）に反映させます。
     bucketRectangle.set(bucketSprite.getX(), bucketSprite.getY(), bucketWidth, bucketHeight);
 
     for (int i = dropSprites.size - 1; i >= 0; i--) {
@@ -789,12 +789,12 @@ private void logic() {
         float dropHeight = dropSprite.getHeight();
 
         dropSprite.translateY(-2f * delta);
-        // Apply the drop position and size to the dropRectangle
+        // 雨粒の位置とサイズをdropRectangle（雨粒用長方形）に反映させます
         dropRectangle.set(dropSprite.getX(), dropSprite.getY(), dropWidth, dropHeight);
 
         if (dropSprite.getY() < -dropHeight) dropSprites.removeIndex(i);
-        else if (bucketRectangle.overlaps(dropRectangle)) { // Check if the bucket overlaps the drop
-            dropSprites.removeIndex(i); // Remove the drop
+        else if (bucketRectangle.overlaps(dropRectangle)) { // バケツと雨粒が重なっているかをチェックします
+            dropSprites.removeIndex(i); // 雨粒を削除します
         }
     }
 
@@ -806,7 +806,7 @@ private void logic() {
 }
 ```
 
-`bucketRectangle.overlaps(dropRectangle)` checks if the bucket overlaps the drop. If it does, the Sprite will be removed from the list of drop Sprites. That means it will no longer be drawn or acted upon. It simply doesn't exist anymore, making it look like the bucket collected it. Make sure your game works as expected. You're almost done!
+`bucketRectangle.overlaps(dropRectangle)`はバケツと雨粒が重なっているかどうかを判定します。もし重なっていれば、その雨粒のスプライトは雨粒リストから削除されます。リストから削除されたスプライトはもう描画されることもなく、ロジックの処理対象にもなりません。完全に存在しなくなり、バケツが雨粒をキャッチしたように見えます。ゲームが意図した通りに動いているかを確認してください。ゲーム作成の完了はあと一歩です！
 
 ## 効果音と音楽
 It's very easy to add a line to play a sound effect now that we are at the end of our workflow. We want the drop sound (the sound effect loaded at the beginning of this tutorial) to play when the bucket collides with the drop. It should not play when the drop falls out of the level.
