@@ -1,21 +1,21 @@
 ---
-title: "Extending the Simple Game"
+title: "シンプルなゲームの拡張"
 redirect_from:
   - /dev/simple-game-extended/
   - /dev/simple_game_extended/
 ---
 
-In this tutorial we will be **extending the simple game** "Drop", made in [the previous tutorial](/wiki/start/a-simple-game). We will be adding a menu screen and a couple of features to make this game a little more fully featured.
+このチュートリアルでは、[前回のチュートリアル](/wiki/start/a-simple-game)で作った**シンプルなゲーム**「Drop」を**拡張**していきます。今回は、メニュー画面やいくつかの新機能を追加して、ゲームを少し充実させていきます。
 
-Let's get started with an introduction to a few more advanced classes in libGDX.
+では、libGDXの少し高度なクラスについて紹介していきましょう。
 
-## The Screen interface
-Screens are _fundamental_ to any game with multiple components. Screens contain many of the methods you are used to from ApplicationListener objects, and include a couple of new methods: `show` and `hide`, which are called when the Screen gains or loses focus, respectively. Screens are responsible for handling (i.e., processing and rendering) one aspect of your game: a menu screen, a settings screen, a game screen, etc.
+## スクリーンインターフェース
+複数の要素を持つゲームにおいて、スクリーンは_基本的な_存在です。スクリーンは`ApplicationListener`オブジェクトで慣れ親しんだメソッドの多くを備えており、さらにいくつかの新しいメソッドも持っています。新しいメソッドである`show`と`hide`はスクリーンがフォーカスされたとき、または失ったときにそれぞれ呼ばれます。スクリーンはゲームの一側面（例えば、メニュー画面、設定画面、ゲーム画面など）の処理や描画を担当します。
 
-## The Game Class
-The Game class is responsible for handling multiple screens and provides some helper methods for this purpose, alongside an implementation of ApplicationListener for you to use. Together, Screen and Game objects are used to create a simple and powerful structure for games.
+## ゲームクラス
+`Game`クラスは複数のスクリーンを管理する役割を持ち、そのためのヘルパーメソッドをいくつか提供するとともに、`ApplicationListener`の実装も備えています。`Screen`と`Game` オブジェクトを組み合わせることで、シンプルながら強力なゲーム構造を作ることができます。
 
-We will start by creating a `Drop` class, which extends Game and whose `create()` method will be the entry point to our game. Let's take a look at some code:
+ここからは、`Game`クラスを継承した`Drop`クラスを作成し、その`create()`メソッドをゲームのエントリーポイントとします。コードを見てみましょう。
 
 ```java
 package com.badlogic.drop;
@@ -36,11 +36,11 @@ public class Drop extends Game {
 
 	public void create() {
 		batch = new SpriteBatch();
-		// use libGDX's default font
+		// libGDXのデフォルトフォントを使用します
 		font = new BitmapFont();
 		viewport = new FitViewport(8, 5);
 		
-		//font has 15pt, but we need to scale it to our viewport by ratio of viewport height to screen height 
+		// フォントサイズは15ptですが、ビューポートの高さと画面の高さの比率でスケーリングする必要があります
 		font.setUseIntegerPositions(false);
 		font.getData().setScale(viewport.getWorldHeight() / Gdx.graphics.getHeight());
 		
@@ -48,7 +48,7 @@ public class Drop extends Game {
 	}
 
 	public void render() {
-		super.render(); // important!
+		super.render(); // 重要！
 	}
 
 	public void dispose() {
@@ -59,18 +59,18 @@ public class Drop extends Game {
 }
 ```
 
-We start the application with instantiating a SpriteBatch, BitmapFont and a Viewport. It is a bad practice to create multiple objects that can be shared instead (see [DRY](https://en.wikipedia.org/wiki/Don't_repeat_yourself)). The SpriteBatch object is used to render objects onto the screen, such as textures; and the BitmapFont object is used, along with a SpriteBatch, to render text onto the screen. We will touch more on this in the Screen classes.
+アプリケーションはスプライトバッチ、ビットマップフォント、ビューポートをインスタンス化して開始します。共有できるオブジェクトを何度も作成するのは望ましくない方法です（[DRY](https://en.wikipedia.org/wiki/Don't_repeat_yourself)を参照）。スプライトバッチはテクスチャなどのオブジェクトを画面に描画するために使用されます。ビットマップフォントはスプライトバッチと組み合わせて、画面に文字を描画するために使われます。これについては、後ほどスクリーンインターフェースを実装したクラスの説明で詳しく触れます。
 
-Next, we set the Screen of the Game to a `MainMenuScreen` object, with a Drop instance as its first and only parameter.
+次に、ゲームのスクリーンを`MainMenuScreen`オブジェクトに設定します。このとき、Dropインスタンスを唯一の引数として渡します。
 
-A common mistake is to forget to call `super.render()` with a Game implementation. Without this call, the Screen that you set in the `create()` method will not be rendered if you override the render method in your Game class!
+よくあるミスは`Game`を継承したクラスで`super.render()`を呼び忘れることです。この呼び出しがないと、`Game`を継承したクラス内で`render`メソッドをオーバーライドした場合、`create()`メソッドで設定したスクリーンが描画されません！
 {: .notice--primary}
 
-Finally, another reminder to dispose of your (heavy) objects! Some further reading on this can be found [here](/wiki/managing-your-assets).
+最後にもう一つ、重いオブジェクトは必ず破棄（dispose）することを忘れないでください！詳しい解説は[こちら](/wiki/managing-your-assets)で確認してください。
 
 
-## The Main Menu
-Now, let's get into the nitty-gritty of the `MainMenuScreen` class.
+## メインメニュー
+それでは、`MainMenuScreen`クラスの核心部分に踏み込んでみましょう。
 
 ```java
 package com.badlogic.drop;
@@ -87,14 +87,14 @@ public class MainMenuScreen implements Screen {
 	}
 
 
-        //...Rest of class omitted for succinctness.
+        //...残りのクラス部分は省略します
 
 }
 ```
 
-In this code snippet, we make the constructor for the `MainMenuScreen` class, which implements the Screen interface. The Screen interface does not provide any sort of `create()` method, so we instead use a constructor. The only parameter for the constructor necessary for this game is an instance of `Drop`, so that we can call upon its methods and fields if necessary.
+このコード例では、`Screen`インターフェースを実装する`MainMenuScreen`クラスのコンストラクタを作成しています。`Screen`インターフェースには`create()`メソッドのようなメソッドは用意されていないため、代わりにコンストラクタを使用します。今回のゲームでは、コンストラクタに必要なのは`Drop`のインスタンスだけです。これを渡すことによって、必要に応じて`Drop`インスタンスのメソッドやフィールドを呼び出すことが出来ます。
 
-Next, the final "meaty" method in the `MainMenuScreen` class: `render(float)`
+次に、`MainMenuScreen`クラスの最後の「重要な」メソッド`render(float)`メソッドです。
 
 ```java
 public class MainMenuScreen implements Screen {
@@ -109,7 +109,7 @@ public class MainMenuScreen implements Screen {
 		game.batch.setProjectionMatrix(game.viewport.getCamera().combined);
 
 		game.batch.begin();
-		//draw text. Remember that x and y are in meters
+		// テキストを描画します。xとyはメートル単位であることを忘れないでください。
 		game.font.draw(game.batch, "Welcome to Drop!!! ", 1, 1.5f);
 		game.font.draw(game.batch, "Tap anywhere to begin!", 1, 1);
 		game.batch.end();
@@ -120,17 +120,17 @@ public class MainMenuScreen implements Screen {
 		}
 	}
 
-        // Rest of class still omitted...
+        // 残りのクラス部分は省略します...
 
 }
 
 ```
 
-The code here is fairly straightforward, except for the fact that we need to call game's SpriteBatch and BitmapFont instances instead of creating our own. `game.font.draw(SpriteBatch, String, float, float)`, is how text is rendered to the screen. libGDX comes with a pre-made font, Arial, so that you can use the default constructor and still get a font.
+ここでのコードは比較的単純ですが、独自にスプライトバッチやビットマップフォントを作るのではなく、`game`が持つインスタンスを使う点に注意してください。テキストを画面に描画する方法は`game.font.draw(SpriteBatch, String, float, float)`です。libGDXにはあらかじめ用意されたフォント（Arial）が含まれているので、デフォルトコンストラクタを使うだけでもフォントを利用できます。
 
-We then check to see if the screen has been touched, if it has, then we check to set the games screen to a GameScreen instance, and then dispose of the current instance of MainMenuScreen. The rest of the methods that are needed to implement in the MainMenuScreen are left empty, so I'll continue to omit them (there is nothing to dispose of in this class).
+次に、画面がタッチされたかどうかを確認します。もしタッチされていれば、ゲームの画面を`GameScreen`インスタンスに切り替え、現在の`MainMenuScreen`のインスタンスを破棄します。`MainMenuScreen`で実装する必要のある他のメソッドは空のままにしてあるので、ここでも省略します（このクラスでは破棄すべきものは特にありません）。
 
-Also remember to update viewport on resize.
+また、リサイズ時にビューポートを更新することを忘れないでください。
 
 ```java
 @Override
@@ -139,7 +139,7 @@ public void resize(int width, int height) {
 }
 ```
 
-## The Game Screen
+## ゲームスクリーン
 Now that we have our main menu finished, it's time to finally get to making our game. We will be lifting most of the code from the [original game](/wiki/start/a-simple-game) as to avoid redundancy, and avoid having to think of a different game idea to implement as simply as Drop is.
 
 
@@ -335,7 +335,7 @@ Note that the `dispose()` method of the `GameScreen` class is not called automat
 
 And that's it, you have the complete game finished. That is all there is to know about the Screen interface and abstract Game Class, and all there is to creating multifaceted games with multiple states. The **full Java code** can be found [here](https://github.com/libgdx/libgdx.github.io/tree/dev/assets/downloads/tutorials/extended-game-java). If you are developing in **Kotlin**, take a look [here](https://github.com/libgdx/libgdx.github.io/tree/dev/assets/downloads/tutorials/extended-game-kotlin) for the full code.
 
-## The Future
+## 今後の展望
 After this tutorial you should have a basic understanding how libGDX works and what to expect going forward. Some things can still be improved, like using the [Memory Management](/wiki/articles/memory-management#object-pooling) classes to recycle all the Rectangles we have the garbage collector clean up each time we delete a raindrop. OpenGL is also not too fond if we hand it too many different images in a batch (in our case it's OK as we only had two images). Usually one would put all those images into a single `Texture`, also known as a `TextureAtlas`. In addition, taking a look at [Viewports](/wiki/graphics/viewports) will most certainly prove useful. Viewports help dealing with different screen sizes/resolutions and decide, whether the screen's content needs to be stretched/should keep its aspect ratio, etc.
 
 To continue learning about libGDX we highly **recommend reading our [wiki](/wiki/)** and checking out the demos and tests in our main GitHub repository. If you have any questions, **join our official [Discord server](/community/)**, we are always glad to help!
