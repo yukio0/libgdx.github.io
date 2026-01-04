@@ -197,7 +197,7 @@
 </div>
 </details>
 
-## ## 記事
+## 記事
 * [サポートを受けるには](/wiki/articles/getting-help)
 * [外部チュートリアル](/wiki/articles/external-tutorials)
 * [座標系](/wiki/articles/coordinate-systems)
