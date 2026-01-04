@@ -319,30 +319,30 @@ private void draw() {
 背景とバケツが正しく表示されていることを確認してください。水滴の描画は後ほど生成処理を実装したあとにします。
 
 ## 入力操作
-It's not fun to have a game without some sort of movement or action on screen. Let's enable the player's ability to control the bucket. As you know, there are all sorts of ways to get input from a user. We'll focus on a few: the keyboard, mouse, and touch.
+画面上で何の動きやアクションもないゲームは楽しくないですね。プレイヤーがバケツを操作できるようにしましょう。ご存じの通り、ユーザーから入力を受け取る方法にはさまざまなものがあります。ここでは、キーボード、マウス、タッチ操作に焦点を当てます。
 
-We need some way of keeping track of where the player bucket is in the game world. Texture does not store any position state. Sure, you can tell SpriteBatch where to draw it every frame by using the provided overloaded methods. What if you want to rotate it? Resize it? These methods get incredibly complicated the more you want to do.
+ゲーム世界の中でプレイヤーのバケツがどこにあるのかを管理する仕組みが必要です。テクスチャは位置情報を保持しません。確かに、SpriteBatchクラスに用意されているオーバーロードされたメソッドを使えば、毎フレームどこに描画するかを指定することはできます。しかし、もし回転させたい場合はどうでしょう？サイズを変えたくなったら？こうしたことをやろうとすると、描画用のメソッドはやりたいことが増えるほど急激に複雑になっていきます。
 
 ![long method parameters](/assets/images/dev/a-simple-game/10.png)
 
-Let's use a Sprite instead. Sprite is capable of doing all these things and keeping state. This means that it will remember its properties instead of you having to define them every frame.
+スプライトを使いましょう。スプライトはこれらすべての操作を行うことができ、しかも状態を保持してくれます。つまり、毎フレームこちらが設定し直さなくても、位置、サイズ、回転といったプロパティを自分で覚えていてくれるのです。
 
 ```java
 public class Main implements ApplicationListener {
     ...
-    Sprite bucketSprite; // Declare a new Sprite variable
+    Sprite bucketSprite; // 新しいSprite変数を宣言
 ```
 
 ```java
 @Override
 public void create() {
     ...
-    bucketSprite = new Sprite(bucketTexture); // Initialize the sprite based on the texture
-    bucketSprite.setSize(1, 1); // Define the size of the sprite
+    bucketSprite = new Sprite(bucketTexture); // テクスチャを元にスプライトを初期化します
+    bucketSprite.setSize(1, 1); // スプライトのサイズを定義します
 }
 ```
 
-Erase the `spriteBatch.draw(bucketTexture, 0, 0, 1, 1);` line for the bucket. The Sprite draw code is written in a different way:
+バケツを描画していた`spriteBatch.draw(bucketTexture, 0, 0, 1, 1);`の行を消してください。スプライトを使う場合、描画方法は少し変わります。
 
 ```java
 private void draw() {
@@ -355,60 +355,60 @@ private void draw() {
     float worldHeight = viewport.getWorldHeight();
 
     spriteBatch.draw(backgroundTexture, 0, 0, worldWidth, worldHeight);
-    bucketSprite.draw(spriteBatch); // Sprites have their own draw method
+    bucketSprite.draw(spriteBatch); // スプライトは専用のdrawメソッドを持っています
 
     spriteBatch.end();
 }
 ```
-If you run the game again, there shouldn't be any difference in the output. That's good! If you don't see the bucket, make sure you adjusted the line indicated above correctly.
+この状態で、もう一度ゲームを実行してみてください。表示結果は見た目上は何も変わらないはずです。それで正解です！もしバケツが表示されなかった場合、バケツを描画している行を正しく修正できているか確認してみてください。
 
 ### キーボード操作
-Now to capturing player input. This is how you detect if a player is pressing keys on the keyboard. This needs to happen in the input method
+では、プレイヤーの入力を取得していきましょう。キーボード入力を検知する方法です。これはinputメソッドの中で行う必要があります。
 
 ```java
 private void input() {
     if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-        // todo: Do something when the user presses the right arrow
+        // TODO: ユーザーが右矢印キーを押したときの処理
     }
 }
 ```
 
-This is known as keyboard polling. Every time a frame is drawn, we're going to check if a key is pressed. There is a list of pretty much every conceivable key in `Gdx.input.Input.Keys`. We want to react to the user pressing the right arrow key.
+この方法はキーボードポーリングと呼ばれています。毎フレーム描画されるたびにキーが押されているかどうかを確認するというやり方です。`Gdx.input.Input.Keys`には、考えうるほぼすべてのキーが定義されています。今回、ユーザーが右矢印キーを押したことに反応したいわけです。
 
 ![keys list](/assets/images/dev/a-simple-game/11.png)
 
-That's great, but what is supposed to happen when the key is pressed? We need to move the coordinates of the bucket sprite.
+ここまでは良いですね。でも、キーが押されたら、何を起こすべきでしょうか？バケツのSpriteの座標を動かす必要がありますね。
 
 ```java
 private void input() {
     float speed = .25f;
 
     if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-        bucketSprite.translateX(speed); // Move the bucket right
+        bucketSprite.translateX(speed); // バケツを右に動かします
     }
 }
 ```
 
-The variable `speed` dictates how fast the bucket moves. Adding to the x makes the bucket move to the right. This basically means "set the bucket x to what it currently is right now plus a little bit more". Subtracting from the x makes the bucket move to the left.
+この`speed`という変数はバケツがどれくらいの速さで動くかを決めています。x座標に値を足すと右へ移動します。つまりこのコードは、「バケツのx座標に、今の値から少し足した値を設定する」と言っているのと基本的に同じ意味です。x座標に値を引くとバケツは左に移動します。
 
-An unfortunate side effect of having our logic inside the render method is that our code behaves differently on different hardware. This is because of differences in framerate. More frames per second means more movement per second.
+ロジックをrenderメソッドの中に書いていると、残念な副作用として、ハードウェアごとにコードの挙動が変わってしまいます。これはフレームレートの違いが原因です。1秒あたりのフレーム数が多いほど、1秒間に行われる移動量も多くなってしまいます。
 
 ![fps comparison](/assets/images/dev/a-simple-game/12.png)
 
-To counteract this, we need to use delta time. Delta time is the measured time between frames. If we multiply our movement by delta time, the movement will be consistent no matter what hardware we run this game on.
+これを防ぐために、デルタタイムを使用する必要があります。デルタタイムとは、前のフレームから次のフレームまでにかかった時間を表します。移動量にデルタタイムを掛けることで、どのハードウェアでゲームを実行しても、動きが一定になります。
 
 ```java
 private void input() {
     float speed = .25f;
-    float delta = Gdx.graphics.getDeltaTime(); // retrieve the current delta
+    float delta = Gdx.graphics.getDeltaTime(); // 現在のデルタタイムを取得します
 
     if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-        bucketSprite.translateX(speed * delta); // Move the bucket right
+        bucketSprite.translateX(speed * delta); // バケツを右に動かします
     }
 }
 ```
 
-This effectively means that the number we select here is how far the bucket moves in one second. Remember to use delta time whenever you are calculating something that happens over time. Adjust the number to a value that moves the bucket at an acceptable speed like `4f`. Now let's copy the code for movement to the left. Flip the plus to a minus to move to the left.
+実質、ここで指定した数値`speed`は「1秒間にバケツがどれだけ移動するか」を表しています。時間の経過に伴って起こる処理を計算するときは、デルタタイムを使うことを忘れないでください。数値は`4f`のようなバケツがちょうどよい速さで動く値に調整しましょう。右移動のコードをコピーして、左へ移動する処理も追加します。プラスをマイナスに変えれば、左方向に動くようになります。
 
 ```java
 private void input() {
@@ -416,14 +416,14 @@ private void input() {
     float delta = Gdx.graphics.getDeltaTime();
 
     if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-        bucketSprite.translateX(speed * delta); // move the bucket right
+        bucketSprite.translateX(speed * delta); // バケツを右に動かします
     } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-        bucketSprite.translateX(-speed * delta); // move the bucket left
+        bucketSprite.translateX(-speed * delta); // バケツを左に動かします
     }
 }
 ```
 
-Run the game again to make sure you can move the bucket left and right with the keyboard.
+もう一度ゲームを実行して、キーボード操作でバケツを左右に動かせるか確認してください。
 
 ### マウス、タッチ操作
 Mouse and Touch controls are related. To react to the user clicking or tapping the screen, call the following method:
