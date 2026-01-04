@@ -140,7 +140,7 @@ public void resize(int width, int height) {
 ```
 
 ## ゲームスクリーン
-Now that we have our main menu finished, it's time to finally get to making our game. We will be lifting most of the code from the [original game](/wiki/start/a-simple-game) as to avoid redundancy, and avoid having to think of a different game idea to implement as simply as Drop is.
+メインメニューが完成したので、いよいよゲーム本編を作る時です。重複する作業を避け、Dropのようにシンプルに実装できる別のゲームアイデアを考える手間を省くため、ほとんどのコードは[前回作ったゲーム](/wiki/start/a-simple-game)から流用します。
 
 
 ```java
@@ -180,12 +180,12 @@ public class GameScreen implements Screen {
 	public GameScreen(final Drop game) {
 		this.game = game;
 
-		// load the images for the background, bucket and droplet
+		// 背景、バケツ、雨粒の画像を読み込みます
 		backgroundTexture = new Texture("background.png");
 		bucketTexture = new Texture("bucket.png");
 		dropTexture = new Texture("drop.png");
 
-		// load the drop sound effect and background music
+		// 雨粒の効果音とBGMを読み込む
 		dropSound = Gdx.audio.newSound(Gdx.files.internal("drop.mp3"));
 		music = Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
 		music.setLooping(true);
@@ -204,8 +204,7 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void show() {
-		// start the playback of the background music
-		// when the screen is shown
+		// スクリーンが表示されたときにBGMの再生を開始
 		music.play();
 	}
 
@@ -329,15 +328,15 @@ public class GameScreen implements Screen {
 }
 ```
 
-This code is almost 95% the same as the original implementation, except now we use a constructor instead of the `create()` method of the `ApplicationListener`, and pass in a `Drop` object, like in the `MainMenuScreen` class. We also start playing the music as soon as the Screen is set to `GameScreen`. Moreover, we added a string to the top left corner of the game, which tracks the number of raindrops collected.
+このコードは元の実装と95％同じですが、違いとして、`ApplicationListener`の`create()`メソッドの代わりにコンストラクタを使い、`MainMenuScreen`クラスと同じように`Drop`オブジェクトを渡す形になっている点があります。また、スクリーンが`GameScreen`に切り替わった瞬間に音楽の再生を開始するようにしています。さらに、ゲームの左上に集めた雨粒の数を表示する文字列を追加しました。
 
-Note that the `dispose()` method of the `GameScreen` class is not called automatically, see the [Screen API](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/Screen.html). It is your responsibility to take care of that. You can call this method from the `dispose()` method of the `Game` class, if the `GameScreen` class passes a reference to itself to the `Game` class or by calling `screen.dispose()` in `Drop` class `dispose()` method. It is important to do this, else `GameScreen` assets might persist and occupy memory even after exiting the application.
+`GameScreen`クラスの`dispose()`メソッドは自動で呼ばれないことに注意してください。詳しくは[Screen API](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/Screen.html)を参照してください。`dispose()`メソッドを呼ぶ責任は開発者側にあります。`GameScreen`クラスの`dispose()`メソッドを呼ぶ方法としては、`GameScreen`クラスが自分自身の参照を`Game`クラスに渡している場合、`Game`クラスの`dispose()`メソッドから呼び出すことができます。あるいは`Drop`クラスの`dispose()`メソッド内で`screen.dispose()`を呼ぶことも可能です。`dispose()`を実行しないと、`GameScreen`のアセットが解放されず、アプリケーションを終了した後もメモリに残ってしまう可能性があります。
 
-And that's it, you have the complete game finished. That is all there is to know about the Screen interface and abstract Game Class, and all there is to creating multifaceted games with multiple states. The **full Java code** can be found [here](https://github.com/libgdx/libgdx.github.io/tree/dev/assets/downloads/tutorials/extended-game-java). If you are developing in **Kotlin**, take a look [here](https://github.com/libgdx/libgdx.github.io/tree/dev/assets/downloads/tutorials/extended-game-kotlin) for the full code.
+これで、ゲームの完成です。これまでで、スクリーンインターフェースとゲーム抽象クラスについて知っておくべきことはすべて説明しました。また、複数の状態を持つ多機能なゲームを作る方法も理解できました。**Java版の完全なコード**は[こちら](https://github.com/libgdx/libgdx.github.io/tree/dev/assets/downloads/tutorials/extended-game-java)で確認できます。**Kotlin**で開発する場合は、[こちら](https://github.com/libgdx/libgdx.github.io/tree/dev/assets/downloads/tutorials/extended-game-kotlin)に完全なコードがあります。
 
 ## 今後の展望
-After this tutorial you should have a basic understanding how libGDX works and what to expect going forward. Some things can still be improved, like using the [Memory Management](/wiki/articles/memory-management#object-pooling) classes to recycle all the Rectangles we have the garbage collector clean up each time we delete a raindrop. OpenGL is also not too fond if we hand it too many different images in a batch (in our case it's OK as we only had two images). Usually one would put all those images into a single `Texture`, also known as a `TextureAtlas`. In addition, taking a look at [Viewports](/wiki/graphics/viewports) will most certainly prove useful. Viewports help dealing with different screen sizes/resolutions and decide, whether the screen's content needs to be stretched/should keep its aspect ratio, etc.
+このチュートリアルを終えることで、libGDXがどのように動作するか、今後どのようなことができるのかについて基本的な理解が得られるはずです。まだ改善できる点もいくつかあります。例えば、[メモリ管理](/wiki/articles/memory-management#object-pooling)クラスを使って、雨粒を削除するたびにガベージコレクタに任せるのではなく、長方形オブジェクトを再利用する方法があります。また、OpenGLは一度に大量の異なる画像を扱うのが苦手です（今回の例では画像が2枚しかないので問題ありません）。通常、複数の画像を1つのテクスチャにまとめる方法が取られます。これをテクスチャアトラスと呼びます。さらに、[ビューポート](/wiki/graphics/viewports)を確認することも非常に有用です。ビューポートは、画面サイズや解像度の違いに対応するのに役立ち、画面の内容を引き伸ばすか、アスペクト比を維持するかなどを決定するために使います。
 
-To continue learning about libGDX we highly **recommend reading our [wiki](/wiki/)** and checking out the demos and tests in our main GitHub repository. If you have any questions, **join our official [Discord server](/community/)**, we are always glad to help!
+libGDX の学習をさらに進めたい場合は、**ぜひ[wiki](/wiki/)を読み**、GitHubリポジトリにあるデモやテストも確認することを強くおすすめします。質問があれば、**公式の[Discordサーバ](https://libgdx.com/community/)に参加してください**。いつでも喜んでサポートします！
 
-The best practice is to get out there and do it, so farewell and happy coding!
+最も良い学び方は、実際に手を動かして作ってみることです。では、楽しいコーディングを！
