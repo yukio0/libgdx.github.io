@@ -1,26 +1,26 @@
 ---
-title: "Demos & Tutorials"
+title: "デモとチュートリアル"
 redirect_from:
   - /dev/tutorials/
 ---
 
-# Tutorials
+# チュートリアル
 
-After you have [created](/wiki/start/setup) your very first libGDX project, we highly recommend our [A Simple Game](/wiki/start/a-simple-game) and [Extending the Simple Game](/wiki/start/simple-game-extended) pages. If you're completely new to game dev and have never developed a game before, this (even more straight-forward) [tutorial](https://colourtann.github.io/HelloLibgdx/) by tann is also worth a look as an alternative.
+最初のlibGDXプロジェクトを[作成](/wiki/start/setup)した後、[シンプルなゲーム](/wiki/start/a-simple-game)と[シンプルなゲームの拡張](/wiki/start/simple-game-extended)のページを読むことを強くおすすめします。もしあなたがゲーム開発初心者で、これまでゲームを開発したことが全くない場合、tann氏によるこの（さらに分かりやすい）[チュートリアル](https://colourtann.github.io/HelloLibgdx/)も、代替として一度見ておく価値があります。
 
-From then on, our [wiki](/wiki/#developers-guide) is your best companion: it provides extensive documentation on nearly every feature offered by libGDX. For any further questions, our official [Discord server](/community/) is good starting point.
+その後は、[wiki](/wiki/#developers-guide)が最良の伴侶となります。libGDXが提供するほぼすべての機能についての詳細なドキュメントを提供しています。さらに質問がある場合は、公式の[Discordサーバ](https://libgdx.com/community/)が良い出発点となります。
 
-There are also many third-party tutorials. A (non-exhaustive) list of them can be found [here](/wiki/articles/external-tutorials).
+また、多くのサードパーティ製チュートリアルも存在します。（網羅的ではない）一覧は[こちら](/wiki/articles/external-tutorials)で確認できます。
 
-# Demos
+# デモ
 
-If you want to inspect some open source libGDX games for reference, this [wiki article](/wiki/articles/external-tutorials#some-simple-open-source-projects-for-reference) is the right place to start looking.
+参考のためにオープンソースのlibGDXゲームを調べたい場合は、この[wiki記事](/wiki/articles/external-tutorials#some-simple-open-source-projects-for-reference)が調べるのに適した場所です。
 
-The official libGDX organization on GitHub also offers a few **demo projects** that you can play around with to get a feeling for how to do things. Note that many of these demos have been created during game jams and may not necessarily reflect best practices. To use them [setup your development environment](/wiki/start/setup), then simple clone the repositories on Github (or click on the "Download ZIP" button of a project's site) and import the project into your favorite IDE as a Gradle project.
+公式のlibGDX組織はGitHub上でいくつかの**デモプロジェクト**も提供しており、どのように作るかの感覚を掴むために触ってみることができます。なお、これらのデモの多くはゲームジャム中に作成されたもので、必ずしもベストプラクティスを反映しているわけではないことに注意してください。使用するには、[開発環境の構築](/wiki/start/setup)をした後、GitHub でリポジトリをクローンする（またはプロジェクトサイトの「Download ZIP」ボタンをクリックする）だけで、好きなIDEにGradleプロジェクトとしてインポートできます。
 
-* [Cuboc - a simple platformer with a twist](https://github.com/libgdx/libgdx-demo-cuboc)
-* [Gdx Invaders - a 3D space invaders clone](https://github.com/libgdx/libgdx-demo-invaders)
-* [Pax Britannica - a one button RTS game](https://github.com/libgdx/libgdx-demo-pax-britannica)
-* [Super Jumper - a Doodle jump clone with programmer's art](https://github.com/libgdx/libgdx-demo-superjumper)
-* [Vector Pinball - a Box2D-based pinball game](https://github.com/libgdx/libgdx-demo-vector-pinball)
-* [The Plane that couldn't fly good - a flappy bird's clone](https://github.com/badlogic/theplanethatcouldntflygood)
+* [Cuboc - ひねりのあるシンプルなプラットフォーマー](https://github.com/libgdx/libgdx-demo-cuboc)
+* [Gdx Invaders - 3Dスペースインベーダーのクローン](https://github.com/libgdx/libgdx-demo-invaders)
+* [Pax Britannica - ワンボタンRTSゲーム](https://github.com/libgdx/libgdx-demo-pax-britannica)
+* [Super Jumper - プログラマーアートを用いた Doodle jump クローン](https://github.com/libgdx/libgdx-demo-superjumper)
+* [Vector Pinball - Box2Dベースのピンボールゲーム](https://github.com/libgdx/libgdx-demo-vector-pinball)
+* [The Plane that couldn't fly good - flappy birdのクローン](https://github.com/badlogic/theplanethatcouldntflygood)
