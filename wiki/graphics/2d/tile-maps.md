@@ -190,42 +190,42 @@ int rows = tileLayer.getHeight();
 
 タイルレイヤー内のセルはこれらのタイルを参照します。1つのレイヤー内のセルは複数のタイルセットに含まれるタイルを参照することもできます。ただし、テクスチャの切り替え回数を減らすため、1レイヤーにつき1タイルセットに統一することが推奨されます。
 
-### Rendering Tiled Maps
-To render a TiledMap and its layers, you will need one of the [specialized MapRenderer implementations](https://github.com/libgdx/libgdx/tree/master/gdx/src/com/badlogic/gdx/maps/tiled/renderers). For orthogonal or top down maps, use 
+### タイルマップの描画
+タイルマップとそのレイヤを描画するには、[専用のマップレンダラー実装](https://github.com/libgdx/libgdx/tree/master/gdx/src/com/badlogic/gdx/maps/tiled/renderers)が必要です。直交や見下ろしのマップには
 [OrthogonalTiledMapRenderer](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/maps/tiled/renderers/OrthogonalTiledMapRenderer.html)
-[(コード)](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/maps/tiled/renderers/OrthogonalTiledMapRenderer.java), for isometric maps use 
+[(コード)](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/maps/tiled/renderers/OrthogonalTiledMapRenderer.java)を使い、アイソメトリック（isometric）マップには、
 [IsometricTiledMapRenderer](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/maps/tiled/renderers/IsometricTiledMapRenderer.html)
-[(コード)](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/maps/tiled/renderers/IsometricTiledMapRenderer.java). Other renderers in this package are experimental, we do not advise to use them at this point.
+[(コード)](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/maps/tiled/renderers/IsometricTiledMapRenderer.java)を使います。このパッケージ内のその他のレンダラーは実験的なものなので、現時点では使用を推奨しません。
 
-Creating such a renderer works like this:
+このようなレンダラーの作成は次のように行います。
 
 ```java
 float unitScale = 1 / 16f;
 OrthogonalTiledMapRenderer renderer = new OrthogonalTiledMapRenderer(map, unitScale);
 ```
 
-The renderer will only ever be able to render the map you pass to it in the constructor. This coupling allows the renderer to perform optimizations for this specific map, and cache them.
+レンダラーはコンストラクタで渡したマップだけを描画できます。この結びつきにより、レンダラーはその特定のマップに対して最適化を行い、その結果をキャッシュできます。
 
-The unit scale tells the renderer how many pixels map to a single world unit. In the above case 16 pixels would equal one unit. If you want a pixel to map to a unit, unitScale would have to be one, and so on.
+`unitScale`は「何ピクセルがワールドの1単位に相当するか」をレンダラーに伝えます。上の例では16ピクセルが1単位です。もし1ピクセルを1単位に対応させたいなら、`unitScale`は1にする必要があり、後は同様です。
 
-The unit scale is a way to couple your rendering coordinate system with your logical or world coordinate system.
+unitScaleは描画時の座標系とゲーム世界の座標系を結びつけるための方法です。
 
-A small example: assume you have a tile map, where tiles are 32x32 pixels wide. In your logical representation of the world, you want these to map to 1x1 unit squares. You'd specify 1/32f as your unit scale. You can now setup your camera to also operate on that unit scale. Say you want to view 30x20 tiles of your map on screen, then you can create your camera like this:
+小さな例として、タイルが32x32ピクセルのタイルマップを考えます。ゲーム世界の表現では、これを1x1単位の正方形に対応させたいとします。この場合、`unitScale`に1/32fを指定します。さらにカメラも同じ単位スケールで動作するように設定できます。たとえば画面上にマップの30x20タイルを表示したいなら、カメラは次のように作れます。
 
 ```java
 OrthographicCamera camera = new OrthographicCamera();
 camera.setToOrtho(false, 30, 20);
 ```
 
-Working with isometric maps is analogous, just create an IsometricTiledMapRenderer:
+アイソメトリックマップでも考え方は同じで、`IsometricTiledMapRenderer`を作るだけです。
 
 ```
 renderer = new IsometricTiledMapRenderer(isoMap, 1 / 32f);
 ```
 
-Again, you have to specify the map (which should be an isometric tiled map) and a unit scale.
+ここでも、（アイソメトリックのタイルマップである）マップとunitScaleを指定する必要があります。
 
-*Note:* the isometric renderer is experimental, use at your own risk and please report any issues you find. From a performance perspective, rendering isometric maps on mobile devices is very costly, as every tile must have blending on.
+*注意：* アイソメトリック用レンダラーは実験的なものです。自己責任で使用し、問題を見つけた場合は報告してください。性能面では、モバイル端末でアイソメトリックマップを描画するのは非常にコストが高く、すべてのタイルでブレンド処理が必要になります。
 
 ### Loading TMX/Tiled maps
 ![images/tile-maps2.png](/assets/wiki/images/tile-maps2.png)
