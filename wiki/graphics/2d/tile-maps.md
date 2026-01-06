@@ -1,24 +1,23 @@
 ---
-title: Tile maps
+title: タイルマップ
 ---
-# Maps
+# マップ
 
-libGDX features a generic maps API. All map related classes can be found in the [com.badlogic.gdx.maps](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/maps/package-use.html) [(code)](https://github.com/libgdx/libgdx/tree/master/gdx/src/com/badlogic/gdx/maps) package. The root package contains the base classes, sub-packages contain specialized implementations for tile maps and other forms of maps.
+libGDXには汎用的なマップAPIが用意されています。マップ関連のクラスはすべて、[com.badlogic.gdx.maps](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/maps/package-use.html) [(コード)](https://github.com/libgdx/libgdx/tree/master/gdx/src/com/badlogic/gdx/maps)パッケージにあります。ルートのパッケージには基本クラスが置かれており、サブパッケージにはタイルマップやその他の形式のマップ向けに特化した実装が含まれます。
 
-## Base Classes
-The set of base classes is meant to be generic so we can support not only tiled maps, but any 2D map format.
+## 基本クラス
+基本クラス群は汎用的に作られており、タイルマップだけでなく、あらゆる2Dマップ形式をサポートできるようになっています。
 
-A map is a set of layers. A layer contains a set of objects. Maps, layers and objects have properties, that depend on the format they've been loaded from. For some formats there are specialized map, layer and object implementations, more on that later. The class hierarchy of the base classes looks as follows:
+マップは複数のレイヤから構成されます。レイヤは複数のオブジェクトを含みます。マップ、レイヤ、オブジェクトはそれぞれプロパティを持ち、その内容は読み込んだマップ形式に依存します。形式によっては、専用のマップ、レイヤ、オブジェクト実装が用意されていることもあります。これについては後ほど説明します。基本クラスのクラス階層は次のとおりです。
 
 ![images/maps-api.png](/assets/wiki/images/maps-api.png)
 
-### Properties
+### プロパティ
 
-Properties of maps, layers or objects are represented by 
-[MapProperties](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/maps/MapProperties.html)
-[(source)](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/maps/MapProperties.java). This class is essentially a hash map, with string keys and arbitrary values.
+マップ、レイヤ、オブジェクトのプロパティは[MapProperties](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/maps/MapProperties.html)[(ソース)](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/maps/MapProperties.java)で表されます。
+このクラスは本質的にはハッシュマップで、キーは文字列、値は任意の型を取れます。
 
-Which key/value pairs are available for a map, layer or object depends on the format from which it was loaded. To access properties, you can simply do the following:
+マップ、レイヤ、オブジェクトで利用できるキー／値の組は読み込んだフォーマットによって異なります。プロパティにアクセスするには、単に次のように書けます。
 
 ```java
 map.getProperties().get("custom-property", String.class);
@@ -26,29 +25,29 @@ layer.getProperties().get("another-property", Float.class);
 object.getProperties().get("foo", Boolean.class);
 ```
 
-Many of the supported editors allow you to specify such properties on maps, layers and objects. What specific type these properties have is format specific. When in doubt, load up your map in your libGDX application, with one of the map loaders, and inspect the properties of the objects you are interested in.
+対応しているエディタの多くでは、マップ、レイヤ、オブジェクトにこうしたプロパティを設定できます。これらのプロパティが具体的にどの型になるかはフォーマット依存です。迷った場合は、いずれかのマップローダーでマップをlibGDXアプリケーションに読み込み、目的のオブジェクトのプロパティを確認してみてください。
 
-### Map Layers
+### マップレイヤ
 
-Layers within a map are ordered and indexed, starting by index 0. You can access the layers of a map like this:
+マップ内のレイヤは順序付けられており、インデックス0から番号が振られます。マップのレイヤには次のようにアクセスできます。
 
 ```java
 MapLayer layer = map.getLayers().get(0);
 ```
 
-You can also search a layer by name
+名前でレイヤを検索することもできます。
 
 ```java
 MapLayer layer = map.getLayers().get("my-layer");
 ```
 
-These getter methods will always return a MapLayer. Some layers may be specialized and offer more functionality, in which case you can simply cast:
+これらのgetterメソッドは常にMapLayerを返します。一部のレイヤは特殊化されていて、より多くの機能を提供している場合があります。その場合は、単にキャストすれば扱えます。
 
 ```java
 TiledMapTileLayer tiledLayer = (TiledMapTileLayer)map.getLayers().get(0);
 ```
 
-A layer has a few attribute that we try to normalize for every supported map format:
+レイヤには対応しているすべてのマップ形式で共通化するようにしている属性がいくつかあります。
 
 ```java
 String name = layer.getName();
@@ -56,30 +55,31 @@ float opacity = layer.getOpacity();
 boolean isVisible = layer.isVisible();
 ```
 
-You can also modify these which may have an effect on how the layer is rendered.
+これらは変更することもでき、レイヤがどのように描画されるかに影響する場合があります。
 
-In addition to these normalized attributes, you can also access the more generic properties, as described above.
+この共通化された属性に加えて、前述のとおり、より汎用的なプロパティにもアクセスできます。
 
-To get the objects within the layer, simply call the following:
+レイヤ内のオブジェクトを取得するには、次のように呼び出します。
 
 ```java
 MapObjects objects = layer.getObjects();
 ```
 
-The [MapObjects](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/maps/MapObjects.html) [(code)](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/maps/MapObjects.java) instance allows you to retrieve objects by name, index or type. You can also insert and remove objects on the fly.
+[MapObjects](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/maps/MapObjects.html) [(コード)](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/maps/MapObjects.java)のインスタンスを使うと、名前、インデックス、型でオブジェクトを取得できます。また、実行中にオブジェクトを追加したり削除したりすることも可能です。
 
-### Map Objects
+### マップオブジェクト
 
-The API already provides a handful of specialized map objects, such as 
-[CircleMapObject](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/maps/objects/CircleMapObject.html) [(code)](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/maps/objects/CircleMapObject.java),
-[PolygonMapObject](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/maps/objects/PolygonMapObject.html) [(code)](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/maps/objects/PolygonMapObject.java) 
- and so on.
+APIには、すでにいくつかの特殊なマップオブジェクトが用意されています。例えば、
+[CircleMapObject](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/maps/objects/CircleMapObject.html) [(コード)](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/maps/objects/CircleMapObject.java)、
+[PolygonMapObject](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/maps/objects/PolygonMapObject.html) [(コード)](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/maps/objects/PolygonMapObject.java) 
+などがあります。
 
-The loader of a map format will parse these objects and put them in their respective 
-[MapLayer](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/maps/MapLayer.html)
-[(code)](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/maps/MapLayer.java).
+マップフォーマットに対応したローダーは、これらのオブジェクトを解析し、それぞれ適切な
+[マップレイヤ](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/maps/MapLayer.html)
+[(コード)](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/maps/MapLayer.java)
+に格納します。
 
-For all supported formats, we try to extract the following normalized attributes for every object:
+対応しているすべてのフォーマットに対して、各オブジェクトから共通化された属性を抽出するようにしています。
 
 ```java
 String name = object.getName();
@@ -88,114 +88,114 @@ boolean isVisible = object.isVisible();
 Color color = object.getColor();
 ```
 
-The specialized map objects, like `PolygonMapObject` may also have aditional attributes, e.g.
+`PolygonMapObject`のような特殊なマップオブジェクトは、追加の属性を持つ場合もあります。例えば次のようなものです。
 
 ```java
 Polygon poly = polyObject.getPolygon();
 ```
 
-Changing any of these attributes may have an effect on how the object is rendered.
+これらの属性のいずれかを変更すると、オブジェクトがどのように描画されるかに影響することがあります。
 
-As in the case of maps and layers, you can also access the more generic properties, as described above.
+マップやレイヤの場合と同様に、前述のとおり、より汎用的なプロパティにもアクセスできます。
 
-*Note:* tiles of a tiled map are not stored as map objects. There are specialized layer implementations that store these kind of objects more efficiently, see below. Objects as described above are generally used to define trigger areas, spawn points, collision shapes and so on.
+*注意：* タイルマップのタイルは、マップオブジェクトとして保存されません。こうした要素をより効率的に保持するための、専用のレイヤ実装が用意されています（後述）。ここで説明したオブジェクトは一般に、トリガー領域、スポーン地点、当たり判定形状などを定義するために使われます。
 
-### Map Renderer
+### マップレンダラー
 
-The [MapRenderer](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/maps/MapRenderer.html)
-[(code)](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/maps/MapRenderer.java) interface defines methods that allow you to render the layers and objects of a map.
+[マップレンダラー](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/maps/MapRenderer.html)
+[(コード)](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/maps/MapRenderer.java) インターフェースはマップのレイヤやオブジェクトを描画するためのメソッドを定義しています。
 
-Before you can start rendering, you have to set the view on your map. Think of the view as window through which you look. The easiest way to achieve this, is to tell the map renderer about an OrthographicCamera it should use:
+描画を始める前に、マップに対してビューを設定する必要があります。ビューは覗き込む窓のようなものだと考えてください。これを行う最も簡単な方法は使用する正射影カメラ（OrthographicCamera）をマップレンダラーに渡すことです。
 
 ```java
 mapRenderer.setView(camera);
 ```
 
-Alternatively you can also specify a projection matrix and the view boundaries manually:
+あるいは、投影行列と表示範囲（ビューの境界）を手動で指定することもできます。
 
 ```java
 mapRenderer.setView(projectionMatrix, startX, startY, endx, endY);
 ```
 
-The view boundaries are given in the x/y plane, with the y-axis pointing upwards. The units used are specific to the map and format it was loaded from.
+表示範囲はx/y平面上で指定し、y軸は上向きです。使用する単位は、読み込んだマップおよびそのフォーマットに依存します。
 
-To render all layers of the map you can then simply call:
+マップの全レイヤを描画するには、次のように呼び出すだけです。
 
 ```java
 mapRenderer.render();
 ```
 
-If you need more control over which layers should be rendered, you can specify the indices of layers you want to render. Assuming you have 3 layers, two background layers and a foreground layer, and you want to render your custom sprites between the foreground and background layer, you can do this:
+どのレイヤを描画するかをより細かく制御したい場合は、描画したいレイヤのインデックスを指定できます。たとえば3つのレイヤ（背景レイヤが2つ、前景レイヤが1つ）を持っていて、背景と前景の間に自前のスプライトを描画したいなら、次のようにできます。
 
 ```java
-int[] backgroundLayers = { 0, 1 }; // don't allocate every frame!
-int[] foregroundLayers = { 2 };    // don't allocate every frame!
+int[] backgroundLayers = { 0, 1 }; // 毎フレームアロケートしないこと！
+int[] foregroundLayers = { 2 };    // 毎フレームアロケートしないこと！
 mapRenderer.render(backgroundLayers);
 renderMyCustomSprites();
 mapRenderer.render(foregroundLayers);
 ```
 
-By rendering each layer separately and modifying the view for every layer, you can also achieve a parallax effect.
+レイヤを個別に描画し、さらにレイヤごとにビューを変更することで、パララックス（視差）効果を実現することもできます。
 
-## Tiled Maps
-Maps that contain layers with tiles are handled by the classes in the [com.badlogic.gdx.maps.tiled](https://github.com/libgdx/libgdx/tree/master/gdx/src/com/badlogic/gdx/maps/tiled) package. The package contains loaders for different formats.
+## タイルマップ
+タイルを含むレイヤを持つマップは[com.badlogic.gdx.maps.tiled](https://github.com/libgdx/libgdx/tree/master/gdx/src/com/badlogic/gdx/maps/tiled)パッケージ内のクラスで扱います。このパッケージには、複数のフォーマットに対応したローダーが含まれています。
 
-Tile maps are loaded into 
+タイルマップは
 [TiledMap](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/maps/tiled/TiledMap.html)
-[(code)](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/maps/tiled/TiledMap.java) instances. TiledMap is a subclass of the generic Map class, with additional methods and attributes.
+[(コード)](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/maps/tiled/TiledMap.java)クラスのインスタンスとして読み込まれます。`TiledMap`は汎用の`Map`クラスのサブクラスで、追加のメソッドや属性を備えています。
 
-### Tiled Map Layers
-Layers with tiles in them are stored in 
+### タイルマップのレイヤ
+タイルを含むレイヤは
 [TiledMapTileLayer](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/maps/tiled/TiledMapTileLayer.html)
-[(code)](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/maps/tiled/TiledMapTileLayer.java) instances. In order to get access to the tiles, you will have to cast:
+[(コード)](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/maps/tiled/TiledMapTileLayer.java)のインスタンスとして保持されます。タイルにアクセスするにはキャストが必要です。
 
 ```java
-TiledMap tiledMap = loadMap(); // see below for this
-TiledMapTileLayer layer = (TiledMapTileLayer)tiledMap.getLayers().get(0); // assuming the layer at index on contains tiles
+TiledMap tiledMap = loadMap(); // これについては下で説明
+TiledMapTileLayer layer = (TiledMapTileLayer)tiledMap.getLayers().get(0); // インデックありのレイヤがタイルを含む前提
 ```
 
-A TiledMapTileLayer has all the same attributes as the generic MapLayer, e.g. properties, objects and so on.
+`TiledMapTileLayer`は汎用の`MapLayer`と同じ属性（例：プロパティ、オブジェクトなど）をすべて持っています。
 
-In addition to those, the TiledMapTileLayer also has a two dimensional array of [TiledMapTileLayer.Cell](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/maps/tiled/TiledMapTileLayer.Cell.html) [(code)](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/maps/tiled/TiledMapTileLayer.java#L89) instances.
+それに加えて、`TiledMapTileLayer`には、2次元配列として[TiledMapTileLayer.Cell](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/maps/tiled/TiledMapTileLayer.Cell.html) [(コード)](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/maps/tiled/TiledMapTileLayer.java#L89)のインスタンスが格納されています。
 
-To access a cell, you can ask the tile layer to hand it out like this:
+セルにアクセスするには、タイルレイヤから次のように取得します。
 
 ```java
 Cell cell = tileLayer.getCell(column, row);
 ```
 
-Where column and row specify the location of the cell. These are integer indices. The tiles are supposed to be in a y-up coordinate system. The bottom left tile of a map would thus be located at (0,0), the top right tile at (tileLayer.getWidth()-1, tileLayer.getHeight()-1).
+ここでcolumnとrowはセルの位置を表し、いずれも整数のインデックスです。タイルはy軸が上向きの座標系にある想定です。マップの左下のタイルは(0,0)、右上のタイルは(tileLayer.getWidth()-1, tileLayer.getHeight()-1)の位置になります。
 
-If no tile exists at that position, or if the column/row arguments are out of bounds, null will be returned.
+その位置にタイルが存在しない場合、またはcolumn、rowが範囲外の場合はnullが返されます。
 
-You can query the number of horizontal and vertical tiles in a layer by:
+レイヤー内の横方向、縦方向のタイル数は、次のように取得できます。
 
 ```java
 int columns = tileLayer.getWidth();
 int rows = tileLayer.getHeight();
 ```
 
-### Cells
-A cell is a container for a 
+### セル
+セルは
 [TiledMapTile](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/maps/tiled/TiledMapTile.html)
-[(code)](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/maps/tiled/TiledMapTile.java). The cell itself stores a reference to a tile in addition to attributes that specify if the tile should be rotated or flipped when rendering it.
+[(コード)](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/maps/tiled/TiledMapTile.java)のコンテナ（入れ物）です。セル自体はタイルへの参照を保持しており、さらに描画時にそのタイルを回転させるか、反転させるかを指定する属性も持っています。
 
-Tiles are usually shared by multiple cells.
+タイルは通常、複数のセルから共有されます。
 
-### Tilesets & Tiles
-A TiledMap contains one or more 
+### タイルセットとタイル
+タイルマップは1つ以上の
 [TiledMapTileSet](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/maps/tiled/TiledMapTileSet.html)
-[(code)](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/maps/tiled/TiledMapTileSet.java) instances. A tile set contains a number of [TiledMapTile](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/maps/tiled/TiledMapTile.html)
-[(code)](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/maps/tiled/TiledMapTile.java) instances. There are [multiple implementations](https://github.com/libgdx/libgdx/tree/master/gdx/src/com/badlogic/gdx/maps/tiled/tiles) of tiles, e.g. static tiles, animated tiles etc. You can also create your own implementation for special purposes.
+[(コード)](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/maps/tiled/TiledMapTileSet.java)インスタンスを含みます。タイルセットは複数の[TiledMapTile](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/maps/tiled/TiledMapTile.html)
+[(コード)](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/maps/tiled/TiledMapTile.java)インスタンスを含みます。タイルには[複数の実装](https://github.com/libgdx/libgdx/tree/master/gdx/src/com/badlogic/gdx/maps/tiled/tiles)（例：静的タイル、アニメーションタイルなど）があり、特別な目的のために独自の実装を作ることもできます。
 
-Cells in a tile layer reference these tiles. Cells within a layer can reference tiles of multiple tile sets. It is however recommended to stick to a single tile set per layer to reduce texture switches.
+タイルレイヤー内のセルはこれらのタイルを参照します。1つのレイヤー内のセルは複数のタイルセットに含まれるタイルを参照することもできます。ただし、テクスチャの切り替え回数を減らすため、1レイヤーにつき1タイルセットに統一することが推奨されます。
 
 ### Rendering Tiled Maps
 To render a TiledMap and its layers, you will need one of the [specialized MapRenderer implementations](https://github.com/libgdx/libgdx/tree/master/gdx/src/com/badlogic/gdx/maps/tiled/renderers). For orthogonal or top down maps, use 
 [OrthogonalTiledMapRenderer](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/maps/tiled/renderers/OrthogonalTiledMapRenderer.html)
-[(code)](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/maps/tiled/renderers/OrthogonalTiledMapRenderer.java), for isometric maps use 
+[(コード)](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/maps/tiled/renderers/OrthogonalTiledMapRenderer.java), for isometric maps use 
 [IsometricTiledMapRenderer](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/maps/tiled/renderers/IsometricTiledMapRenderer.html)
-[(code)](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/maps/tiled/renderers/IsometricTiledMapRenderer.java). Other renderers in this package are experimental, we do not advise to use them at this point.
+[(コード)](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/maps/tiled/renderers/IsometricTiledMapRenderer.java). Other renderers in this package are experimental, we do not advise to use them at this point.
 
 Creating such a renderer works like this:
 
