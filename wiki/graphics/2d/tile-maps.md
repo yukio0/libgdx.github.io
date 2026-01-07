@@ -71,11 +71,10 @@ MapObjects objects = layer.getObjects();
 
 APIには、すでにいくつかの特殊なマップオブジェクトが用意されています。例えば、
 [CircleMapObject](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/maps/objects/CircleMapObject.html) [(コード)](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/maps/objects/CircleMapObject.java)、
-[PolygonMapObject](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/maps/objects/PolygonMapObject.html) [(コード)](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/maps/objects/PolygonMapObject.java) 
-などがあります。
+[PolygonMapObject](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/maps/objects/PolygonMapObject.html) [(コード)](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/maps/objects/PolygonMapObject.java)などがあります。
 
 マップフォーマットに対応したローダーは、これらのオブジェクトを解析し、それぞれ適切な
-[マップレイヤー](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/maps/MapLayer.html)
+[MapLayer](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/maps/MapLayer.html)
 [(コード)](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/maps/MapLayer.java)
 に格納します。
 
@@ -102,8 +101,8 @@ Polygon poly = polyObject.getPolygon();
 
 ### マップレンダラー
 
-[マップレンダラー](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/maps/MapRenderer.html)
-[(コード)](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/maps/MapRenderer.java) インターフェースはマップのレイヤーやオブジェクトを描画するためのメソッドを定義しています。
+[MapRenderer](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/maps/MapRenderer.html)
+[(コード)](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/maps/MapRenderer.java)インターフェースはマップのレイヤーやオブジェクトを描画するためのメソッドを定義しています。
 
 描画を始める前に、マップに対してビューを設定する必要があります。ビューは覗き込む窓のようなものだと考えてください。これを行う最も簡単な方法は使用する正射影カメラ（OrthographicCamera）をマップレンダラーに渡すことです。
 
@@ -114,7 +113,7 @@ mapRenderer.setView(camera);
 あるいは、投影行列と表示範囲（ビューの境界）を手動で指定することもできます。
 
 ```java
-mapRenderer.setView(projectionMatrix, startX, startY, endx, endY);
+mapRenderer.setView(projectionMatrix, startX, startY, endX, endY);
 ```
 
 表示範囲はx/y平面上で指定し、y軸は上向きです。使用する単位（座標系）は、読み込んだマップおよびそのフォーマットに依存します。
