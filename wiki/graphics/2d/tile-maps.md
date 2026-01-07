@@ -8,16 +8,16 @@ libGDXには汎用的なマップAPIが用意されています。マップ関�
 ## 基本クラス
 基本クラス群は汎用的に作られており、タイルマップだけでなく、あらゆる2Dマップ形式をサポートできるようになっています。
 
-マップは複数のレイヤから構成されます。レイヤは複数のオブジェクトを含みます。マップ、レイヤ、オブジェクトはそれぞれプロパティを持ち、その内容は読み込んだマップ形式に依存します。形式によっては、専用のマップ、レイヤ、オブジェクト実装が用意されていることもあります。これについては後ほど説明します。基本クラスのクラス階層は次のとおりです。
+マップは複数のレイヤーから構成されます。レイヤーは複数のオブジェクトを含みます。マップ、レイヤー、オブジェクトはそれぞれプロパティを持ち、その内容は読み込んだマップ形式に依存します。形式によっては、専用のマップ、レイヤー、オブジェクト実装が用意されていることもあります。これについては後ほど説明します。基本クラスのクラス階層は次のとおりです。
 
 ![images/maps-api.png](/assets/wiki/images/maps-api.png)
 
 ### プロパティ
 
-マップ、レイヤ、オブジェクトのプロパティは[MapProperties](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/maps/MapProperties.html)[(ソース)](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/maps/MapProperties.java)で表されます。
+マップ、レイヤー、オブジェクトのプロパティは[MapProperties](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/maps/MapProperties.html)[(ソース)](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/maps/MapProperties.java)で表されます。
 このクラスは本質的にはハッシュマップで、キーは文字列、値は任意の型を取れます。
 
-マップ、レイヤ、オブジェクトで利用できるキー／値の組は読み込んだフォーマットによって異なります。プロパティにアクセスするには、単に次のように書けます。
+マップ、レイヤー、オブジェクトで利用できるキー／値の組は読み込んだフォーマットによって異なります。プロパティにアクセスするには、単に次のように書けます。
 
 ```java
 map.getProperties().get("custom-property", String.class);
@@ -25,29 +25,29 @@ layer.getProperties().get("another-property", Float.class);
 object.getProperties().get("foo", Boolean.class);
 ```
 
-対応しているエディタの多くでは、マップ、レイヤ、オブジェクトにこうしたプロパティを設定できます。これらのプロパティが具体的にどの型になるかはフォーマット依存です。迷った場合は、いずれかのマップローダーでマップをlibGDXアプリケーションに読み込み、目的のオブジェクトのプロパティを確認してみてください。
+対応しているエディタの多くでは、マップ、レイヤー、オブジェクトにこうしたプロパティを設定できます。これらのプロパティが具体的にどの型になるかはフォーマット依存です。迷った場合は、いずれかのマップローダーでマップをlibGDXアプリケーションに読み込み、目的のオブジェクトのプロパティを確認してみてください。
 
-### マップレイヤ
+### マップレイヤー
 
-マップ内のレイヤは順序付けられており、インデックス0から番号が振られます。マップのレイヤには次のようにアクセスできます。
+マップ内のレイヤーは順序付けられており、インデックス0から番号が振られます。マップのレイヤーには次のようにアクセスできます。
 
 ```java
 MapLayer layer = map.getLayers().get(0);
 ```
 
-名前でレイヤを検索することもできます。
+名前でレイヤーを検索することもできます。
 
 ```java
 MapLayer layer = map.getLayers().get("my-layer");
 ```
 
-これらのgetterメソッドは常にMapLayerを返します。一部のレイヤは特殊化されていて、より多くの機能を提供している場合があります。その場合は、単にキャストすれば扱えます。
+これらのgetterメソッドは常にMapLayerを返します。一部のレイヤーは特殊化されていて、より多くの機能を提供している場合があります。その場合は、単にキャストすれば扱えます。
 
 ```java
 TiledMapTileLayer tiledLayer = (TiledMapTileLayer)map.getLayers().get(0);
 ```
 
-レイヤには対応しているすべてのマップ形式で共通化するようにしている属性がいくつかあります。
+レイヤーには対応しているすべてのマップ形式で共通化するようにしている属性がいくつかあります。
 
 ```java
 String name = layer.getName();
@@ -55,11 +55,11 @@ float opacity = layer.getOpacity();
 boolean isVisible = layer.isVisible();
 ```
 
-これらは変更することもでき、レイヤがどのように描画されるかに影響する場合があります。
+これらは変更することもでき、レイヤーがどのように描画されるかに影響する場合があります。
 
 この共通化された属性に加えて、前述のとおり、より汎用的なプロパティにもアクセスできます。
 
-レイヤ内のオブジェクトを取得するには、次のように呼び出します。
+レイヤー内のオブジェクトを取得するには、次のように呼び出します。
 
 ```java
 MapObjects objects = layer.getObjects();
@@ -75,7 +75,7 @@ APIには、すでにいくつかの特殊なマップオブジェクトが用�
 などがあります。
 
 マップフォーマットに対応したローダーは、これらのオブジェクトを解析し、それぞれ適切な
-[マップレイヤ](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/maps/MapLayer.html)
+[マップレイヤー](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/maps/MapLayer.html)
 [(コード)](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/maps/MapLayer.java)
 に格納します。
 
@@ -96,14 +96,14 @@ Polygon poly = polyObject.getPolygon();
 
 これらの属性のいずれかを変更すると、オブジェクトがどのように描画されるかに影響することがあります。
 
-マップやレイヤの場合と同様に、前述のとおり、より汎用的なプロパティにもアクセスできます。
+マップやレイヤーの場合と同様に、前述のとおり、より汎用的なプロパティにもアクセスできます。
 
-*注意：* タイルマップのタイルは、マップオブジェクトとして保存されません。こうした要素をより効率的に保持するための、専用のレイヤ実装が用意されています（後述）。ここで説明したオブジェクトは一般に、トリガー領域、スポーン地点、当たり判定形状などを定義するために使われます。
+*注意：* タイルマップのタイルは、マップオブジェクトとして保存されません。こうした要素をより効率的に保持するための、専用のレイヤー実装が用意されています（後述）。ここで説明したオブジェクトは一般に、トリガー領域、スポーン地点、当たり判定形状などを定義するために使われます。
 
 ### マップレンダラー
 
 [マップレンダラー](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/maps/MapRenderer.html)
-[(コード)](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/maps/MapRenderer.java) インターフェースはマップのレイヤやオブジェクトを描画するためのメソッドを定義しています。
+[(コード)](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/maps/MapRenderer.java) インターフェースはマップのレイヤーやオブジェクトを描画するためのメソッドを定義しています。
 
 描画を始める前に、マップに対してビューを設定する必要があります。ビューは覗き込む窓のようなものだと考えてください。これを行う最も簡単な方法は使用する正射影カメラ（OrthographicCamera）をマップレンダラーに渡すことです。
 
@@ -117,15 +117,15 @@ mapRenderer.setView(camera);
 mapRenderer.setView(projectionMatrix, startX, startY, endx, endY);
 ```
 
-表示範囲はx/y平面上で指定し、y軸は上向きです。使用する単位は、読み込んだマップおよびそのフォーマットに依存します。
+表示範囲はx/y平面上で指定し、y軸は上向きです。使用する単位（座標系）は、読み込んだマップおよびそのフォーマットに依存します。
 
-マップの全レイヤを描画するには、次のように呼び出すだけです。
+マップの全レイヤーを描画するには、次のように呼び出すだけです。
 
 ```java
 mapRenderer.render();
 ```
 
-どのレイヤを描画するかをより細かく制御したい場合は、描画したいレイヤのインデックスを指定できます。たとえば3つのレイヤ（背景レイヤが2つ、前景レイヤが1つ）を持っていて、背景と前景の間に自前のスプライトを描画したいなら、次のようにできます。
+どのレイヤーを描画するかをより細かく制御したい場合は、描画したいレイヤーのインデックスを指定できます。たとえば3つのレイヤー（背景レイヤーが2つ、前景レイヤーが1つ）を持っていて、背景と前景の間に自前のスプライトを描画したいなら、次のようにできます。
 
 ```java
 int[] backgroundLayers = { 0, 1 }; // 毎フレームアロケートしないこと！
@@ -135,30 +135,30 @@ renderMyCustomSprites();
 mapRenderer.render(foregroundLayers);
 ```
 
-レイヤを個別に描画し、さらにレイヤごとにビューを変更することで、パララックス（視差）効果を実現することもできます。
+レイヤーを個別に描画し、さらにレイヤーごとにビューを変更することで、パララックス（視差）効果を実現することもできます。
 
 ## タイルマップ
-タイルを含むレイヤを持つマップは[com.badlogic.gdx.maps.tiled](https://github.com/libgdx/libgdx/tree/master/gdx/src/com/badlogic/gdx/maps/tiled)パッケージ内のクラスで扱います。このパッケージには、複数のフォーマットに対応したローダーが含まれています。
+タイルを含むレイヤーを持つマップは[com.badlogic.gdx.maps.tiled](https://github.com/libgdx/libgdx/tree/master/gdx/src/com/badlogic/gdx/maps/tiled)パッケージ内のクラスで扱います。このパッケージには、複数のフォーマットに対応したローダーが含まれています。
 
 タイルマップは
 [TiledMap](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/maps/tiled/TiledMap.html)
 [(コード)](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/maps/tiled/TiledMap.java)クラスのインスタンスとして読み込まれます。`TiledMap`は汎用の`Map`クラスのサブクラスで、追加のメソッドや属性を備えています。
 
-### タイルマップのレイヤ
-タイルを含むレイヤは
+### タイルマップのレイヤー
+タイルを含むレイヤーは
 [TiledMapTileLayer](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/maps/tiled/TiledMapTileLayer.html)
 [(コード)](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/maps/tiled/TiledMapTileLayer.java)のインスタンスとして保持されます。タイルにアクセスするにはキャストが必要です。
 
 ```java
 TiledMap tiledMap = loadMap(); // これについては下で説明
-TiledMapTileLayer layer = (TiledMapTileLayer)tiledMap.getLayers().get(0); // インデックありのレイヤがタイルを含む前提
+TiledMapTileLayer layer = (TiledMapTileLayer)tiledMap.getLayers().get(0); // インデック0のレイヤーがタイルを含む前提
 ```
 
 `TiledMapTileLayer`は汎用の`MapLayer`と同じ属性（例：プロパティ、オブジェクトなど）をすべて持っています。
 
 それに加えて、`TiledMapTileLayer`には、2次元配列として[TiledMapTileLayer.Cell](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/maps/tiled/TiledMapTileLayer.Cell.html) [(コード)](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/maps/tiled/TiledMapTileLayer.java#L89)のインスタンスが格納されています。
 
-セルにアクセスするには、タイルレイヤから次のように取得します。
+セルにアクセスするには、タイルレイヤーから次のように取得します。
 
 ```java
 Cell cell = tileLayer.getCell(column, row);
@@ -188,10 +188,10 @@ int rows = tileLayer.getHeight();
 [(コード)](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/maps/tiled/TiledMapTileSet.java)インスタンスを含みます。タイルセットは複数の[TiledMapTile](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/maps/tiled/TiledMapTile.html)
 [(コード)](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/maps/tiled/TiledMapTile.java)インスタンスを含みます。タイルには[複数の実装](https://github.com/libgdx/libgdx/tree/master/gdx/src/com/badlogic/gdx/maps/tiled/tiles)（例：静的タイル、アニメーションタイルなど）があり、特別な目的のために独自の実装を作ることもできます。
 
-タイルレイヤー内のセルはこれらのタイルを参照します。1つのレイヤー内のセルは複数のタイルセットに含まれるタイルを参照することもできます。ただし、テクスチャの切り替え回数を減らすため、1レイヤーにつき1タイルセットに統一することが推奨されます。
+タイルレイヤー内のセルはこれらのタイルを参照します。1つのレイヤー内のセルは複数のタイルセットに含まれるタイルを参照することもできます。ただし、テクスチャの切り替え（バインド）回数を減らすため、1レイヤーにつき1タイルセットに統一することが推奨されます。
 
 ### タイルマップの描画
-タイルマップとそのレイヤを描画するには、[専用のマップレンダラー実装](https://github.com/libgdx/libgdx/tree/master/gdx/src/com/badlogic/gdx/maps/tiled/renderers)が必要です。直交や見下ろしのマップには
+タイルマップとそのレイヤーを描画するには、[専用のマップレンダラー実装](https://github.com/libgdx/libgdx/tree/master/gdx/src/com/badlogic/gdx/maps/tiled/renderers)が必要です。直交や見下ろしのマップには
 [OrthogonalTiledMapRenderer](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/maps/tiled/renderers/OrthogonalTiledMapRenderer.html)
 [(コード)](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/maps/tiled/renderers/OrthogonalTiledMapRenderer.java)を使い、アイソメトリック（isometric）マップには、
 [IsometricTiledMapRenderer](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/maps/tiled/renderers/IsometricTiledMapRenderer.html)
@@ -208,7 +208,7 @@ OrthogonalTiledMapRenderer renderer = new OrthogonalTiledMapRenderer(map, unitSc
 
 `unitScale`は「何ピクセルがワールドの1単位に相当するか」をレンダラーに伝えます。上の例では16ピクセルが1単位です。もし1ピクセルを1単位に対応させたいなら、`unitScale`は1にする必要があり、後は同様です。
 
-unitScaleは描画時の座標系とゲーム世界の座標系を結びつけるための方法です。
+`unitScale`は描画時の座標系とゲーム世界の座標系を結びつけるための方法です。
 
 小さな例として、タイルが32x32ピクセルのタイルマップを考えます。ゲーム世界の表現では、これを1x1単位の正方形に対応させたいとします。この場合、`unitScale`に1/32fを指定します。さらにカメラも同じ単位スケールで動作するように設定できます。たとえば画面上にマップの30x20タイルを表示したいなら、カメラは次のように作れます。
 
@@ -227,80 +227,79 @@ renderer = new IsometricTiledMapRenderer(isoMap, 1 / 32f);
 
 *注意：* アイソメトリック用レンダラーは実験的なものです。自己責任で使用し、問題を見つけた場合は報告してください。性能面では、モバイル端末でアイソメトリックマップを描画するのは非常にコストが高く、すべてのタイルでブレンド処理が必要になります。
 
-### Loading TMX/Tiled maps
+### TMX／Tiled マップの読み込み
 ![images/tile-maps2.png](/assets/wiki/images/tile-maps2.png)
 
-[Tiled](https://www.mapeditor.org/) is a generic tile map editor for Windows/Linux/Mac OS X that allows you to create tile layers as well as object layers, containing arbitrary shapes for trigger areas and other purposes. libGDX provides a loader to read files generated by Tiled.
+[Tiled](https://www.mapeditor.org/)はWindows／Linux／Mac OS X向けの汎用タイルマップエディタで、タイルレイヤーだけでなく、トリガー領域などの目的で任意の形状を含められるオブジェクトレイヤーも作成できます。libGDXには、Tiledが生成したファイルを読み込むためのローダーが用意されています。
 
-To load a Tiled map you have two options: either load it directly or via the AssetManager. The first option works like this:
+Tiledマップを読み込む方法は2つあります。直接読み込む方法と、`AssetManager`経由で読み込む方法です。まず、直接読み込む場合は次のようになります。
 
 ```java
 TiledMap map = new TmxMapLoader().load("level1.tmx");
 ```
 
-This will load the file called `level1.tmx` from the internal file storage (the assets directory). If you want to load a file using a different file type, you have to supply a FileHandleResolver in the constructor of the TmxMapLoader.
+これは`level1.tmx`というファイルを内部ファイルストレージ（assetsディレクトリ）から読み込みます。別の種類のファイルストレージから読み込みたい場合は、`TmxMapLoader`のコンストラクタに`FileHandleResolver`を渡す必要があります。
 
 ```java
 TiledMap map = new TmxMapLoader(new ExternalFileHandleResolver()).load("level1.tmx");
 ```
 
-We chose this mechanism as the TmxMapLoader can also be used with the AssetManager class, where FileHandleResolvers rule the earth. To load a TMX map via the AssetManager, you can do the following:
+この仕組みを採用したのは、`TmxMapLoader`が`AssetManager`と一緒に使えるようにするためです（`AssetManager`では`FileHandleResolver`がすべてを支配しています）。`AssetManager`経由でTMXマップを読み込むには、次のようにします。
 
 ```java
-// only needed once
+// 1回だけ必要です
 assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
 assetManager.load("level1.tmx", TiledMap.class);
 
-// once the asset manager is done loading
+// AssetManagerの読み込みが完了したら
 TiledMap map = assetManager.get("level1.tmx");
 ```
 
-Once loaded you can treat the map just like an other TiledMap.
+読み込みが終わったら、そのマップは通常どおり`TiledMap`として扱えます。
 
-*Note* if you load your TMX map directly, you are responsible for calling `TiledMap#dispose()` once you no longer need it. This call will dispose of any textures loaded for the map.  
-*Note* if you want to use TMX maps with the GWT backend, you need to make sure the map is saved with pure base64 encoding. The compressed TMX formats will not work due to limitations in GWT.  
-*Note* libGDX does not support infinite size for TMX maps (see [#5764](https://github.com/libgdx/libgdx/issues/5764)). Use only size-limited TMX maps.
+*注意：* TMXマップを直接読み込んだ場合、それが不要になった時点で`TiledMap#dispose()`を呼び出す責任はあなたにあります。この呼び出しにより、マップのために読み込まれたテクスチャが破棄されます。
+*注意：* GWTバックエンドでTMXマップを使いたい場合は、マップを純粋なbase64エンコードで保存しておく必要があります。圧縮されたTMX形式は、GWTの制限により動作しません。
+*注意：* libGDXはTMXマップの無限サイズをサポートしていません（[#5764](https://github.com/libgdx/libgdx/issues/5764)参照）。サイズが固定されたTMXマップのみを使用してください。
 
-### Loading TiledMapPacker Atlas TMX/TMJ Tiled maps
-The libGDX TiledMapPacker and AtlasTmxMapLoader have been around for years, but with recent updates it's been expanded to include
-more feature's and well as better documentation on how to use it.
+### TiledMapPacker AtlasのTMX/TMJタイルマップの読み込み
+libGDXのTiledMapPackerとAtlasTmxMapLoaderは何年も前から存在していますが、最近の更新で対応機能が拡張され、使い方に関するドキュメントもより充実しました。
 
-Maps processed by TiledMapPacker must be loaded using the AtlasTmxMapLoader or AtlasTmjMapLoader classes instead of the standard map loaders.
-These specialized loaders recognize the extra atlas property embedded in the map file, ensuring tilesets, image layers, and collection-of-images tilesets are properly loaded from the generated TextureAtlas.
+TiledMapPackerで処理したマップは、標準のマップローダーではなく`AtlasTmxMapLoader`または`AtlasTmjMapLoader`クラスを使って読み込む必要があります。
+これらの専用ローダーは、マップファイルに埋め込まれた追加のatlasプロパティを認識し、タイルセット・画像レイヤー・複数画像からなるコレクション型タイルセットが、生成されたTextureAtlasから正しく読み込まれるようにします。
 
-Using these loaders reduces draw calls, minimizes texture binds, and improves rendering efficiency. Especially for maps which heavily rely on image layers and multiple tilesets.
+これらのローダーを使うことで、ドローコールを削減し、テクスチャの切り替え回数を最小化し、描画効率を向上させられます。特に、画像レイヤーや複数のタイルセットに大きく依存するマップでは効果的です。
 
-See the full [TiledMapPacker documentation](/wiki/tools/tiled-map-packer) for usage instructions.
+使い方の詳細は、[TiledMapPacker のドキュメント](/wiki/tools/tiled-map-packer)を参照してください。
 
-### Loading Tide maps
+### Tideマップの読み込み
 ![images/tile-maps3.png](/assets/wiki/images/tile-maps3.png)
 
-[Tide](https://colinvella.github.io/tIDE/) is another general purpose tile map editor, available for Windows only. libGDX provides a loader for the format output by Tide.
+[Tide](https://colinvella.github.io/tIDE/)は、もうひとつの汎用タイルマップエディタで、Windows専用です。libGDXには、Tideが出力する形式を読み込むためのローダーが用意されています。
 
-As with TMX files, you can either load a Tide map directly or through the asset manager:
+TMXファイルと同様に、Tideマップも直接読み込むか、AssetManager経由で読み込むかを選べます。
 
 ```java
-// direct loading
+// 直接読み込み
 map = new TideMapLoader().load("level1.tide");
 
-// asset manager loading
+// AssetManager経由で読み込み
 assetManager.setLoader(TiledMap.class, new TideMapLoader(new InternalFileHandleResolver()));
 assetManager.load("level1.tide", TiledMap.class);
 ```
 
-*Note* if you load your Tide map directly, you are responsible for calling TiledMap#dispose() once you no longer need it. This call will dispose of any textures loaded for the map.
+*注意：* Tideマップを直接読み込んだ場合、それが不要になった時点で`TiledMap#dispose()`を呼び出す責任はあなたにあります。この呼び出しにより、マップのために読み込まれたテクスチャが破棄されます。
 
-## Performance considerations
-While we try to make the renderers as fast as possible, there are a few things you can consider to boost rendering performance.
+## パフォーマンスに関する注意点
+レンダラーは可能な限り高速になるようにしていますが、描画性能をさらに高めるために考慮できる点がいくつかあります。
 
-  * Only use tiles from a single tile set in a layer. This will reduce texture binding.
-  * Mark tiles that do not need blending as opaque. At the moment you can only do this programmatically, we will provide ways to do it in the editor or automatically.
-  * Do not go overboard with the number of layers.
+  * 1つのレイヤー内では、単一のタイルセットのタイルだけを使うようにしてください。これによりテクスチャの切り替えが減ります。
+  * ブレンド処理が不要なタイルは不透明として扱うようにしてください。現時点ではこれはプログラムからのみ設定できますが、将来的にはエディタ上で設定したり自動化したりできる手段を提供する予定です。
+  * レイヤー数を増やしすぎないようにしてください。
 
-## Examples
-  * [Simple platformer using a TMX map](https://github.com/libgdx/libgdx/blob/master/tests/gdx-tests/src/com/badlogic/gdx/tests/superkoalio/SuperKoalio.java)
-  * [Programmatic creation of a TiledMap](https://github.com/libgdx/libgdx/blob/master/tests/gdx-tests/src/com/badlogic/gdx/tests/bench/TiledMapBench.java)
-  * [Tile map asset manager loading/rendering](https://github.com/libgdx/libgdx/blob/master/tests/gdx-tests/src/com/badlogic/gdx/tests/TiledMapAssetManagerTest.java)
-  * [Tile map direct loading/rendering](https://github.com/libgdx/libgdx/blob/master/tests/gdx-tests/src/com/badlogic/gdx/tests/TiledMapDirectLoaderTest.java)
-  * [Tide map asset manager loading/rendering](https://github.com/libgdx/libgdx/blob/master/tests/gdx-tests/src/com/badlogic/gdx/tests/TideMapAssetManagerTest.java)
-  * [Tide map direct loading/rendering](https://github.com/libgdx/libgdx/blob/master/tests/gdx-tests/src/com/badlogic/gdx/tests/TideMapDirectLoaderTest.java)
+## 例
+  * [TMX マップを使ったシンプルなプラットフォーマー](https://github.com/libgdx/libgdx/blob/master/tests/gdx-tests/src/com/badlogic/gdx/tests/superkoalio/SuperKoalio.java)
+  * [プログラムでタイルマップを作成する例](https://github.com/libgdx/libgdx/blob/master/tests/gdx-tests/src/com/badlogic/gdx/tests/bench/TiledMapBench.java)
+  * [タイルマップをAssetManager経由で読み込み／描画する例](https://github.com/libgdx/libgdx/blob/master/tests/gdx-tests/src/com/badlogic/gdx/tests/TiledMapAssetManagerTest.java)
+  * [タイルマップを直接読み込み／描画する例](https://github.com/libgdx/libgdx/blob/master/tests/gdx-tests/src/com/badlogic/gdx/tests/TiledMapDirectLoaderTest.java)
+  * [TideマップをAssetManager経由で読み込み／描画する例](https://github.com/libgdx/libgdx/blob/master/tests/gdx-tests/src/com/badlogic/gdx/tests/TideMapAssetManagerTest.java)
+  * [Tideマップを直接読み込み／描画する例](https://github.com/libgdx/libgdx/blob/master/tests/gdx-tests/src/com/badlogic/gdx/tests/TideMapDirectLoaderTest.java)
