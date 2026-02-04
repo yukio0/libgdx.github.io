@@ -15,24 +15,24 @@ libGDXは一般的なゲームアーキテクチャの各段階で必要とな�
 
 ![images/modules-overview.png](/assets/wiki/images/modules-overview.png)
 
-## Modules
+## モジュール
 
-The following part briefly describes each module providing the most common use cases for each. For more in-depth information, be sure to check out the individual wiki sections for the respective modules!
+以下では、各モジュールについて、代表的なユースケースを中心に簡単に説明します。より詳しい情報については、それぞれのモジュールに対応するwikiセクションを参照してください！The following part briefly describes each module providing the most common use cases for each. For more in-depth information, be sure to check out the individual wiki sections for the respective modules!
 {: .notice--primary}
 
 ### Input
-The _Input_ module enables the polling of different input states on every platform.
-It allows polling the state of each key, touchscreen and accelerometer. On the desktop the touchscreen is replaced by the mouse while the accelerometer is not available.
+_Input_モジュールは、すべてのプラットフォームでさまざまな入力状態をポーリングできるようにします。
+各キー、タッチスクリーン、加速度センサーの状態を取得できます。デスクトップではタッチスクリーンはマウスに置き換わり、加速度センサーは利用できません。
 
-It also offers the means to register input processors to use an event based input model.
+また、イベントベースの入力モデルを使うために、入力プロセッサを登録する手段も提供します。
 
-The following code snippet gets the current touch coordinates if a touch (or mouse down on desktop) event is in progress:
+次のコードは、タッチ（デスクトップではマウス押下）イベントが進行中であれば、現在のタッチ座標を取得します。
 ```java
 if (Gdx.input.isTouched()) {
   System.out.println("Input occurred at x=" + Gdx.input.getX() + ", y=" + Gdx.input.getY());
 }
 ```
-In similar fashion all the supported input means can be polled and handled.
+同様の方法で、サポートされている各種入力をポーリングして処理できます。
 
 ### Graphics
 The _Graphics_ module abstracts the communication with the GPU and provides convenience methods to obtain instances of OpenGL ES wrappers. It takes care of all the boilerplate code needed to get hold of the OpenGL instance and handles all implementations provided by the manufacturer.
