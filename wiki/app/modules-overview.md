@@ -1,17 +1,17 @@
 ---
-title: Modules overview
+title: モジュール概要
 ---
-## Introduction
+## はじめに
 
-libGDX comprises several modules that provide services for each step of a typical game architecture.
+libGDXは一般的なゲームアーキテクチャの各段階で必要となるサービスを提供する、複数のモジュールから構成されています。
 
- * *[Input](/wiki/input/input-handling)* - Provides a unified input model and handler for all platforms. Supports keyboard, touchscreen, accelerometer and mouse where available.
- * *[Graphics](/wiki/graphics/graphics)* - Enables the drawing of images to the screen using the hardware provided OpenGL ES implementation.
- * *[Files](/wiki/file-handling)* - Abstracts file access on all platforms by providing convenient methods for read/write operations regardless of the media.
- * *[Audio](/wiki/audio/audio)* - Facilitates sound recording and playback on all platforms.
- * *[Networking](/wiki/networking)* - Provides methods to perform networking operations, such as simple HTTP get and post requests, and TCP server/client socket communication.
+ * *[Input](/wiki/input/input-handling)* - すべてのプラットフォームで統一された入力モデルとハンドラを提供します。利用可能な場合、キーボード、タッチスクリーン、加速度センサー、マウスをサポートします。
+ * *[Graphics](/wiki/graphics/graphics)* - ハードウェアが提供するOpenGL ES実装を用いて、画面に画像を描画できるようにします。
+ * *[Files](/wiki/file-handling)* - メディアの種類に依存せず、読み書き操作のための便利なメソッドを提供することで、全プラットフォームでのファイルアクセスを抽象化して扱えるようにします。
+ * *[Audio](/wiki/audio/audio)* - 全プラットフォームでの音声の録音と再生を容易にします。
+ * *[Networking](/wiki/networking)* - シンプルなHTTPのGET/POSTリクエストや、TCPのサーバー／クライアントソケット通信など、ネットワーク操作を行うためのメソッドを提供します。
 
-The following diagram shows the modules in a simple game architecture:
+次の図は、シンプルなゲームアーキテクチャにおけるモジュールの位置づけを示しています。
 
 ![images/modules-overview.png](/assets/wiki/images/modules-overview.png)
 
