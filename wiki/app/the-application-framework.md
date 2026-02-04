@@ -1,18 +1,18 @@
 ---
-title: The application framework
+title: アプリケーションフレームワーク
 ---
-## Modules
-At its core, libGDX consists of six [modules](/wiki/app/modules-overview) in the form of interfaces that provide means to interact with the operating system. Each backend implements these interfaces.
+## モジュール
+libGDXの中核は、OSとやり取りするための手段を提供するインターフェースとしての6つの[モジュール](/wiki/app/modules-overview)で構成されています。各バックエンドは、これらのインターフェースを実装します。
 
-  * *[Application](https://github.com/libgdx/libgdx/tree/master/gdx/src/com/badlogic/gdx/Application.java)*: runs the application and informs an API client about application level events, such as window resizing. Provides logging facilities and querying methods, e.g., memory usage.
-  * *[Files](https://github.com/libgdx/libgdx/tree/master/gdx/src/com/badlogic/gdx/Files.java)*: exposes the underlying file system(s) of the platform. Provides an abstraction over different types of file locations on top of a custom file handle system (which does not inter-operate with Java's File class).
-  * *[Input](https://github.com/libgdx/libgdx/tree/master/gdx/src/com/badlogic/gdx/Input.java)*: informs the API client of user input such as mouse, keyboard, touch or accelerometer events. Both polling and event driven processing are supported.
-  * *[Net](https://github.com/libgdx/libgdx/tree/master/gdx/src/com/badlogic/gdx/Net.java)*: provides means to access resources via HTTP/HTTPS in a cross-platform way, as well as create TCP server and client sockets.
-  * *[Audio](https://github.com/libgdx/libgdx/tree/master/gdx/src/com/badlogic/gdx/Audio.java)*: provides means to playback sound effects and streaming music as well as directly accessing audio devices for PCM audio input/output.
-  * *[Graphics](https://github.com/libgdx/libgdx/tree/master/gdx/src/com/badlogic/gdx/Graphics.java)*: exposes OpenGL ES 2.0 (where available) and allows querying/setting video modes and similar things.
+  * *[Application](https://github.com/libgdx/libgdx/tree/master/gdx/src/com/badlogic/gdx/Application.java)*: アプリケーションを実行し、ウィンドウのリサイズなどアプリケーションレベルのイベントをAPI利用側に通知します。ログ出力機能や、メモリ使用量などを問い合わせるメソッドも提供します。
+  * *[Files](https://github.com/libgdx/libgdx/tree/master/gdx/src/com/badlogic/gdx/Files.java)*: プラットフォームの基盤となるファイルシステムへアクセスできるようにします。独自のファイルハンドル機構の上で、さまざまな種類のファイルの場所を抽象化して扱えるようにします（JavaのFileクラスとは相互運用できません）。
+  * *[Input](https://github.com/libgdx/libgdx/tree/master/gdx/src/com/badlogic/gdx/Input.java)*: マウス、キーボード、タッチ、加速度センサーなどのユーザー入力をAPI利用側に通知します。ポーリング方式とイベント駆動方式の両方をサポートします。
+  * *[Net](https://github.com/libgdx/libgdx/tree/master/gdx/src/com/badlogic/gdx/Net.java)*: HTTP/HTTPSによるリソースアクセスをクロスプラットフォームに提供し、TCPのサーバー／クライアントソケットも作成できます。
+  * *[Audio](https://github.com/libgdx/libgdx/tree/master/gdx/src/com/badlogic/gdx/Audio.java)*: 効果音の再生やストリーミング音楽の再生、そして PCM 音声の入出力のためにオーディオデバイスへ直接アクセスする手段を提供します。
+  * *[Graphics](https://github.com/libgdx/libgdx/tree/master/gdx/src/com/badlogic/gdx/Graphics.java)*: （利用可能な環境では）OpenGL ES 2.0 を利用できるようにし、ビデオモードの取得／設定など、関連する操作を行えます。
 
-## Starter Classes
-The only platform specific code that needs to be written, are so called [starter classes](/wiki/app/starter-classes-and-configuration). For each platform that is targeted, a piece of code will instantiate a concrete implementation of the Application interface, provided by the back-end for the platform. For the desktop, this might look something like this, using the LWJGL 3 backend:
+## スタータークラス
+プラットフォーム固有のコードとして書く必要があるのは、いわゆる[スタータークラス](/wiki/app/starter-classes-and-configuration)だけです。対象プラットフォームごとに、バックエンドが提供するApplicationインターフェースの実装を生成するコードを書きます。デスクトップの場合、LWJGL3バックエンドを使うと次のようになります。
 
 ```java
 public class DesktopLauncher {
@@ -23,7 +23,7 @@ public class DesktopLauncher {
 }
 ```
 
-For Android, the corresponding starter class might look like this:
+Android の場合、対応するスタータークラスは次のようになるでしょう。
 
 ```java
 public class AndroidStarter extends AndroidApplication {
@@ -35,20 +35,20 @@ public class AndroidStarter extends AndroidApplication {
 }
 ```
 
-These two classes usually live in separate projects, e.g., a desktop and an Android project. The [Project Generation](/wiki/start/project-generation) page describes the layout of these projects.
+これら2つのクラスは通常、デスクトップ用プロジェクトとAndroid用プロジェクトのように、別々のプロジェクトに置かれます。プロジェクト構成（レイアウト）については、[プロジェクトの作成](/wiki/start/project-generation)ページで説明されています。
 
-The actual code of the application is located in a class that implements the [ApplicationListener](https://github.com/libgdx/libgdx/tree/master/gdx/src/com/badlogic/gdx/ApplicationListener.java) interface (MyGame in the above example). An instance of this class is passed to the respective initialization methods of each back-end's Application implementation (see above). The application will then call into the methods of the ApplicationListener at appropriate times (see [The Life-Cycle](/wiki/app/the-life-cycle)).
+アプリケーション本体のコードは、[ApplicationListener](https://github.com/libgdx/libgdx/tree/master/gdx/src/com/badlogic/gdx/ApplicationListener.java)インターフェースを実装したクラス（上の例ではMyGame）に書きます。このクラスのインスタンスは、それぞれのバックエンドの Application 実装が持つ初期化メソッドに渡されます（上記参照）。するとアプリケーションは、適切なタイミングで ApplicationListenerの各メソッドを呼び出します（[ライフサイクル](/wiki/app/the-life-cycle)を参照）。
 
-See [Starter Classes & Configuration](/wiki/app/starter-classes-and-configuration) for details on starter classes.
+スタータークラスの詳細は[スタータークラスと設定](/wiki/app/starter-classes-and-configuration)のページを参照してください。
 
-## Accessing Modules
-The modules described earlier can be accessed via static fields of the [Gdx class](https://github.com/libgdx/libgdx/tree/master/gdx/src/com/badlogic/gdx/Gdx.java). This is essentially a set of global variables that allows easy access to any module of libGDX. While generally viewed as bad coding practice, we decided on using this mechanism to ease the pain usually associated with passing around references to things that are used often in all kinds of places within the code base.
+## モジュールへのアクセス
+先述したモジュールは、[Gdx](https://github.com/libgdx/libgdx/tree/master/gdx/src/com/badlogic/gdx/Gdx.java)クラスの静的フィールドからアクセスできます。これは本質的にグローバル変数の集合で、libGDXのどのモジュールにも簡単にアクセスできるようにするものです。一般的には悪いコーディング習慣とみなされがちですが、コードベース内のあらゆる場所で頻繁に使う参照を渡し回す苦労を軽減するために、この仕組みを採用しました。
 
-To access, for example, the audio module one can simply write the following:
+たとえばオーディオモジュールへアクセスするには、次のように書くだけです。
 
 ```java
-// creates a new AudioDevice to which 16-bit PCM samples can be written
+// 16-bit PCMサンプルを書き込める新しいAudioDeviceを作成する
 AudioDevice audioDevice = Gdx.audio.newAudioDevice(44100, false);
 ```
 
-`Gdx.audio` is a reference to the backend implementation that has been instantiated on application startup by the Application instance. Other modules are accessed in the same fashion, e.g., `Gdx.app` to get the Application, `Gdx.files` to access the Files implementation and so on.
+`Gdx.audio`は、アプリ起動時にApplicationインスタンスによって生成されたバックエンド実装への参照です。他のモジュールも同様にアクセスできます。たとえば`Gdx.app`でApplicationを取得し、`Gdx.files`で Files 実装へアクセスし…といった具合です。
