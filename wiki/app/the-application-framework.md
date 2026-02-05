@@ -4,7 +4,7 @@ title: アプリケーションフレームワーク
 ## モジュール
 libGDXの中核は、OSとやり取りするための手段を提供するインターフェースとしての6つの[モジュール](/wiki/app/modules-overview)で構成されています。各バックエンドは、これらのインターフェースを実装します。
 
-  * *[Application](https://github.com/libgdx/libgdx/tree/master/gdx/src/com/badlogic/gdx/Application.java)*: アプリケーションを実行し、ウィンドウのリサイズなどアプリケーションレベルのイベントをAPI利用側に通知します。ログ出力機能や、メモリ使用量などを問い合わせるメソッドも提供します。
+  * *[Application](https://github.com/libgdx/libgdx/tree/master/gdx/src/com/badlogic/gdx/Application.java)*: アプリケーションを実行し、ウィンドウのリサイズなどアプリケーションレベルのイベントをAPI利用側に通知します。ロギングや、メモリ使用量などを問い合わせるメソッドも提供します。
   * *[Files](https://github.com/libgdx/libgdx/tree/master/gdx/src/com/badlogic/gdx/Files.java)*: プラットフォームの基盤となるファイルシステムへアクセスできるようにします。独自のファイルハンドル機構の上で、さまざまな種類のファイルの場所を抽象化して扱えるようにします（JavaのFileクラスとは相互運用できません）。
   * *[Input](https://github.com/libgdx/libgdx/tree/master/gdx/src/com/badlogic/gdx/Input.java)*: マウス、キーボード、タッチ、加速度センサーなどのユーザー入力をAPI利用側に通知します。ポーリング方式とイベント駆動方式の両方をサポートします。
   * *[Net](https://github.com/libgdx/libgdx/tree/master/gdx/src/com/badlogic/gdx/Net.java)*: HTTP/HTTPSによるリソースアクセスをクロスプラットフォームに提供し、TCPのサーバー／クライアントソケットも作成できます。

@@ -16,7 +16,7 @@
   * [モジュールの概要](/wiki/app/modules-overview)
   * [スタータークラスと設定](/wiki/app/starter-classes-and-configuration)
   * [クエリ](/wiki/app/querying)
-  * [ログ出力](/wiki/app/logging)
+  * [ロギング](/wiki/app/logging)
   * [スレッド処理](/wiki/app/threading)
   * [プラットフォーム固有コードとの連携](/wiki/app/interfacing-with-platform-specific-code)
 </div>
