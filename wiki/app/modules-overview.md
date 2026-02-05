@@ -7,7 +7,7 @@ libGDXは一般的なゲームアーキテクチャの各段階で必要とな�
 
  * *[Input](/wiki/input/input-handling)* - すべてのプラットフォームで統一された入力モデルとハンドラを提供します。利用可能な場合、キーボード、タッチスクリーン、加速度センサー、マウスをサポートします。
  * *[Graphics](/wiki/graphics/graphics)* - ハードウェアが提供するOpenGL ES実装を用いて、画面に画像を描画できるようにします。
- * *[Files](/wiki/file-handling)* - メディアの種類に依存せず、読み書き操作のための便利なメソッドを提供することで、全プラットフォームでのファイルアクセスを抽象化して扱えるようにします。
+ * *[Files](/wiki/file-handling)* - メディアの種類に依存せず、読み書き操作のための便利なメソッドを提供することで、全プラットフォームでのファイルアクセスを抽象化します。
  * *[Audio](/wiki/audio/audio)* - 全プラットフォームでの音声の録音と再生を容易にします。
  * *[Networking](/wiki/networking)* - シンプルなHTTPのGET/POSTリクエストや、TCPのサーバー／クライアントソケット通信など、ネットワーク操作を行うためのメソッドを提供します。
 
@@ -17,16 +17,16 @@ libGDXは一般的なゲームアーキテクチャの各段階で必要とな�
 
 ## モジュール
 
-以下では、各モジュールについて、代表的なユースケースを中心に簡単に説明します。より詳しい情報については、それぞれのモジュールに対応するwikiセクションを参照してください！The following part briefly describes each module providing the most common use cases for each. For more in-depth information, be sure to check out the individual wiki sections for the respective modules!
+以下では、各モジュールについて、代表的なユースケースを中心に簡単に説明します。より詳しい情報については、それぞれのモジュールに対応するwikiセクションを参照してください！
 {: .notice--primary}
 
 ### Input
-_Input_モジュールは、すべてのプラットフォームでさまざまな入力状態をポーリングできるようにします。
+*Input*モジュールは、すべてのプラットフォームでさまざまな入力状態をポーリングできるようにします。
 各キー、タッチスクリーン、加速度センサーの状態を取得できます。デスクトップではタッチスクリーンはマウスに置き換わり、加速度センサーは利用できません。
 
 また、イベントベースの入力モデルを使うために、入力プロセッサを登録する手段も提供します。
 
-次のコードは、タッチ（デスクトップではマウス押下）イベントが進行中であれば、現在のタッチ座標を取得します。
+次のコードは、タッチ（デスクトップではマウス押下）中であれば、現在のタッチ座標を取得します。
 ```java
 if (Gdx.input.isTouched()) {
   System.out.println("Input occurred at x=" + Gdx.input.getX() + ", y=" + Gdx.input.getY());
@@ -35,58 +35,58 @@ if (Gdx.input.isTouched()) {
 同様の方法で、サポートされている各種入力をポーリングして処理できます。
 
 ### Graphics
-The _Graphics_ module abstracts the communication with the GPU and provides convenience methods to obtain instances of OpenGL ES wrappers. It takes care of all the boilerplate code needed to get hold of the OpenGL instance and handles all implementations provided by the manufacturer.
+*Graphics*モジュールはGPUとの通信を抽象化し、OpenGL ESのラッパーのインスタンスを取得するための便利なメソッドを提供します。OpenGLインスタンスを取得するために必要な定型（ボイラープレート）コードを肩代わりし、メーカーごとの実装差も吸収します。
 
-Depending on the underlying hardware, the wrappers may be or may not be available.
+基盤となるハードウェアによっては、これらのラッパーが利用できる場合もあれば、利用できない場合もあります。
 
-The Graphics module also provides methods to generate Pixmaps and Textures.
+Graphicsモジュールは、PixmapやTextureを生成するためのメソッドも提供します。
 
-For example, to obtain the OpenGL API 2.0 instance, the following code will be used:
+たとえばOpenGL API 2.0のインスタンスを取得するには、次のコードを使います。
 ```java
 GL20 gl = Gdx.graphics.getGL20();
 ```
-The method will return an instance that can be used to draw onto the screen. In case the hardware configuration does not support OpenGL ES v2.0, null is returned.
+このメソッドは、画面へ描画するために利用できるインスタンスを返します。ハードウェア構成がOpenGL ES v2.0をサポートしていない場合はnullが返されます。
 
-The following snippet clears the screen and paints it with red.
+次のコードは、画面をクリアして赤で塗りつぶします。
 ```java
 gl.glClearColor(1f, 0.0f, 0.0f, 1);
 gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 ```
-It always returns the specific implementation of the API (lwjgl, jogl or android), so the main application doesn’t need to know specifics and will work across the whole range of platforms if supported.
+これらのメソッドは常に（lwjgl、jogl、android などの）プラットフォーム固有の実装を返します。そのため、アプリ本体が実装の違いを意識しなくても、対応している限り幅広いプラットフォームで動作します。
 
-The following API versions are supported:
+サポートされているAPIバージョンは次のとおりです。
 
-| *GL Version* |    *Method to access*     |
+| *GLバージョン* |    *アクセス用メソッド*     |
 |:------------:|:-------------------------:|
 |     2.0      | `Gdx.graphics.getGL20();` |
 |     3.0      | `Gdx.graphics.getGL30();` |
 
 
-To learn more about the Graphics module check its documentation [here](/wiki/graphics/graphics).
+Graphicsモジュールについての詳細は、[こちら](/wiki/graphics/graphics)のドキュメントを参照してください。
 
 ### Files
-The _Files_ module provides a generic way to access files regardless of the platform.
-It makes it easy to read and write files. File writing has some limitations, which are due to the platform security limitations.
+*Files*モジュールは、プラットフォームに依存しない汎用的な方法でファイルへアクセスできるようにします。
+ファイルの読み書きを簡単に行えます。ただし、書き込みにはプラットフォームのセキュリティ制約に起因するいくつかの制限があります。
 
-The most common use case for the Files module, is to load game assets (textures, sound files) from the same sub-directory of the application for all platforms.
-It is also very useful for writing high scores or game state to files.
+Filesモジュールの最も一般的な用途は、すべてのプラットフォームで、アプリケーション配下の同じサブディレクトリからゲームアセット（テクスチャ、サウンドファイルなど）を読み込むことです。
+ハイスコアやゲーム状態をファイルへ保存する用途にも非常に役立ちます。
 
-The following example creates a Texture from a file present in the $APP_DIR/assets/textures directory.
+次の例は、$APP_DIR/assets/texturesディレクトリにあるファイルからTextureを作成します。
 ```java
 Texture myTexture = new Texture(Gdx.files.internal("assets/textures/brick.png"));
 ```
-This is a very powerful abstraction layer as it works on both Android and desktop.
+これはAndroidとデスクトップの両方で動作する、とても強力な抽象化レイヤーです。
 
 ### Audio
-The _Audio_ module makes the creation and playback of audio files extremely simple. It also gives direct access to the sound hardware.
+*Audio*モジュールは、音声ファイルの作成と再生を非常に簡単にします。また、サウンドハードウェアへ直接アクセスする手段も提供します。
 
-It handles two types of sound files. *Music* and *Sound*. Both types support the WAV, MP3 and OGG formats.
+扱う音声ファイルは2種類で、*Music*と*Sound*があります。どちらもWAV/MP3/OGG形式をサポートします。
 
-Sound instances are loaded into memory and can be played back any time. It is ideal for in-game sound effects that will be used multiple times, like explosions or gunshots.
+Soundインスタンスはメモリ上に読み込まれ、いつでも再生できます。爆発音や銃声のように、ゲーム中で何度も使われる効果音に最適です。
 
-Music instances on the other hand are streams from files on the disk (or SD card). Every time a file is played, it is streamed from the file to the audio device.
+一方、Musicは、ディスク（またはSDカード）上のファイルからのストリーミングです。再生するたびに、ファイルからオーディオデバイスへストリームとして送られます。
 
-The following code snippet plays a sound file, _myMusicFile.mp3_, from disk repeatedly with the volume half turned up:
+次のコードは、ディスク上の*myMusicFile.mp3*を音量50%で繰り返し再生します。
 ```java
 Music music = Gdx.audio.newMusic(Gdx.files.getFileHandle("data/myMusicFile.mp3", FileType.Internal));
 music.setVolume(0.5f);
@@ -95,13 +95,13 @@ music.setLooping(true);
 ```
 
 ### Networking
-The _Networking_ module offers functions useful for game networking and can be used to add multiplayer, send players to your website, or perform other networking tasks. These features are available across multiple platforms, although some platforms may require additional considerations or lack certain features.
+*Networking*モジュールは、ゲームのネットワーク処理に役立つ機能を提供します。マルチプレイの追加、プレイヤーをあなたのWebサイトへ誘導する処理、その他さまざまなネットワーク関連タスクに利用できます。これらの機能は複数プラットフォームで利用可能ですが、プラットフォームによっては追加の考慮が必要だったり、一部機能が利用できない場合があります。
 
-The Networking module includes configurable TCP client and server sockets with settings optimized for low latency.
+Networkingモジュールには、低遅延向けに最適化された設定を備えた、構成可能なTCPクライアント／サーバーソケットが含まれています。
 
-There are also methods and utilities for making HTTP requests. One such utility is the Request Builder, which uses method chaining to easily create HTTP Requests.
+また、HTTPリクエストを作成するためのメソッドやユーティリティも用意されています。その1つがRequest Builderで、メソッドチェーンによって簡単にHTTPリクエストを作成できます。
 
-The Request Builder can be used to create HTTP Requests using the following code snippet:
+Request Builderを使ってHTTPリクエストを作成する例は次のとおりです。
 ```java
 HttpRequestBuilder requestBuilder = new HttpRequestBuilder();
 HttpRequest httpRequest = requestBuilder.newRequest()
@@ -111,7 +111,7 @@ HttpRequest httpRequest = requestBuilder.newRequest()
 Gdx.net.sendHttpRequest(httpRequest, httpResponseListener);
 ```
 
-It can also be used to create HTTP Requests with arguments using the following code snippet:
+次のコードのように、引数（コンテンツ）付きのHTTPリクエストを作成することもできます。
 ```java
 HttpRequestBuilder requestBuilder = new HttpRequestBuilder();
 HttpRequest httpRequest = requestBuilder.newRequest()
