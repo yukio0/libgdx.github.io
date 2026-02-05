@@ -1,41 +1,41 @@
 ---
-title: Querying
+title: クエリ
 ---
-The `Application` interface provides various methods to query properties of the run-time environment.
+`Application`インターフェースには、実行時環境の各種プロパティをクエリ（問い合わせ）するためのメソッドが用意されています。
 
-### Getting the Application Type
-Sometimes it is necessary to implement certain functionality differently depending on the platform it is running on. The `Application.getType()` method returns the platform the application is currently running on:
+### 実行プラットフォームの取得
+実行しているプラットフォームによって、処理を分けて実装したい場合があります。`Application.getType()`メソッドは、アプリケーションが現在動作しているプラットフォームを返します。
 
 ```java
 switch (Gdx.app.getType()) {
     case Android:
-        // android specific code
+        // Android固有のコード
         break;
     case Desktop:
-        // desktop specific code
+        // デスクトップ固有のコード
         break;
     case WebGl:
-        // HTML5 specific code
+        // HTML5固有のコード
         break;
     default:
-        // Other platforms specific code
+        // その他のプラットフォーム固有のコード
 }
 ```
 
-On Android and iOS, one can also query the OS version the application is currently running on:
+AndroidとiOSでは、現在動作しているOSのバージョンも取得できます。
 
 ```java
 int androidVersion = Gdx.app.getVersion();
 ```
 
-On Android, this will return the SDK level supported on the current device, e.g., 3 for Android 1.5; on iOS it will return the major version of the current OS.
+Androidでは、現在の端末のSDKレベル（APIレベル）を返します（例：Android 1.5なら3）。iOSでは、現在のOSのメジャーバージョンを返します。
 
-### Memory Consumption
-For debugging and profiling purposes it is often necessary to know the memory consumption, for both the Java heap and the native heap:
+### メモリ使用量
+デバッグやプロファイリングの目的で、Javaヒープとネイティブヒープの両方のメモリ使用量を把握したいことがよくあります。
 
 ```java
 long javaHeap = Gdx.app.getJavaHeap();
 long nativeHeap = Gdx.app.getNativeHeap();
 ```
 
-Both methods return the number of bytes currently in use on the respective heap.
+どちらのメソッドも、それぞれのヒープで現在使用中のバイト数を返します。
