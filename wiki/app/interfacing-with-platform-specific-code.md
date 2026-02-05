@@ -1,13 +1,13 @@
 ---
-title: Interfacing with platform specific code
+title: プラットフォーム固有コードとの連携
 ---
-Oftentimes it can become necessary to access platform specific APIs, e.g., adding advertisement services or a leaderboard functionality which are only available for Android/iOS/desktop. This can be achieved by allowing a specific implementation to be defined through a common API interface.
+広告サービスの追加やリーダーボード機能のように、Android／iOS／デスクトップでしか利用できないプラットフォーム固有のAPIへアクセスしたくなる場面はよくあります。これは、共通のAPIインターフェースを用意し、そのインターフェースに対する「プラットフォームごとの実装」を差し替えられるようにすることで実現できます。
 
-Take the following example, which tries to use a very simple leaderboard API that is only available on Android. For other targets we simply want to log invocations or provide mock return values.
+以下の例では、Androidでのみ利用できる、とてもシンプルなリーダーボードAPIを使うことを想定します。その他のターゲットでは、呼び出されたことをログに出すか、モックの戻り値を返すだけにします。
 
-## The common interface
+## 共通インターフェース
 
-The first step is to create an abstraction of the API in form of an interface which is put into the **core project**:
+最初のステップは、APIをインターフェースとして抽象化し、**coreプロジェクト**に置くことです。
 
 ```java
 public interface Leaderboard {
@@ -15,32 +15,32 @@ public interface Leaderboard {
 }
 ```
 
-Next we create specific implementations for each platform and put these into their respective projects.
+次に、各プラットフォーム向けの実装を作り、それぞれ対応するプロジェクトに配置します。
 
-## The Android implementation
+## Android実装
 
-On Android, we would like our code to call the Google Play API, which provides the method `LeaderboardsClient#submitScore(String leaderboardId, long score);`.
+Androidでは、`LeaderboardsClient#submitScore(String leaderboardId, long score);`というメソッドを提供するGoogle Play APIを呼び出したいとします。
 
-Thus, in the **Android project**, we need to implement our interface `Leaderboard` and call the platform-specific code as follows:
+そのため、**Androidプロジェクト**で`Leaderboard`インターフェースを実装し、次のようにプラットフォーム固有のコードを呼び出します。
 
 ```java
-/** Android implementation, can access PlayGames directly **/
+/** Android実装。PlayGamesに直接アクセスできる **/
 public class AndroidLeaderboard implements Leaderboard {
 
    public void submitScore(String user, int score) {
-      // Ignore the user name, because Google Play reports the score for the currently signed-in player
-      // See https://developers.google.com/games/services/android/signin for more information on this
+      // ユーザー名は無視する。Google Playは現在サインインしているプレイヤーのスコアとして記録するため。
+      // 詳細は https://developers.google.com/games/services/android/signin を参照。
       PlayGames.getLeaderboardsClient(activity).submitScore(getString(R.string.leaderboard_id), score);
    }
 }
 ```
 
-## The desktop implementation
+## デスクトップ実装
 
-The following code would go into the **desktop lwjgl3 project**:
+次のコードは**デスクトップLwjgl3プロジェクト**に置きます。
 
 ```java
-/** Desktop implementation, we simply log invocations **/
+/** デスクトップ実装：呼び出し内容をログに出すだけ **/
 public class Lwjgl3Leaderboard implements Leaderboard {
    public void submitScore(String user, int score) {
       Gdx.app.log("Lwjgl3Leaderboard", "would have submitted score for user " + user + ": " + score);
@@ -48,11 +48,11 @@ public class Lwjgl3Leaderboard implements Leaderboard {
 }
 ```
 
-## The GWT implementation
-The following code would go into the **HTML5 project**:
+## HTML5(GWT)実装
+次のコードは**HTML5プロジェクト**に置きます。
 
 ```java
-/** Html5 implementation, same as Lwjgl3Leaderboard **/
+/** HTML5実装：Lwjgl3Leaderboardと同じ（ログ出力のみ） **/
 public class Html5Leaderboard implements Leaderboard {
    public void submitScore(String user, int score) {
       Gdx.app.log("Html5Leaderboard", "would have submitted score for user " + user + ": " + score);
@@ -60,8 +60,8 @@ public class Html5Leaderboard implements Leaderboard {
 }
 ```
 
-## Obtaining the platform-specific implementation in core
-Next, our `ApplicationListener` gets a constructor to which we can pass the concrete Leaderboard implementation:
+## coreでプラットフォーム固有実装を利用する
+次に、具体的な`Leaderboard`実装を渡せるように、`ApplicationListener`にコンストラクタを用意します。
 
 ```java
 public class MyGame implements ApplicationListener {
@@ -71,11 +71,11 @@ public class MyGame implements ApplicationListener {
       this.leaderboard = leaderboardImpl;
    }
 
-   // rest omitted for clarity
+   // 分かりやすさのため、残りは省略
 }
 ```
 
-In each [starter class](/wiki/app/starter-classes-and-configuration) we then simply instantiate `MyGame`, passing the corresponding Leaderboard implementation as an argument, e.g., on the desktop:
+そして各[スタータークラス](/wiki/app/starter-classes-and-configuration)で、対応する`Leaderboard`実装を引数に渡して`MyGame`を生成します。たとえばデスクトップなら次のようになります。
 
 ```java
 public static void main(String[] argv) {
@@ -84,7 +84,7 @@ public static void main(String[] argv) {
 }
 ```
 
-Alternatively, we can obtain the platform-specific implementation via reflection:
+別の方法として、リフレクションを使ってプラットフォーム固有の実装を取得することもできます。
 
 ```java
 if (Gdx.app.getType() == ApplicationType.Desktop || Gdx.app.getType() == ApplicationType.HeadlessDesktop) {
