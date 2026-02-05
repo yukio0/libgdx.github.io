@@ -1,28 +1,32 @@
 ---
-title: Starter classes and configuration
+title: スタータークラスと設定
 ---
-* [Desktop (LWJGL3)](#desktop-lwjgl3)
-* [Android](#android)
-  - [Game Activity](#game-activity)
-  - [Game Fragment](#game-fragment)
-  - [Manifest configuration](#manifest-configuration)
-  - [Live Wallpapers](#live-wallpapers)
-  - [Screen Savers (aka Daydreams)](#screen-savers-aka-daydreams)
-* [iOS/Robovm](#iosrobovm)
-* [HTML5/GWT](#html5gwt)
+- [デスクトップ(LWJGL3)](#desktop-lwjgl3)
+- [Android](#android)
+  - [ゲームアクティビティ](#game-activity)
+  - [ゲームフラグメント](#game-fragment)
+  - [マニフェストの設定](#manifest-configuration)
+      - [画面の向きと設定変更](#screen-orientation--configuration-changes)
+      - [権限](#permissions)
+  - [ライブ壁紙](#live-wallpapers)
+  - [スクリーンセーバー(aka Daydreams)](#screen-savers-aka-daydreams)
+- [iOS/Robovm](#iosrobovm)
+- [HTML5/GWT](#html5gwt)
+    - [モジュールファイル](#module-files)
+    - [GWT固有の注意点](#gwt-specifics)
 
 
-For each target platform, a starter class has to be written. This class instantiates a back-end specific `Application` implementation and the `ApplicationListener` that implements the application logic. The starter classes are platform-dependent, so let's have a look at how to instantiate and configure these for each backend.
+ターゲットとする各プラットフォームごとに、スタータークラスを書く必要があります。このクラスは、バックエンド固有の`Application`実装と、アプリケーションロジックを実装した`ApplicationListener`を生成します。スタータークラスはプラットフォーム依存なので、各バックエンドでの生成方法と設定方法を見ていきましょう。
 
-This article assumes you have followed the instructions in [Project Setup](/wiki/start/project-generation) as well as [Importing & Running a Project](/wiki/start/import-and-running) and you therefore have already set up the project in your IDE.
+この記事は、[プロジェクトの作成](/wiki/start/project-generation)と[プロジェクトのインポートと実行](/wiki/start/import-and-running)の手順に従っており、IDE上でプロジェクトの設定がすでに完了していることを前提とします。
 {: .notice--info}
 
-# Desktop (LWJGL3)
+# デスクトップ(LWJGL3) {#desktop-lwjgl3}
 
-Since libGDX version 1.10.1, LWJGL3 has been the default desktop backend. You can find more information [here](/news/2021/07/devlog-7-lwjgl3).
+libGDX 1.10.1以降、LWJGL3はデスクトップのデフォルトバックエンドになっています。詳しくは[こちら](/news/2021/07/devlog-7-lwjgl3)を参照してください。
 {: .notice--info}
 
-Opening the `Lwjgl3Launcher.java` class in `my-gdx-game` shows the following:
+`my-gdx-game`内の`Lwjgl3Launcher.java`を開くと、次のようになっています。
 
 ```java
 package com.me.mygdxgame;
@@ -53,17 +57,17 @@ public class Lwjgl3Launcher {
 }
 ```
 
-First an [Lwjgl3ApplicationConfiguration](https://github.com/libgdx/libgdx/blob/master/backends/gdx-backend-lwjgl3/src/com/badlogic/gdx/backends/lwjgl3/Lwjgl3ApplicationConfiguration.java) is instantiated. This class lets one specify various configuration settings, such as the initial screen resolution, whether to use OpenGL ES 2.0 or 3.0 and so on. Refer to the Javadocs of this class for more information.
+まず[Lwjgl3ApplicationConfiguration](https://github.com/libgdx/libgdx/blob/master/backends/gdx-backend-lwjgl3/src/com/badlogic/gdx/backends/lwjgl3/Lwjgl3ApplicationConfiguration.java)のインスタンスを生成します。このクラスでは、初期画面解像度、OpenGL ES 2.0/3.0のどちらを使うか、といった各種設定を指定できます。詳細はこのクラスのJavadocを参照してください。
 
-Once the configuration object is set, an `Lwjgl3Application` is instantiated. The `MyGdxGame()` class is the ApplicationListener implementing the game logic.
+設定オブジェクトを用意したら、`Lwjgl3Application`を生成します。`MyGdxGame()`クラスが、ゲームロジックを実装するApplicationListenerです。
 
-From there on a window is created and the ApplicationListener is invoked as described in [The Life-Cycle](/wiki/app/the-life-cycle)
+以降、ウィンドウが作成され、[ライフサイクル](/wiki/app/the-life-cycle)で説明したとおりにApplicationListenerが呼び出されます。
 
-# Android
+# Android {#android}
 
-## Game Activity
+## ゲームアクティビティ {#game-activity}
 
-Android applications do not use a `main()` method as the entry-point, but instead require an Activity. Open the `AndroidLauncher.java` class in the `my-gdx-game-android` project:
+Androidアプリケーションは`main()`メソッドをエントリポイントとして使いません。代わりにアクティビティ（Activity）がエントリポイントになります。`my-gdx-game-android`プロジェクトの`AndroidLauncher.java`を開いてください。
 
 ```java
 package com.me.mygdxgame;
@@ -85,13 +89,13 @@ public class AndroidLauncher extends AndroidApplication {
 }
 ```
 
-The main entry-point method is the Activity's `onCreate()` method. Note that `AndroidLauncher` derives from `AndroidApplication`, which itself derives from `Activity`. As in the desktop starter class, a configuration instance is created ([AndroidApplicationConfiguration](https://github.com/libgdx/libgdx/tree/master/backends/gdx-backend-android/src/com/badlogic/gdx/backends/android/AndroidApplicationConfiguration.java)). Once configured, the `AndroidApplication.initialize()` method is called, passing in the `ApplicationListener` (`MyGdxGame`) as well as the configuration. Refer to the [AndroidApplicationConfiguration Javadocs](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/backends/android/AndroidApplicationConfiguration.html) for more information on what configuration settings are available.
+主なエントリポイントはアクティビティの`onCreate()`メソッドです。`AndroidLauncher`は`AndroidApplication`を継承しており、`AndroidApplication`自体は`Activity`を継承している点に注意してください。デスクトップのスタータークラスと同様に、設定インスタンス（[AndroidApplicationConfiguration](https://github.com/libgdx/libgdx/tree/master/backends/gdx-backend-android/src/com/badlogic/gdx/backends/android/AndroidApplicationConfiguration.java)）を作成します。設定後、`AndroidApplication.initialize()`を呼び出し、`ApplicationListener`（`MyGdxGame`）と設定を渡します。利用可能な設定項目については、[AndroidApplicationConfigurationのJavadoc](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/backends/android/AndroidApplicationConfiguration.html)を参照してください。
 
-Android applications can have multiple activities. libGDX games should usually only consist of a single activity. Different screens of the game are implemented within libGDX, not as separate activities. The reason for this is that creating a new `Activity` also implies creating a new OpenGL context, which is time consuming and also means that all graphical resources have to be reloaded.
+Androidアプリは複数のアクティビティを持てますが、libGDXゲームは通常単一のアクティビティで構成すべきです。ゲーム内の画面遷移は、別アクティビティとして実装するのではなくlibGDX側（Screenなど）で実装します。というのも、新しいアクティビティを作ることは新しいOpenGLコンテキストを作ることを意味し、時間がかかるうえ、すべてのグラフィックリソースを再読み込みする必要が出てくるためです。
 
-## Game Fragment
+## ゲームフラグメント {#game-fragment}
 
-A libGDX game can be hosted in an Android [Fragment](https://developer.android.com/guide/fragments) instead of using a complete Activity. This allows it to take up a portion of the screen in an Activity or be moved between layouts. To create a libGDX fragment, subclass `AndroidFragmentApplication` and implement the `onCreateView()` with the following initialization:
+libGDXゲームは、アクティビティ全体を使う代わりにAndroidの[フラグメント](https://developer.android.com/guide/fragments)（Fragment）上でホストすることもできます。これにより、アクティビティの一部領域に表示したり、レイアウト間で移動させたりできます。libGDX用フラグメントを作るには、`AndroidFragmentApplication`を継承し、`onCreateView()`で次のように初期化します。
 ```java
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -99,18 +103,18 @@ A libGDX game can be hosted in an Android [Fragment](https://developer.android.c
     }
 ```
 
-That code depends on some other changes to the -android project:
-1. [Add AndroidX Fragment Library to the -android project and its build path](https://developer.android.com/jetpack/androidx/releases/fragment) if you haven't already added it. This is needed in order to extend FragmentActivity later.
-2. Change the AndroidLauncher Activity to extend FragmentActivity, not AndroidApplication.
-3. Implement AndroidFragmentApplication.Callbacks on the AndroidLauncher Activity.
-4. Create a class that extends AndroidFragmentApplication which is the Fragment implementation for libGDX.
-5. Add the `initializeForView()` code in the Fragment's `onCreateView` method.
-6. Finally, replace the AndroidLauncher activity content with the libGDX Fragment.
+このコードを動かすには、-androidプロジェクト側でいくつか追加の変更が必要です。
+1. まだ追加していない場合は、[AndroidXフラグメントライブラリを-androidプロジェクトとビルドパスに追加](https://developer.android.com/jetpack/androidx/releases/fragment)します。後で `FragmentActivity`を継承するために必要です
+2. AndroidLauncherアクティビティが`AndroidApplication`ではなく`FragmentActivity`を継承するように変更します。
+3. AndroidLauncherアクティビティに`AndroidFragmentApplication.Callbacks`を実装します。
+4. libGDX用フラグメント実装として、`AndroidFragmentApplication`を継承するクラスを作成します。
+5. フラグメントの`onCreateView()`に`initializeForView()`のコードを追加します。
+6. 最後に、AndroidLauncherアクティビティの内容をlibGDXフラグメントに置き換えます。
 
-For example:
+例：
 ```java
-// 2. Change AndroidLauncher activity to extend FragmentActivity, not AndroidApplication
-// 3. Implement AndroidFragmentApplication.Callbacks on the AndroidLauncher activity
+// 2. AndroidLauncherアクティビティをAndroidApplicationではなくFragmentActivityを継承するよう変更
+// 3. AndroidLauncherアクティビティにAndroidFragmentApplication.Callbacksを実装
 public class AndroidLauncher extends FragmentActivity implements AndroidFragmentApplication.Callbacks
 {
    @Override
@@ -118,17 +122,17 @@ public class AndroidLauncher extends FragmentActivity implements AndroidFragment
    {
       super.onCreate(savedInstanceState);
 
-      // 6. Finally, replace the AndroidLauncher activity content with the libGDX Fragment.
+      // 6. 最後にAndroidLauncherアクティビティの内容をlibGDXフラグメントに置き換える
       GameFragment fragment = new GameFragment();
       FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
       trans.replace(android.R.id.content, fragment);
       trans.commit();
    }
 
-   // 4. Create a Class that extends AndroidFragmentApplication which is the Fragment implementation for libGDX.
+   // 4. AndroidFragmentApplicationを継承するクラスを作成（libGDX用フラグメント実装）
    public static class GameFragment extends AndroidFragmentApplication
    {
-      // 5. Add the initializeForView() code in the Fragment's onCreateView method.
+      // 5. フラグメントのonCreateViewにinitializeForView()を追加
       @Override
       public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
       {  return initializeForView(new MyGdxGame());   }
@@ -139,8 +143,8 @@ public class AndroidLauncher extends FragmentActivity implements AndroidFragment
 }
 ```
 
-## Manifest configuration
-Besides the `AndroidApplicationConfiguration`, an Android application is also configured via the `AndroidManifest.xml` file, found in the root directory of the Android project. This might look something like this:
+## マニフェストの設定 {#manifest-configuration}
+`AndroidApplicationConfiguration`に加えて、Androidアプリケーションはプロジェクトのルートディレクトリにある`AndroidManifest.xml`によっても設定されます。例は次のとおりです。
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -172,15 +176,15 @@ Besides the `AndroidApplicationConfiguration`, an Android application is also co
 </manifest>
 ```
 
-#### Screen Orientation & Configuration Changes
-In addition to the targetSdkVersion, the `screenOrientation` and `configChanges` attributes of the activity element should always be set.
+#### 画面の向きと設定変更 {#screen-orientation--configuration-changes}
+`targetSdkVersion`に加えて、`activity`要素の`screenOrientation`属性と`configChanges`属性は常に設定しておくべきです。
 
-The `screenOrientation` attribute specifies a fixed orientation for the application. One may omit this if the application can work with both landscape and portrait mode.
+`screenOrientation`はアプリの向きを固定します。アプリが横画面／縦画面のどちらでも動作できるなら、これを省略してもかまいません。
 
-The `configChanges` attribute is *crucial* and should always have the values shown above. Omitting this attribute means that the application will be restarted every time a physical keyboard is slid out/in or if the orientation of the device changes. If the `screenOrientation` attribute is omitted, a libGDX application will receive calls to `ApplicationListener.resize()` to indicate the orientation change. API clients can then re-layout the application accordingly.
+`configChanges`は*非常に重要*で、上記の値を常に指定すべきです。これを省略すると、物理キーボードの出し入れや端末の向きの変更が起きるたびにアプリが再起動されます。`screenOrientation`を省略した場合、向きの変更を知らせるためにlibGDXアプリは`ApplicationListener.resize()`を呼び出します。利用側はそれに応じてレイアウトを再構成できます。
 
-#### Permissions
-If an application needs to be able to write to the external storage of a device (e.g. SD-card), needs internet access, uses the vibrator or wants to record audio, the following permissions need to be added to the `AndroidManifest.xml` file:
+#### 権限 {#permissions}
+アプリが端末の外部ストレージ（例：SDカード）へ書き込む必要がある、インターネットアクセスが必要、バイブレーターを使う、音声録音をしたい――といった場合は、次の権限（permission）を`AndroidManifest.xml`に追加する必要があります。
 
 ```xml
 	<uses-permission android:name="android.permission.RECORD_AUDIO"/>
@@ -188,28 +192,23 @@ If an application needs to be able to write to the external storage of a device 
 	<uses-permission android:name="android.permission.VIBRATE"/>
 ```
 
-Users are generally suspicious of applications with many permissions, so choose these wisely.
+一般に、権限の多いアプリはユーザーに警戒されやすいので、必要なものだけを慎重に選んでください。
 
-For wake locking to work, `AndroidApplicationConfiguration.useWakeLock` needs to be set to true.
+ウェイクロック(wake lock)を使うには、`AndroidApplicationConfiguration.useWakeLock`を`true`にする必要があります。
 
-If a game doesn't need accelerometer or compass access, it is advised to disable these by setting the
-`useAccelerometer` and `useCompass` fields of `AndroidApplicationConfiguration` to false.
+ゲームが加速度センサーやコンパスにアクセスする必要がない場合は、`AndroidApplicationConfiguration`の`useAccelerometer`と`useCompass`を`false`にして無効化することを推奨します。
 
-If your game needs the gyroscope sensor, you have to set `useGyroscope` to true in `AndroidApplicationConfiguration` (It's disabled by default, to save energy).
+ゲームでジャイロスコープが必要なら、`AndroidApplicationConfiguration`の`useGyroscope`を`true`に設定してください（省電力のため、デフォルトでは無効です）。
 
-Please refer to the [Android Developer's Guide](https://developer.android.com/guide) for more information on how to set other attributes like icons for your application.
+アプリアイコンなど他の属性の設定方法については、[Android Developer's Guide](https://developer.android.com/guide)を参照してください。
 
-## Live Wallpapers
-A libGDX core application can also be used as an Android [Live Wallpaper](https://android-developers.googleblog.com/2010/02/live-wallpapers.html).
-The project setup is very similar to an Android game, but `AndroidLiveWallpaperService` is used in
-place of `AndroidApplication`. Live Wallpapers are Android [Services](https://developer.android.com/guide/components/services),
-not Activities.
+## ライブ壁紙 {#live-wallpapers}
+libGDXの`core`アプリケーションはAndroidの[ライブ壁紙](https://android-developers.googleblog.com/2010/02/live-wallpapers.html)（Live Wallpapers）として利用することもできます。
+プロジェクト構成はAndroidゲームと非常によく似ていますが、`AndroidApplication`の代わりに`AndroidLiveWallpaperService`を使います。ライブ壁紙はアクティビティではなくAndroidの[サービス](https://developer.android.com/guide/components/services)（Service）です。
 
-**Note: Due to synchronization issues, you cannot combine games and live wallpapers in the same app. However, Live
-Wallpapers and Screen Savers can safely coexist in the same app.**
+**注意： 同期の問題があるため、同じアプリ内でゲームとライブ壁紙を組み合わせることはできません。ただし、ライブ壁紙とスクリーンセーバーは同じアプリ内で安全に共存できます。**
 
-First, extend `AndroidLiveWallpaperService` and override `onCreateApplication()` (instead of `onCreate()`
-like you would do with a game `Activity`):
+まず`AndroidLiveWallpaperService`を継承し、ゲームのアクティビティで行う`onCreate()`の代わりに`onCreateApplication()`をオーバーライドします。
 
 ```java
 public class MyLiveWallpaper extends AndroidLiveWallpaperService {
@@ -222,10 +221,7 @@ public class MyLiveWallpaper extends AndroidLiveWallpaperService {
 }
 ```
 
-You can optionally subscribe to Live Wallpaper-specific events by implementing `AndroidWallpaperListener` with your
-`ApplicationListener` class. `AndroidWallpaperListener` is not available from the `core` module, so you can either
-follow the strategy outlined in [Interfacing With Platform-Specific Code](/wiki/app/interfacing-with-platform-specific-code), or you can manage it just from the `android`
-module by subclassing your `ApplicationListener` like this:
+必要に応じて、`ApplicationListener`クラスで`AndroidWallpaperListener`を実装することで、ライブ壁紙特有のイベント通知を受け取るようにできます。`AndroidWallpaperListener`は`core`モジュールからは利用できないため、[プラットフォーム固有コードとの連携](/wiki/app/interfacing-with-platform-specific-code)で示した方法に従うか、あるいは`android`モジュール側だけで管理するために、次のように`ApplicationListener`をサブクラス化して対応できます。
 
 ```java
 public class MyLiveWallpaper extends AndroidLiveWallpaperService {
@@ -234,17 +230,17 @@ public class MyLiveWallpaper extends AndroidLiveWallpaperService {
         @Override
         public void offsetChange (float xOffset, float yOffset, float xOffsetStep,
                                   float yOffsetStep, int xPixelOffset, int yPixelOffset) {
-            // Called when the home screen is scrolled. Not all launchers support this.
+            // ホーム画面がスクロールされたときに呼ばれる。すべてのランチャーが対応しているわけではない。
         }
 
         @Override
         public void previewStateChange (boolean isPreview) {
-            // Called when switched between being previewed and running as the wallpaper.
+            // 壁紙のプレビュー表示と実行状態の切り替え時に呼ばれる。
         }
 
         @Override
         public void iconDropped (int x, int y) {
-            // Called when an icon is dropped on the home screen.
+            // ホーム画面にアイコンがドロップされたときに呼ばれる。
         }
     }
 
@@ -257,10 +253,7 @@ public class MyLiveWallpaper extends AndroidLiveWallpaperService {
 }
 ```
 
-Since libGDX 1.9.12, you can also report the dominant colors of the wallpaper to
-the OS. Starting with Android 8.1, this is used by some Android launchers and lock screens for styling, such as changing
-the text color of the clock. You can create a method like this to report the colors, and access it from the core module
-using the strategy from [Interfacing With Platform-Specific Code](/wiki/app/interfacing-with-platform-specific-code):
+libGDX 1.9.12以降、壁紙のドミナントカラーをOSに通知することもできます。Android 8.1以降では、いくつかのAndroidランチャーやロックスクリーンがこれをスタイリングに利用します（例：時計の文字色を変えるなど）。次のようなメソッドを作って色を通知し、[プラットフォーム固有コードとの連携](/wiki/app/interfacing-with-platform-specific-code)で示した方法に従い、`core`モジュールから呼び出せます。
 
 ```java
 public void notifyColorsChanged (Color primaryColor, Color secondaryColor, Color tertiaryColor) {
@@ -271,9 +264,7 @@ public void notifyColorsChanged (Color primaryColor, Color secondaryColor, Color
 }
 ```
 
-In additional to the service class, you must also create an `xml` file in the Android `res/xml` directory to define
-some Live Wallpaper properties: its thumbnail and description shown in the wallpaper picker, and an optional settings
-Activity. Let's call this file `livewallpaper.xml`.
+サービスクラスに加えて、Androidの`res/xml`ディレクトリに`xml`ファイルを作成し、ライブ壁紙のプロパティを定義する必要があります。壁紙選択画面に表示されるサムネイルと説明文、そして任意で設定用アクティビティを指定します。ここではファイル名を`livewallpaper.xml`とします。
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -284,10 +275,7 @@ Activity. Let's call this file `livewallpaper.xml`.
     android:settingsActivity="com.mypackage.MyLiveWallpaperSettingsActivity"/>
 ```
 
-Finally, you'll need to add things to your `AndroidManifest.xml` files. Here's an example for a Live Wallpaper with a simple
-settings Activity. The key elements here are the `uses-feature` and `service` blocks. The label and icon set on the
-service appear in the Android application settings. The settings Activity and the Live Wallpaper service must both be set
-with `exported` true so they can be accessed by the Live Wallpaper picker.
+最後に`AndroidManifest.xml`にも追記が必要です。以下は、シンプルな設定アクティビティを持つライブ壁紙の例です。重要な要素は`uses-feature`と`service`ブロックです。`service`に設定したlabelとiconはAndroidのアプリ設定画面に表示されます。設定アクティビティとライブ壁紙サービスの両方は、ライブ壁紙選択画面からアクセスできるよう`exported`を`true`にする必要があります。
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -313,20 +301,14 @@ with `exported` true so they can be accessed by the Live Wallpaper picker.
 </manifest>
 ```
 
-Live Wallpapers have some limitations concerning touch input. In general only one pointer will be reported. If you want
-full multi-touch events you can set the `AndroidApplicationConfiguration.getTouchEventsForLiveWallpaper` field to true.
+ライブ壁紙にはタッチ入力に関する制限があります。一般に、報告されるポインタは1つだけです。完全なマルチタッチイベントが必要な場合は、`AndroidApplicationConfiguration.getTouchEventsForLiveWallpaper`を`true`に設定してください。
 
-## Screen Savers (aka Daydreams)
-A libGDX core application can also be used as an Android [Screen Saver](https://developer.android.com/about/versions/android-4.2#Daydream).
-Screen Savers were once known as Daydreams, so many of the related classes have the term "Daydream" in their names. Screen
-Savers have no relation to Google's Daydream VR platform.
+## スクリーンセーバー(aka Daydreams) {#screen-savers-aka-daydreams}
+libGDXの`core`アプリケーションは、Androidの[スクリーンセーバー](https://developer.android.com/about/versions/android-4.2#Daydream)として利用することもできます。スクリーンセーバーはかつて Daydreamと呼ばれていたため、関連クラス名の多くに"Daydream"という語が含まれています。なお、スクリーンセーバーはGoogleのDaydream VRプラットフォームとは無関係です。
 
-The project setup is very similar to an Android game, but `AndroidDaydream` is used in  place of `AndroidApplication`.
-Screen Savers are Android [Services](https://developer.android.com/guide/components/services), not Activities.
+プロジェクト構成はAndroidゲームと非常によく似ていますが、`AndroidApplication`の代わりに`AndroidDaydream`を使います。スクリーンセーバーはアクティビティではなくAndroidの[サービス](https://developer.android.com/guide/components/services)です。
 
-First, extend `AndroidDaydream` and override `onAttachedToWindow()` (instead of `onCreate()` like you
-would do with a game `Activity`). It must call through to `super`. You can also call `setInteractive()` from this method
-to enable/disable touch. A non-interactive Screen Saver immediately closes when the screen is touched.
+まず`AndroidDaydream`を継承し、ゲームアクティビティの`onCreate()`の代わりに、`onAttachedToWindow()`をオーバーライドします。ここでは`super`を必ず呼び出す必要があります。また、このメソッドから`setInteractive()`を呼ぶことで、タッチ操作を有効／無効にできます。非インタラクティブなスクリーンセーバーは、画面に触れるとすぐ終了します。
 
 ```java
 public class MyScreenSaver extends AndroidDaydream {
@@ -341,8 +323,7 @@ public class MyScreenSaver extends AndroidDaydream {
 }
 ```
 
-In additional to the service class, you must also create an `xml` file in the Android `res/xml` directory to define
-the only Screensaver setting: an optional settings Activity. Let's call this file `screensaver.xml`.
+サービスクラスに加えて、Androidの`res/xml`ディレクトリに`xml`ファイルを作成し、スクリーンセーバーの唯一の設定項目である「任意の設定アクティビティ」を定義する必要があります。ここではファイル名を`screensaver.xml`とします。
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -350,9 +331,7 @@ the only Screensaver setting: an optional settings Activity. Let's call this fil
     android:settingsActivity="com.badlogic.gdx.tests.android/.MyScreenSaverSettingsActivity" />
 ```
 
-Finally, you'll need to add things to your `AndroidManifest.xml` files. Here's an example for a Screen Saver with a simple
-settings Activity. Note that a settings Activity is optional. The key element is the `service` block. The settings Activity
-and the Screen Saver service must both be set with `exported` true so they can be accessed by the Screen Saver picker.
+最後に`AndroidManifest.xml`にも追記が必要です。以下は、シンプルな設定アクティビティを持つスクリーンセーバーの例です（設定アクティビティは任意です）。重要な要素は`service`ブロックです。設定アクティビティとスクリーンセーバーサービスの両方は、スクリーンセーバー選択画面からアクセスできるよう`exported`を`true`にする必要があります。
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -377,9 +356,9 @@ and the Screen Saver service must both be set with `exported` true so they can b
 </manifest>
 ```
 
-# iOS/Robovm
+# iOS/Robovm {#iosrobovm}
 
-Opening the `IOSLauncher.java` class in `my-gdx-game` shows the following:
+`my-gdx-game`内の`IOSLauncher.java`を開くと、次のようになっています。
 
 ```java
 package com.me.mygdxgame.ios;
@@ -406,10 +385,10 @@ public class IOSLauncher extends IOSApplication.Delegate {
 }
 ```
 
-See [this medium article](https://medium.com/@bschulte19e/deploying-your-libgdx-game-to-ios-in-2020-4ddce8fff26c) for more details on deploying to iOS devices.
+iOSデバイスへのデプロイについて詳しくは、[このMediumの記事](https://medium.com/@bschulte19e/deploying-your-libgdx-game-to-ios-in-2020-4ddce8fff26c)を参照してください。
 
-# HTML5/GWT
-The main entry-point for an HTML5/GWT application is a `GwtApplication`. Open `GwtLauncher.java` in the my-gdx-game-html5 project:
+# HTML5/GWT {#html5gwt}
+HTML5/GWTアプリケーションの主なエントリポイントは`GwtApplication`です。`my-gdx-game-html5`プロジェクトの`GwtLauncher.java`を開いてください。
 
 ```java
 package com.me.mygdxgame.gwt;
@@ -435,12 +414,12 @@ public class GwtLauncher extends GwtApplication {
 }
 ```
 
-The main entry-point is composed of two methods, `GwtApplication.getConfig()` and `GwtApplication.createApplicationListener()`. The former has to return a [GwtApplicationConfiguration](https://github.com/libgdx/libgdx/tree/master/backends/gdx-backends-gwt/src/com/badlogic/gdx/backends/gwt/GwtApplicationConfiguration.java) instance, which specifies various configuration settings for the HTML5 application. The `GwtApplication.createApplicatonListener()` method returns the `ApplicationListener` to run.
+エントリポイントは`GwtApplication.getConfig()`と`GwtApplication.createApplicationListener()`の2つのメソッドで構成されます。前者はHTML5アプリケーション向けの各種設定を指定する [GwtApplicationConfiguration](https://github.com/libgdx/libgdx/tree/master/backends/gdx-backends-gwt/src/com/badlogic/gdx/backends/gwt/GwtApplicationConfiguration.java)インスタンスを返す必要があります。`GwtApplication.createApplicationListener()`は実行する`ApplicationListener`を返します。
 
-### Module Files
-GWT needs the actual Java code for each jar/project that is referenced. Additionally, each of these jars/projects needs to have one module definition file, having the suffix gwt.xml.
+### モジュールファイル {#module-files}
+GWTは参照している各jar／プロジェクトに含まれる実際のJavaコードを必要とします。さらに、各jar／プロジェクトには、拡張子が`gwt.xml`のモジュール定義ファイルが1つ必要です。
 
-In the example project setup, the module file of the html5 project looks like this:
+例となるプロジェクト構成では、html5プロジェクトのモジュールファイルは次のようになっています。
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -460,17 +439,17 @@ In the example project setup, the module file of the html5 project looks like th
 </module>
 ```
 
-This specifies two other modules to inherit from (gdx-backends-gwt and the core project) as well as the entry-point class (`GwtLauncher` above) and a path relative to the html5 project's root directory, pointing to the assets directory.
+ここでは、継承する2つのモジュール（`gdx-backends-gwt`と`core`プロジェクト）に加え、エントリポイントクラス（上の`GwtLauncher`）と、html5プロジェクトのルートディレクトリから見た`assets`ディレクトリへの相対パスを指定しています。
 
-Both the gdx-backend-gwt jar and the core project have a similar module file, specifying other dependencies. *You cannot use jars/projects which do not contain a module file and source!*
+`gdx-backend-gwt`のjarと`core`プロジェクトにも同様のモジュールファイルがあり、他の依存関係が指定されています。*モジュールファイルとソースを含まないjar／プロジェクトは使用できません！*
 
-For more information on modules and dependencies refer to the [GWT Developer Guide](https://developers.google.com/web-toolkit/doc/1.6/DevGuide).
+モジュールと依存関係について詳しくは、[GWT Developer Guide](https://developers.google.com/web-toolkit/doc/1.6/DevGuide)を参照してください。
 
-### GWT Specifics
+### GWT固有の注意点 {#gwt-specifics}
 
-The HTML backend has a number of caveats. Be sure to check out the  comprehensive [HTML Backend Guide](/wiki/html5-backend-and-gwt-specifics#differences-between-gwt-and-desktop-java)!
+HTMLバックエンドにはいくつかの注意点があります。より包括的な[HTML Backend Guide](/wiki/html5-backend-and-gwt-specifics#differences-between-gwt-and-desktop-java)を必ず確認してください。
 {: .notice--warning}
 
-GWT does not support Java **reflection** for various reasons. libGDX has an internal emulation layer that will generate reflection information for a select few internal classes. This means that if you use the [Json serialization](/wiki/utils/reading-and-writing-json) capabilities of libGDX, you'll run into issues. You can fix this by specifying for which packages and classes reflection information should be generated for. To do so, take a look at the [Reflection Guide](/wiki/utils/reflection#gwt).
+GWTはさまざまな理由からJavaの**リフレクション**（reflection）をサポートしません。libGDXには内部のエミュレーション層があり、限られた一部の内部クラスについてはリフレクション情報を生成します。つまり、libGDXの[Jsonシリアライズ](/wiki/utils/reading-and-writing-json)を使うと問題に遭遇することがあります。これを解決するには、どのパッケージ／クラスについてリフレクション情報を生成するかを指定します。詳細は[リフレクションのガイド](/wiki/utils/reflection#gwt)を参照してください。
 
-A libGDX HTML5 application preloads all assets found in the `gdx.assetpath`. During this loading process, a **loading screen** is displayed which is implemented via GWT widget. If you want to customize this loading screen, you can simply overwrite the `GwtApplication.getPreloaderCallback()` method (in `GwtLauncher` in the above example). An example can be found [here](/wiki/html5-backend-and-gwt-specifics#changing-the-load-screen-progress-bar).
+libGDXのHTML5アプリケーションは、`gdx.assetpath`にあるアセットをすべて事前ロードします。この読み込み処理の間、GWTのウィジェットとして実装された**ローディング画面**が表示されます。このローディング画面をカスタマイズしたい場合は、`GwtApplication.getPreloaderCallback()`メソッド（上の例では`GwtLauncher`内）をオーバーライドするだけでできます。例は[こちら](/wiki/html5-backend-and-gwt-specifics#changing-the-load-screen-progress-bar)にあります。
