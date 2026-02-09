@@ -1,38 +1,38 @@
 ---
-title: Streaming music
+title: 音楽のストリーミング再生
 ---
-For any sound that's longer than a few seconds it is preferable to stream it from disk instead of fully loading it into RAM. libGDX provides a Music interface that lets you do that.
+数秒を超えるような音声は、RAMにすべて読み込むのではなく、ディスクからストリーミング再生するほうが好ましいです。libGDXでは、それを実現するための`Music`インターフェースが用意されています。
 
-To load a Music instance we can do the following:
+`Music`インスタンスを読み込むには、次のようにします。
 
 ```java
 Music music = Gdx.audio.newMusic(Gdx.files.internal("data/mymusic.mp3"));
 ```
 
-This loads an MP3 file called `"mymusic.mp3"` from the internal directory `data`.
+これは内部ディレクトリ`data`から`"mymusic.mp3"`というMP3ファイルを読み込みます。
 
-Playing back the music instance works as follows:
+`Music`インスタンスの再生は次のとおりです。
 
 ```java
 music.play();
 ```
 
-Of course you can set various playback attributes of the `Music` instance:
+もちろん、`Music`インスタンスには再生に関するさまざまな属性を設定できます。
 
 ```java
-music.setVolume(0.5f);                 // sets the volume to half the maximum volume
-music.setLooping(true);                // will repeat playback until music.stop() is called
-music.stop();                          // stops the playback
-music.pause();                         // pauses the playback
-music.play();                          // resumes the playback
-boolean isPlaying = music.isPlaying(); // obvious :)
-boolean isLooping = music.isLooping(); // obvious as well :)
-float position = music.getPosition();  // returns the playback position in seconds
+music.setVolume(0.5f);                 // 音量を最大の半分に設定する
+music.setLooping(true);                // music.stop()が呼ばれるまで繰り返し再生する
+music.stop();                          // 再生を停止する
+music.pause();                         // 再生を一時停止する
+music.play();                          // 再開する
+boolean isPlaying = music.isPlaying(); // 再生中かどうか（メソッド名の通り）
+boolean isLooping = music.isLooping(); // ループ設定かどうか（これもメソッド名の通り）
+float position = music.getPosition();  // 再生位置を秒単位で返す
 ```
 
-`Music` instances are heavy on some backends (such as Android), you should usually not have more than about 10 loaded and more than 1 or 2 playing at the same time.
+`Music`インスタンスは、バックエンドによっては（Androidなど）重い処理になります。通常、読み込む数は10個程度までに抑え、同時再生も1〜2個までにしておくのがよいでしょう。
 
-A `Music` instance needs to be disposed if it is no longer needed, to free up resources.
+`Music`インスタンスが不要になったら、リソースを解放するために破棄する必要があります。
 
 ```java
 music.dispose();
