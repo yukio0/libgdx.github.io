@@ -1,55 +1,55 @@
 ---
-title: Sound effects
+title: 効果音
 ---
-Sound effects are small audio samples, usually no longer than a few seconds, that are played back on specific game events such as a character jumping or shooting a gun.
+効果音は小さな音声サンプルで、通常は数秒以内の長さです。キャラクターがジャンプしたり銃を撃ったりといった、特定のゲームイベントに合わせて再生されます。
 
-Sound effects can be stored in various formats, including MP3, OGG and WAV. Which format you should use, depends on your specific needs, as each format has its own advantages and disadvantages. For example, WAV files are quite large compared to other formats, OGG files don’t work on RoboVM (iOS) nor with Safari (GWT), and MP3 files have issues with seemless looping.
+効果音はMP3、OGG、WAVなどさまざまな形式で保存できます。どの形式を使うべきかは用途次第で、各形式にはそれぞれ長所と短所があります。たとえばWAVファイルは他の形式に比べてサイズが大きく、OGGファイルはRoboVM（iOS）やSafari（GWT）では動作しません。またMP3ファイルはシームレスなループ再生に問題があります。
 
-**Note:** On Android, a Sound instance can not be over 1mb in size (uncompressed raw PCM size, not the file size). If you have a bigger file, use [Music](/wiki/audio/streaming-music) instead.
+**注意：** Androidでは、`Sound`インスタンスのサイズは1MBを超えられません（ファイルサイズではなく、展開後の非圧縮RAW PCMサイズ基準です）。より大きいファイルを扱う場合は、代わりに[`Music`](/wiki/audio/streaming-music)を使用してください。
 {: .notice--primary}
 
-Sound effects are represented by the [Sound](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/audio/Sound.html) interface. Loading a sound effect works as follows:
+効果音は、[Sound](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/audio/Sound.html)インターフェースで表現されます。効果音の読み込みは次のとおりです。
 
 ```java
 Sound sound = Gdx.audio.newSound(Gdx.files.internal("data/mysound.mp3"));
 ```
 
-This loads an audio file called `"mysound.mp3"` from the internal directory `data`.
+これは内部ディレクトリ`data`から`"mysound.mp3"`という音声ファイルを読み込みます。
 
-Once we have the sound loaded we can play it back:
+読み込んだら、次のように再生できます。
 
 ```java
 sound.play(1.0f);
 ```
 
-This will playback the sound effect once, at full volume. The play method on a single `Sound` instance can be called many times in a row, e.g. for a sequence of shots in a game, and will be overlaid accordingly.
+これは効果音を1回、最大音量で再生します。1つの`Sound`インスタンスに対して`play()`メソッドは連続して何度でも呼び出せます（例：ゲーム中の連射など）。その場合、音は重なって再生されます。
 
-More fine-grained control is available. Every call to `Sound.play()` returns a long which identifies that sound instance. Using this handle we can modify that specific playback instance:
+さらに細かい制御も可能です。`Sound.play()`を呼ぶたびに、その再生インスタンスを識別する`long`値が返ります。このハンドルを使うことで、特定の再生インスタンスだけを操作できます。
 
 ```java
-long id = sound.play(1.0f); // play new sound and keep handle for further manipulation
-sound.stop(id);             // stops the sound instance immediately
-sound.setPitch(id, 2);      // increases the pitch to 2x the original pitch
+long id = sound.play(1.0f); // 新しい音を再生し、後で操作できるようハンドル（ID）を保持する
+sound.stop(id);             // その音の再生を即座に停止する
+sound.setPitch(id, 2);      // ピッチを元の2倍に上げる
 
-id = sound.play(1.0f);      // plays the sound a second time, this is treated as a different instance
-sound.setPan(id, -1, 1);    // sets the pan of the sound to the left side at full volume
-sound.setLooping(id, true); // keeps the sound looping
-sound.stop(id);             // stops the looping sound 
+id = sound.play(1.0f);      // もう一度再生する（別インスタンスとして扱われる）
+sound.setPan(id, -1, 1);    // 左側にパンを振り、音量は最大にする
+sound.setLooping(id, true); // ループ再生を続ける
+sound.stop(id);             // ループ再生を停止する
 ```
 
-***note:*** These modifier methods have limited functionality in the JavaScript/WebGL back-end for now. As of 1.9.6 `setPan()` is only working when flash is supported and enabled `GwtApplicationConfiguration.preferFlash = true`
+***注意：*** これらの変更系メソッドは、現時点ではJavaScript/WebGLバックエンドでは機能が制限されています。1.9.6時点では、`setPan()`はFlashがサポートされていて、かつ有効化されている場合（`GwtApplicationConfiguration.preferFlash = true`）にのみ動作します。
 
-***note:*** `setPan()` method does not work with stereo sounds
+***注意：*** `setPan()`メソッドはステレオ音源では動作しません。
 
-Once you no longer need a Sound, make sure you dispose of it:
+`Sound`が不要になったら、必ず破棄してください。
 
 ```java
 sound.dispose();
 ```
 
-Accessing the sound after you disposed of it will result in undefined errors.
+破棄後にその`Sound`へアクセスすると、動作は未定義となりエラーの原因になります。
 
-### Multiple sounds cause freezes on Android
-As stated on an [Audio](/wiki/audio/audio) topic the Android has many issues with audio in general. One of them, is that waiting for sound ID might take quite a lot time. The sounds in Libgdx are playing synchronously by default. It causes main loop to be frozen for significant time if you play a lot of sounds at once. Especially this issue noticeable on Android 10.
+### Androidで複数の音を鳴らすとフリーズする
+[オーディオ](/wiki/audio/audio)の項でも述べたとおり、Androidのオーディオには全般的にさまざまな問題があります。その1つとして、サウンドIDの取得待ちにかなり時間がかかる場合があります。libGDXの`Sound`はデフォルトで同期的に再生されるため、同時に大量の音を鳴らすとメインループが目立って長時間止まってしまうことがあります。特にAndroid 10ではこの問題が顕著です。
 
-The solution is to make them playing asynchronously. However it will cause inability to use sounds methods where ID is required. More info provided here - [Audio#audio-on-android](/wiki/audio/audio#audio-on-android)
+解決策は、非同期に再生するようにすることです。ただしその場合、IDが必要な`Sound`の各種メソッドを使えなくなります。詳細はここにあります： [オーディオ#Androidでのオーディオ](/wiki/audio/audio#audio-on-android)
