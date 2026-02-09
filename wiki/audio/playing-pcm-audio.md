@@ -3,7 +3,7 @@ title: PCMオーディオの再生
 ---
 オーディオモジュールは、[PCMサンプル](https://en.wikipedia.org/wiki/Pulse-code_modulation)をオーディオハードウェアへ書き込むための、直接アクセスする手段を提供します。
 
-オーディオハードウェアは、[AudioDevice](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/audio/AudioDevice.html) [（ソース）](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/audio/AudioDevice.java)インターフェースによって抽象化されています。
+オーディオハードウェアは、[AudioDevice](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/audio/AudioDevice.html)（[ソース](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/audio/AudioDevice.java)）インターフェースによって抽象化されています。
 
 新しい`AudioDevice`インスタンスを作成するには、次のようにします。
 
