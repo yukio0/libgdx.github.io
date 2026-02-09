@@ -1,41 +1,41 @@
 ---
-title: Deploying your application
+title: アプリケーションのデプロイ
 ---
-The mechanism to deploy your game differs between platforms. This article aims to articulate, what is necessary to deploy to each platform that libGDX officially supports:
+ゲームをデプロイする仕組みは、プラットフォームによって異なります。この記事では、libGDXが公式にサポートしている各プラットフォームへデプロイするために必要なことを整理します。
 
-* [Deploy to Windows/Linux/Mac](#deploy-to-windowslinuxmac-os-x)
-* [Deploy to Android](#deploy-to-android)
-* [Deploy to iOS](#deploy-to-ios)
-* [Deploy Web](#deploy-web)
+* [Windows／Linux／Mac OS Xへのデプロイ](#deploy-to-windowslinuxmac-os-x)
+* [Androidへのデプロイ](#deploy-to-android)
+* [OSへのデプロイ](#deploy-to-ios)
+* [Webへデプロイ](#deploy-web)
 
-# Deploy to Windows/Linux/Mac OS X
-### As JAR file
-The easiest way to deploy to Windows/Linux/Mac is to create a runnable JAR file. This can be done via the following console command:
+# Windows／Linux／Mac OS Xへのデプロイ {#deploy-to-windowslinuxmac-os-x}
+### JARファイルとして {#as-jar-file}
+Windows／Linux／Macにデプロイする最も簡単な方法は、実行可能なJARファイルを作ることです。次のコンソールコマンドで作成できます。
 `./gradlew lwjgl3:dist`
 
-If you are getting an error like `Unsupported class file major version 60`, your Java version (see [here](https://stackoverflow.com/q/9170832) for a list) is not supported by your Gradle version. To fix this, install an older JDK.
+`Unsupported class file major version 60`のようなエラーが出る場合、あなたのJavaバージョン（一覧は[こちら](https://stackoverflow.com/q/9170832)参照）が、使用しているGradleのバージョンでサポートされていません。対処として、より古いJDKをインストールしてください。
 
-The generated JAR file will be located in the `lwjgl3/build/libs/` folder. It contains all necessary code as well as all your art assets from the android/assets folder and can be run either by double clicking or on the command line via `java -jar jar-file-name.jar`. Your audience must have a JVM installed for this to work. The JAR will work on Windows, Linux and Mac OS X!
+生成されたJARファイルは`lwjgl3/build/libs/`フォルダに出力されます。このJARには必要なコード一式に加え、`android/assets`フォルダ内のすべてのアセットも含まれます。ダブルクリックで実行するか、コマンドラインから`java -jar jar-file-name.jar`で実行できます。これを動かすには、利用者側にJVMのインストールが必要です。このJARはWindows／Linux／Mac OS Xで動作します！
 
-### Alternative (modern) ways of deployment
-Distributing java applications as JAR file can be very unhandy and prone to issues, as not every user can be expected to have the right JRE (or even any JRE) installed. Other ways of deployment are for example:
+### 代替（モダンな）デプロイ方法 {#alternative-modern-ways-of-deployment}
+JavaアプリをJARファイルとして配布するのは、利用者が適切なJRE（あるいはJRE自体）を入れているとは限らないため、手間がかかったり問題が起きやすかったりします。たとえば次のような方法もあります。
 
-* A very convenient way to distribute java application is to just bundle an JRE. See this [entry](/wiki/deployment/bundling-a-jre) on how to do this. (**This is the recommended way to distribute an application!**)
-* Via electron, HTML5 applications can be deployed to desktop. See [here](https://medium.com/@bschulte19e/how-to-deploy-a-libgdx-game-with-electron-3f1b37f0c26e).
-* GWT applications can also be bundled as UWP Apps, see [here](https://web.archive.org/web/20200428040905/https://www.badlogicgames.com/forum/viewtopic.php?f=17&t=14766).
+* Javaアプリを配布する非常に便利な方法の1つは、JREを同梱してしまうことです。方法は[このページ](/wiki/deployment/bundling-a-jre)を参照してください。**これはアプリ配布の推奨手段です！**
+* Electronを使うことで、HTML5アプリケーションをデスクトップ向けにデプロイできます。詳しくは[こちら](https://medium.com/@bschulte19e/how-to-deploy-a-libgdx-game-with-electron-3f1b37f0c26e)。
+* GWTアプリケーションはUWPアプリとしてバンドルすることもできます。詳しくは[こちら](https://web.archive.org/web/20200428040905/https://www.badlogicgames.com/forum/viewtopic.php?f=17&t=14766)。
 
-# Deploy to Android
+# Androidへのデプロイ {#deploy-to-android}
 `gradlew android:assembleRelease`
 
-This will create an unsigned APK file in the `android/build/outputs/apk` folder. Before you can install or publish this APK, you must [sign it](https://developer.android.com/studio/publish/app-signing). The APK build by the above command is already in release mode, you only need to follow the steps for keytool and jarsigner. You can install this APK file on any Android device that allows [installation from unknown sources](https://developer.android.com/distribute/marketing-tools/alternative-distribution#unknown-sources).
+これにより、署名されていないAPKファイルが`android/build/outputs/apk`フォルダに生成されます。このAPKをインストールまたは公開する前に、[署名](https://developer.android.com/studio/publish/app-signing)が必要です。上のコマンドで作られるAPKはすでにリリースモードなので、keytoolとjarsignerの手順に従うだけでOKです。さらに、このAPKは、[不明な提供元からのインストール](https://developer.android.com/distribute/marketing-tools/alternative-distribution#unknown-sources)を許可している任意のAndroid端末へインストールできます。
 
-# Deploy to iOS
-*This section assumes you're familiar with the basic deployment steps for iOS apps.*
+# iOSへのデプロイ {#deploy-to-ios}
+*このセクションは、iOSアプリの基本的なデプロイ手順を把握していることを前提とします。*
 
-### Prerequisites:
-In order to upload the IPA to the app store, it must be signed with your distribution signature and linked to your provisioning profile.
-You can follow Apple's guide on [app store distribution](https://developer.apple.com/library/ios/documentation/IDEs/Conceptual/AppDistributionGuide/Introduction/Introduction.html) to create provisioning profiles and certificates.
-Once you have done that, you must define them in your root build.gradle file, in your IOS Project
+### 前提条件 {#prerequisites}
+App StoreにIPAをアップロードするには、配布用の署名で署名し、プロビジョニングプロファイルに関連付ける必要があります。
+プロビジョニングプロファイルと証明書の作成については、Appleの[App Store配布ガイド](https://developer.apple.com/library/ios/documentation/IDEs/Conceptual/AppDistributionGuide/Introduction/Introduction.html)に従ってください。
+それらが用意できたら、ルートの`build.gradle`のiOSプロジェクトで次のように設定します。
 
 ```
 project(":ios") {
@@ -55,34 +55,34 @@ project(":ios") {
  }
 ```
 
-- Your provisioning profile name is available in your developer portal (where you created your provisioning profile).
-- Your Signing identity name is available in your keychain, under "My Certificates"
+- プロビジョニングプロファイル名は、Developer Portal（プロビジョニングプロファイルを作成した場所）で確認できます。
+- 署名ID（Signing identity）名は、キーチェーンの「My Certificates」内で確認できます。
 
-### Packaging:
-To create your IPA, run
+### パッケージング {#packaging}
+IPAを作成するには、次を実行します。
 
 `gradlew ios:createIPA`
 
-This will create an IPA in the `ios/build/robovm` folder that you distribute to the Apple App Store.
-To upload your app you will need to use [Transporter](https://apps.apple.com/us/app/transporter/id1450874784) from the Mac App store 
+これにより`ios/build/robovm`フォルダにIPAが生成され、Apple App Storeへ配布できます。
+アプリをアップロードするには、Mac App Storeの[Transporter](https://apps.apple.com/us/app/transporter/id1450874784)を使う必要があります。
 
-Note: as of iOS 11 instead of simply adding your icons into your data folder within your iOS project you need to include an asset Catalog.
-If you do not include one, you can still submit your app but later you receive a message regarding `Missing Info.plist value - A value for the Info.plist key CFBundleIconName is missing in the bundle '...'. Apps that provide icons in the asset catalog must also provide this Info.plist key.` To fix this, follow these [instructions to include an asset catalog](https://github.com/MobiVM/robovm/wiki/Howto-Create-an-Asset-Catalog-for-XCode-9-Appstore-Submission%3F).
+**注意:** iOS 11以降、iOSプロジェクト内のdataフォルダにアイコンを入れるだけではなく、アセットカタログ（Asset Catalog）を含める必要があります。
+含めなくても提出自体はできますが、後から次のようなメッセージを受け取ることがあります。`Missing Info.plist value - A value for the Info.plist key CFBundleIconName is missing in the bundle '...'. Apps that provide icons in the asset catalog must also provide this Info.plist key.`これを修正するには、[アセットカタログを含めるための手順](https://github.com/MobiVM/robovm/wiki/Howto-Create-an-Asset-Catalog-for-XCode-9-Appstore-Submission%3F)に従ってください。
 
-### Additional guides
+### 追加ガイド {#additional-guides}
 
-Deploying to iOS is relatively straight forward, see [here](https://medium.com/@bschulte19e/deploying-your-libgdx-game-to-ios-in-2020-4ddce8fff26c) if you're having difficulties. Take a look at [this post](https://medium.com/dev-genius/deploying-your-libgdx-game-to-ios-testflight-163cada0696b), if you want to deploy your iOS application to TestFlight.
+iOSへのデプロイは比較的シンプルですが、うまくいかない場合は[こちら](https://medium.com/@bschulte19e/deploying-your-libgdx-game-to-ios-in-2020-4ddce8fff26c)が参考になります。iOSアプリをTestFlightへデプロイしたい場合は、[こちらの記事](https://medium.com/dev-genius/deploying-your-libgdx-game-to-ios-testflight-163cada0696b)も参照してください。
 
-# Deploy Web
+# Webへデプロイ {#deploy-web}
 `gradlew html:dist`
 
-This will compile your app to Javascript and place the resulting Javascript, HTML and asset files in the `html/build/dist/` folder. The contents of this folder have to be served up by a web server, e.g. Apache or Nginx. Just treat the contents like you'd treat any other static HTML/Javascript site. There is no Java or Java Applets involved!
+これによりアプリがJavaScriptへコンパイルされ、生成されたJavaScript／HTML／アセット一式が`html/build/dist/`フォルダに配置されます。このフォルダの内容は、ApacheやNginxなどのWebサーバで配信する必要があります。通常の静的HTML／JavaScriptサイトと同じように扱ってください。JavaやJava Appletは関与しません！
 
-When running the result, you might encounter errors like `Couldn't find Type for class ...`. To fix this, please see our wiki page [Reflection](/wiki/utils/reflection) and include the needed classes/packages.
+実行時に`Couldn't find Type for class ...`のようなエラーが出ることがあります。その場合はWikiの[リフレクション](/wiki/utils/reflection)ページを参照し、必要なクラス／パッケージを含めてください。
 
-For more HTML5/GWT specifics, see [this video](https://youtu.be/I_85usDvJvQ) for details.
+HTML5/GWT特有の話は、詳しくは[この動画](https://youtu.be/I_85usDvJvQ)も参照してください。
 
-With Python installed, you can test your distribution by executing the following in the `html/build/dist` folder:
+Pythonがインストールされていれば、`html/build/dist`フォルダで次を実行して配布物をテストできます。
 
 **Python 2.x**
 
@@ -92,8 +92,8 @@ With Python installed, you can test your distribution by executing the following
 
 `python -m http.server 8000`
 
-You can then open a browser to [http://localhost:8000](http://localhost:8000) and see your project in action.
+その後、ブラウザで[http://localhost:8000](http://localhost:8000)を開くと、プロジェクトが動作しているのを確認できます。
 
-With Node.js `npm install http-server -g` then `http-server html/build/dist` and browse at <http://localhost:8080>. [docs](https://github.com/indexzero/http-server)
+Node.jsの場合は、`npm install http-server -g`の後に`http-server html/build/dist`を実行し、[http://localhost:8080](http://localhost:8080)へアクセスします。[ドキュメント](https://github.com/indexzero/http-server)
 
-With PHP you may type `php -S localhost:8000` and browse at <http://localhost:8080>. [docs](http://php.net/manual/en/features.commandline.webserver.php)
+PHPの場合は、`php -S localhost:8000`を実行し、[http://localhost:8080](http://localhost:8080)へアクセスします。[ドキュメント](http://php.net/manual/en/features.commandline.webserver.php)
