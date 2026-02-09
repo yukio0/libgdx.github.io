@@ -1,44 +1,44 @@
 ---
-title: Playing PCM audio
+title: PCMオーディオの再生
 ---
-The audio module can provide you direct access to the audio hardware for writing [PCM samples](https://en.wikipedia.org/wiki/Pulse-code_modulation) to it.
+オーディオモジュールは、[PCMサンプル](https://en.wikipedia.org/wiki/Pulse-code_modulation)をオーディオハードウェアへ書き込むための、直接アクセスする手段を提供します。
 
-The audio hardware is abstracted via the [AudioDevice](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/audio/AudioDevice.html) [(source)](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/audio/AudioDevice.java) interface.
+オーディオハードウェアは、[AudioDevice](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/audio/AudioDevice.html) [（ソース）](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/audio/AudioDevice.java)インターフェースによって抽象化されています。
 
-To create a new `AudioDevice` instance we do the following:
+新しい`AudioDevice`インスタンスを作成するには、次のようにします。
 
 ```java
 AudioDevice device = Gdx.audio.newAudioDevice(44100, true);
 ```
 
-This creates a new `AudioDevice` that has a sampling frequency of 44.1khz and outputs mono. If the device couldn't be created, a `GdxRuntimeException` will be thrown.
+これは、サンプリング周波数44.1kHzでモノラル出力の新しい`AudioDevice`を作成します。デバイスを作成できなかった場合は、`GdxRuntimeException`がスローされます。
 
-We can write either 16-bit signed PCM or 32-bit float PCM data to the device:
+デバイスには、16-bit符号付きPCMまたは32-bit float PCMのデータを書き込めます。
 
 ```java
-float[] floatPCM = ... generated from a sine for example ...
+float[] floatPCM = ... 例えば、正弦波（sine wave）から生成 ...
 device.writeSamples(floatPCM, 0, floatPCM.length);
 
-short[] shortPCM = ... generated from a decoder ...
+short[] shortPCM = ... デコーダから生成 ...
 device.writeSamples(shortPCM, 0, shortPCM.length);
 ```
 
-If stereo is used, left and right channel samples are interleaved as usual (first float/short -> left, second float/short -> right).
+ステレオを使用する場合、左右チャンネルのサンプルは通常どおりインターリーブされます（1つ目のfloat/shortが左、2つ目のfloat/shortが右）。
 
-The latency in milliseconds can be queried like this:
+レイテンシの指標は次のように問い合わせられます。
 
 ```java
 int latencyInSamples = device.getLatency();
 ```
 
-This will return the size of the audio buffer in samples and thus give you a good indicator about the latency. The bigger the return value, the longer it takes for the audio to arrive at the recipient after it was written.
+これはオーディオバッファのサイズ（サンプル数）を返すため、レイテンシを把握するための良い指標になります。戻り値が大きいほど、書き込んでから実際に再生（受け取り側に到達）されるまでの時間が長くなります。
 
-Note that latency on almost all Android phones is ridiculously high. Real-time audio applications have a hard time to get in the useful 10-30ms range. Usually you can achieve 100ms latency, many phones will have up to 400ms latency. Sadly, this is a driver/OS related problem and can't be worked around.
+なお、ほとんどのAndroid端末ではレイテンシが非常に大きい点に注意してください。リアルタイム音声アプリケーションが実用的な10〜30msの範囲に収めるのは難しく、通常は100ms程度が限界で、多くの端末では最大400ms程度になることもあります。残念ながらこれはドライバ／OSに起因する問題で、回避策はありません。
 
-An `AudioDevice` is a native resource and needs to be disposed of when no longer used:
+`AudioDevice`はネイティブリソースなので、不要になったら破棄する必要があります。
 
 ```java
 device.dispose();
 ```
 
-Direct PCM output is not supported in the JavaScript/WebGL backend.
+JavaScript/WebGLバックエンドでは、PCMの直接出力はサポートされていません。
