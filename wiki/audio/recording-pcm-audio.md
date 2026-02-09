@@ -1,27 +1,27 @@
 ---
-title: Recording PCM audio
+title: PCMオーディオの録音
 ---
-You can access PCM data from the microphone on a PC or Android phone via the [AudioRecorder](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/audio/AudioRecorder.html) [(code)](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/audio/AudioRecorder.java) interface. To create an instance of that interface use:
+PCやAndroid端末では、[AudioRecorder](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/audio/AudioRecorder.html)（[コード](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/audio/AudioRecorder.java)）インターフェースを介して、マイクからPCMデータを取得できます。このインターフェースのインスタンスを作成するには、次のようにします。
 
 ```java
 AudioRecorder recorder = Gdx.audio.newAudioRecorder(22050, true);
 ```
 
-This will create an `AudioRecorder` with a sampling rate of 22.05khz, in mono mode. If the recorder couldn't be created, a `GdxRuntimeException` will be thrown.
+これは、サンプリングレート22.05kHz・モノラルモードの`AudioRecorder`を作成します。レコーダーを作成できなかった場合は、`GdxRuntimeException`がスローされます。
 
-Samples can be read as 16-bit signed PCM:
+サンプルは16-bit符号付きPCMとして読み取れます。
 
 ```java
-short[] shortPCM = new short[1024]; // 1024 samples
+short[] shortPCM = new short[1024]; // 1024サンプル
 recorder.readSamples(shortPCM, 0, shortPCM.length);
 ```
 
-Stereo samples are interleaved as usual (first sample -> left channel, second sample -> right channel).
+ステレオの場合、サンプルは通常どおりインターリーブされます（1つ目のサンプルが左チャンネル、2つ目のサンプルが右チャンネル）。
 
-An `AudioRecorder` is a native resource and needs to be disposed of if no longer in use:
+`AudioRecorder`はネイティブリソースなので、不要になったら破棄する必要があります。
 
 ```java
 recorder.dispose();
 ```
 
-Audio recording is not supported in the JavaScript/WebGL backend.
+JavaScript/WebGLバックエンドでは、音声録音はサポートされていません。
