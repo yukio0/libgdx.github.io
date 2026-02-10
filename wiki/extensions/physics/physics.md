@@ -1,12 +1,12 @@
 ---
-title: Physics
+title: 物理演算
 ---
-# Libraries
+# ライブラリ
 
-libGDX comes with 2 different Physics libraries. Box2D which is used for 2D physics and also a experimental Bullet Physics wrapper which can be used for 3D physics.
+libGDXには2種類の物理演算ライブラリが同梱されています。2D物理に使われるBox2Dと、3D物理に使える実験的なBullet Physicsのラッパーです。
 
-## Documentation
+## ドキュメント
 
-[Box2D Documentation](https://box2d.org/documentation/) - Most documentation is compatible with the libGDX implementation but will need some changes from C++ to Java.
+[Box2Dドキュメント](https://box2d.org/documentation/) - ドキュメントの大半はlibGDXの実装にも対応していますが、C++からJavaへの書き換えに伴い、いくつか修正が必要になります。
 
-[Bullet Wiki](https://pybullet.org/Bullet/BulletFull/) - Documentation for Bullet should be compatible with the Java wrapper of Bullet but will need various syntax and class name changes.
+[Bullet Wiki](https://pybullet.org/Bullet/BulletFull/) - BulletのドキュメントはJavaラッパーでも概ね利用できますが、文法やクラス名などを中心に、さまざまな変更が必要になります。
