@@ -1,11 +1,11 @@
 ---
-title: Bullet Wrapper Using models
+title: Bulletラッパーでモデルを使用する
 ---
-## Using models
-[`Model`](/wiki/graphics/3d/models) and `ModelInstance` are typically used for the visual representation of objects. `btCollisionObject` or `btRigidBody` are used for the physical representation of these objects.
+## モデルを使用する
+[モデル（`Model`）](/wiki/graphics/3d/models)と`ModelInstance`は、通常オブジェクトの見た目（描画）を表すために使われます。一方、これらのオブジェクトの物理（衝突・剛体）を表すためには`btCollisionObject`や`btRigidBody`を使います。
 
-### Using motion states
-To synchronize the location and orientation between a `ModelInstance` and `btRigidBody`, Bullet provides the `btMotionState` class that you can extend. A very basic example of such synchronization is:
+### モーションステートを使う
+`ModelInstance`と`btRigidBody`の位置・向きを同期するために、Bulletには拡張可能な`btMotionState`クラスが用意されています。同期の基本例は次のとおりです。
 ```java
 static class MyMotionState extends btMotionState {
     Matrix4 transform;
@@ -19,7 +19,7 @@ static class MyMotionState extends btMotionState {
     }
 }
 ```
-Which you can use as follows:
+使い方は次のとおりです。
 ```java
 btRigidBody body;
 ModelInstance instance;
@@ -29,7 +29,7 @@ motionState = new MyMotionState();
 motionState.transform = instance.transform;
 body.setMotionState(motionState);
 ```
-Now the location and orientation of `ModelInstance` will be updated (by Bullet) whenever the `btRigidBody` moves. This approach is not restricted to `ModelInstance`, it will work for any object that contains a `Matrix4` transformation, like e.g. also `Renderable`. Moreover, it is possible to add simple logic to a motion state, for example:
+これで、`btRigidBody`が動くたびに`ModelInstance`の位置と向きが（Bulletによって）更新されます。この方法は`ModelInstance`に限らず、`Renderable`のように`Matrix4`の変換（transform）を持つオブジェクトなら同様に機能します。さらに、モーションステートに簡単なロジックを追加することもできます。
 ```java
 static class PlayerMotionState extends btMotionState {
     final static Vector3 position = new Vector3();
@@ -47,25 +47,25 @@ static class PlayerMotionState extends btMotionState {
     }
 }
 ```
-Note that the transformation (location and rotation) of a `btRigidBody` is typically relative to the center of mass (most commonly the center of the shape). When needed, a `btCompoundShape` can be used to move the center of mass. It is advised to keep the origin of the visual model the same as the origin of the physical object. If this is not possible, then you can modify the transformation in the motion state accordingly.
+**注意：** `btRigidBody`の変換（位置と回転）は、通常重心（多くの場合シェイプの中心）を基準にしています。必要であれば、`btCompoundShape`を使って重心位置をずらすことができます。見た目のモデルの原点は、物理オブジェクトの原点と同じにしておくことが推奨されます。もしそれが難しい場合は、モーションステート側で変換を適切に調整してください。
 
-> Keep in mind that Bullet's transformation only supports translation (location) and rotation (orientation). Any other transformation, like scaling, is not supported.
+> Bulletの変換がサポートするのは、平行移動（位置）と回転（向き）のみです。スケーリングなど、それ以外の変換はサポートされません。
 
-The motion state has to be disposed when no longer needed: `motionState.dispose();`.
+モーションステートは不要になったら破棄する必要があります：`motionState.dispose();`。
 
-### Create a collision object from a model
-A Model boils down to a bunch of triangles with some properties which are rendered with a specific transformation. It is optimized for rendering, not for physics. Therefore a Model is rarely useful for an efficient representation of a physics shape.
+### モデルから衝突オブジェクトを作る
+モデルは、いくつかのプロパティを持つ三角形の集合を、特定の変換で描画するものです。モデルは描画向けに最適化されており、物理用途向けではありません。そのため、モデルがそのまま物理シェイプを効率よく表現できるケースは多くありません。
 
-To understand why this is, consider a simple box model. The physics shape of a box would contain eight corners. The visual model however, will contain 24 corners (vertices). This is because the vertices are specified for each face of the box, where each vertex contains the "normal" of the face. Otherwise visual effects, like lighting, would not be possible. So, instead of a solid box, the visual model is actually made up of six independent rectangles. Theses rectangles (or the triangles it is made up) are infinitely thin, they have no volume. This makes it unsuitable for dynamic physics.
+理由を理解するために、単純な箱のモデルを考えてみます。箱の物理シェイプは8つの角（頂点）で表せます。しかし、見た目のモデルは24個の角（頂点）を持ちます。これは、箱の各面ごとに頂点が定義され、各頂点がその面の「法線（normal）」を持つからです。そうしないと、ライティングなどの視覚効果が実現できません。つまり、見た目のモデルは「中身が詰まった箱」ではなく、実際には6枚の独立した長方形（またはそれを構成する三角形）からできています。これらの長方形（や三角形）は無限に薄く、体積がありません。そのため、動的な物理には不向きです。
 
-There are several more issues, e.g. a model typically contains more detail than would be needed for the physics. In fact, for some shapes it is possible to use a much cheaper collision detection algorithm than using the model's vertices. For example, in case of the box shape, it would be possible to use a single detection against a box, instead of a detection against the 12 triangles it is made of.
+ほかにも問題はあります。たとえばモデルは、物理に必要な以上に細かいディテールを持っていることが一般的です。実際、形状によってはモデルの頂点を使うよりも、ずっと低コストな衝突判定アルゴリズムが使えます。箱形状であれば、12枚の三角形に対する判定ではなく、単一の「箱」に対する判定で済ませられます。
 
-There are several ways to work around these problems, ranging from approximating a model using primitive shapes to using a dedicated model or sharing vertices between visual model and physics shape. The [Bullet manual](https://github.com/bulletphysics/bullet3/blob/master/docs/Bullet_User_Manual.pdf?raw=true)
-provides a decision chart to help you decide which method you should choose:
+これらの問題を回避する方法はいくつかあります。プリミティブ形状でモデルを近似する方法から、専用のモデルを用意する方法、見た目モデルと物理シェイプの間で頂点を共有する方法までさまざまです。[Bulletマニュアル](https://github.com/bulletphysics/bullet3/blob/master/docs/Bullet_User_Manual.pdf?raw=true)には、どの方法を選ぶべきか判断するためのチャートが用意されています。
+  
 ![images/bullet_shape_decision.png](/assets/wiki/images/bullet_shape_decision.png)
 
-For the case of a static model, the Bullet wrapper provides a convenient method to create a collision shape of it:
+静的モデルの場合、Bulletラッパーにはモデルから衝突シェイプを作るための便利なメソッドがあります。
 ```java
 btCollisionShape shape = Bullet.obtainStaticNodeShape(model.nodes);
 ```
-In this case the collision shape will share the same data (vertices) as the model. This will include [node transformation](/wiki/graphics/3d/models#node-transformation) by using a `btCompoundShape` if needed, but will not include any scaling applied to nodes.
+この場合、衝突シェイプはモデルと同じデータ（頂点）を共有します。必要であれば`btCompoundShape`を使って[ノード変換](/wiki/graphics/3d/models#node-transformation)も取り込みますが、ノードに適用されたスケーリングは取り込みません。
