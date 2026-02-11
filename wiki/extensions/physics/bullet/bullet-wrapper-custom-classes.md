@@ -1,13 +1,13 @@
 ---
-title: Bullet Wrapper Custom classes
+title: Bulletラッパーのカスタムクラス
 ---
-In some cases it's not possible to wrap a C++ bullet class/method in a Java class/method, in which case a custom class or method is used to bridge the two. The following list describes those. Note that the list might not be complete.
+場合によっては、C++のBulletクラス／メソッドをJavaのクラス／メソッドとしてそのままラップできないことがあります。そのようなときは、両者を橋渡しするためにカスタムクラスやカスタムメソッドが使われます。以下はそれらの一覧です。なお、このリストは完全ではない可能性があります。
 
 ### btCollisionObject
 
-The btCollisionObject is modified to reuse Java objects instead of creating a new Java object every time. This is done using the static `btCollisionObject.instances` map. To remove an object from the map and delete the native object use the `dispose` method.
+`btCollisionObject`は、毎回新しいJavaオブジェクトを生成するのではなく、Javaオブジェクトを再利用するように改修されています。これは静的な`btCollisionObject.instances`マップを使って行われます。マップからオブジェクトを取り除き、ネイティブ側のオブジェクトを削除するには`dispose`メソッドを使います。
 
-Besides reusing instances, the Bullet wrappers allows you to provide a unique number to identify the instance. For example the index/ID of the entity in your entity system. Some frequently called methods allow you to use that value instead of the instance itself. This completely eliminates the overhead of mapping C++ and Java instances. You can set this value using the `setUserValue(int);` method and retrieve the value using the `getUserValue();` method.
+インスタンスの再利用に加えて、Bulletラッパーではインスタンスを識別するための一意な番号を付けられます。たとえば、エンティティシステムにおけるエンティティのインデックス/IDなどです。頻繁に呼ばれるメソッドの中には、インスタンスそのものの代わりにその値を使えるものがあります。これにより、C++とJavaのインスタンスをマッピングするオーバーヘッドを完全に排除できます。この値は`setUserValue(int);`で設定し、`getUserValue();`で取得できます。
 
 ```java
 public class MyGameObject {
@@ -20,7 +20,7 @@ gameObjects.add(myGameObject);
 myGameObject.body.setUserValue(gameObjects.size-1);
 ```
 
-You can use the `userData` field to add some additional data. For example:
+追加データを付けたい場合は`userData`フィールドが使えます。例は次のようなものです。
 ```java
 btCollisionObject obj = new btCollisionObject();
 obj.userData = myGameObject;
@@ -29,76 +29,76 @@ if (obj.userData instanceof MyGameObject)
   myGameObject = (MyGameObject)obj.userData;
 ```
 
-`btCollisionObject` adds the methods `takeOwnership` and `releaseOwnership` which can be used to remove or make the wrapper responsable for destroying the native object when the Java object is destroyed by the garbage collector.
+`btCollisionObject`には`takeOwnership`と`releaseOwnership`というメソッドも追加されています。これらは、Javaオブジェクトがガベージコレクタによって破棄される際に、ネイティブオブジェクトの破棄をラッパーが担当する／しないを切り替えるために使えます。
 
-The `btCollisionObject` also adds the following methods:
+また、`btCollisionObject`には次のメソッドも追加されています。
  * `getAnisotropicFriction(Vector3)`
  * `getWorldTransform(Matrix4)`
  * `getInterpolationWorldTransform(Matrix4)`
  * `getInterpolationLinearVelocity(Vector3)`
  * `getInterpolationAngularVelocity(Vector3)`
- * `getContactCallbackFlag()` and `setContactCallbackFlag(int)`
- * `getContactCallbackFilter()` and `setContactCallbackFilter(int)`
+ * `getContactCallbackFlag()`と`setContactCallbackFlag(int)`
+ * `getContactCallbackFilter()`と`setContactCallbackFilter(int)`
 
 ### ClosestNotMeConvexResultCallback
-The `ClosestNotMeConvexResultCallback` class is a custom `ClosestConvexResultCallback` implementation which you can use to perform a `convexSweepTest` on all objects except the specified one.
+`ClosestNotMeConvexResultCallback`クラスは、`ClosestConvexResultCallback`のカスタム実装です。指定したオブジェクト「以外」すべてを対象に`convexSweepTest`を行うために使えます。
 
 ### ClosestNotMeRayResultCallback
 
-The `ClosestNotMeRayResultCallback` class is a custom `ClosestRayResultCallback` implementation which you can use to perform a `rayTest` on all objects except the specified one.
+`ClosestNotMeRayResultCallback`クラスは、`ClosestRayResultCallback`のカスタム実装です。指定したオブジェクト「以外」すべてを対象に`rayTest`を行うために使えます。
 
 ### InternalTickCallback
 
-The `InternalTickCallback` is implemented to bridge the callback required by `btDynamicsWorld#setInternalTickCallback` to a java class. You can extend the class and override `onInternalTick` method. You can use the `attach` and `detach` methods to start and stop getting tick callbacks.
+`InternalTickCallback`は、`btDynamicsWorld#setInternalTickCallback`が要求するコールバックをJavaクラスに橋渡しするために実装されています。このクラスを拡張して`onInternalTick`メソッドをオーバーライドできます。`attach`と`detach`メソッドでティックコールバックの受信を開始／停止できます。
 
 ### btDefaultMotionState
 
-In some cases it's easier to use `btDefaultMotionState` instead of extending `btMotionState`. The following custom methods are available for `btDefaultMotionState`.
+場合によっては、`btMotionState`を拡張するより`btDefaultMotionState`を使ったほうが簡単です。`btDefaultMotionState`には次のカスタムメソッドが用意されています。
  * `getGraphicsWorldTrans(Matrix4)`
  * `getCenterOfMassOffset(Matrix4)`
  * `getStartWorldTrans(Matrix4)`
-Note that extending `btMotionState` with your own implementation is the preferred method.
+ただし、自分の実装で`btMotionState`を拡張する方法が推奨されます。
 
 ### btCompoundShape
 
-The `btCompoundShape` class allows to keep a reference to child shapes, so you don't have to do that. To use it, use the `addChildShape` with the third `managed` argument set to true. Note that this will delete the managed child shape if the compound shape is deleted. Therefor the managed shapes should be exclusive for the compound shape.
+`btCompoundShape`クラスは、子シェイプ（shape）への参照を保持できるようにします（自分で参照を保持しなくてよくなります）。使うには、`addChildShape`の第3引数`managed`を`true`にして呼び出します。`btCompoundShape`が削除されると、`managed`指定された子シェイプも削除される点に注意してください。そのため、`managed`にするシェイプはその`btCompoundShape`専用にする必要があります。
 
 ### btIndexedMesh
 
-The `btIndexedMesh` class adds the constructor:
+`btIndexedMesh`クラスには次のコンストラクタが追加されています。
  * `btIndexedMesh(Mesh)`
-And the methods:
+また、次のメソッドが追加されています。
  * `setTriangleIndexBase(ShortBuffer)`
  * `setVertexBase(FloatBuffer)`
  * `set(Mesh)`
-For easy constructing or setting a `btIndexedMesh` based on a `Mesh` instance or a vertex and index buffer. The buffers itself are not managed by the wrapper and should out-live the object.
+これらにより、`Mesh`インスタンスや頂点／インデックスバッファから `btIndexedMesh`を簡単に生成・設定できます。なお、バッファ自体はラッパーによって管理されないため、オブジェクトより長く生存させる必要があります。
 
 ### btTriangleIndexVertexArray
 
-The `btTriangleIndexVertexArray` class adds the ability to maintain a reference to the Java `btIndexedMesh` classes it holds. To use it call `addIndexedMesh` with the last argument `managed` set to true. When the `btTriangleIndexVertexArray` is destroyed it will also destroy it's managed `btIndexedMesh` children.
+`btTriangleIndexVertexArray`クラスは、内部に保持しているJava側の`btIndexedMesh`クラスへの参照を維持できるようにします。使うには、`addIndexedMesh`の最後の引数`managed`をtrueにして呼び出します。`btTriangleIndexVertexArray`が破棄されると、`managed`指定された`btIndexedMesh`の子も破棄されます。
 
-Also, the `btTriangleIndexVertexArray` class adds the `addMesh` and `addModel` methods and likewise constructors, for easy constructing and setting the class.
+また`btTriangleIndexVertexArray`クラスには、簡単に生成・設定できるように`addMesh`と`addModel`メソッド、および同様のコンストラクタが追加されています。
 
 ### btBvhTriangleMeshShape
 
-The `btBvhTriangleMeshShape` class adds the ability to maintain a reference to the Java `btStridingMeshInterface` class. To use it construct the class with the argument `managed` set to true. When the `btBvhTriangleMeshShape` is destroyed it will also destroy the managed `btStridingMeshInterface`.
+`btBvhTriangleMeshShape`クラスは、Java側の`btStridingMeshInterface`クラスへの参照を維持できるようにします。使うには、コンストラクタ引数`managed`を`true`にして生成します。`btBvhTriangleMeshShape`が破棄されると、`managed`指定された`btStridingMeshInterface`も破棄されます。
 
-Also, the `btBvhTriangleMeshShape` class add constructors for easy constructing one or more `Mesh` or `Model` instances.
+また`btBvhTriangleMeshShape`クラスには、1つ以上の`Mesh`または`Model`インスタンスから簡単に生成できるコンストラクタも追加されています。
 
 ### btConvexHullShape
 
-The `btConvexHullShape` class adds a convenience constructor `btConvexHullShape(btShapeHull)`.
+`btConvexHullShape`クラスには、便利なコンストラクタ`btConvexHullShape(btShapeHull)`が追加されています。
 
 ### btBroadphasePairArray
 
-The `btBroadphasePairArray` class adds methods to get all collision objects within it at once:
+`btBroadphasePairArray`クラスには、内部の衝突オブジェクトをまとめて取得するためのメソッドが追加されています。
 ```java
 btBroadphasePairArray.getCollisionObjects(Array<btCollisionObject> out, btCollisionObject other, int[] tempArray)
 btBroadphasePairArray.getCollisionObjectsValue(int[] out, btCollisionObject other)
 ```
 ### FilterableVehicleRaycaster
 
-The `FilterableVehicleRaycaster` class extends `btDefaultVehicleRaycaster` and adds support for collision filtering using groups and masks:
+`FilterableVehicleRaycaster`クラスは`btDefaultVehicleRaycaster`を拡張し、`group`と`mask`を使った衝突フィルタリングをサポートします。
 ```java
 FilterableVehicleRaycaster raycaster = new FilterableVehicleRaycaster(dynamicsWorld);
 raycaster.setCollisionFilterGroup(FILTER_GROUP);
