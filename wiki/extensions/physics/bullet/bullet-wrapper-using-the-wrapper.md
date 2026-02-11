@@ -1,28 +1,28 @@
 ---
-title: Bullet Wrapper Using the wrapper
+title: Bulletラッパーの使い方
 ---
-## Initializing Bullet
+## Bulletの初期化
 
-Before you can use Bullet, you’ll need to load the libraries. This can be done by adding the following line in your create method:
+Bulletを使う前に、ライブラリをロードする必要があります。これは`create`メソッドに次の1行を追加することで行えます。
 ```java
 Bullet.init();
 ```
 
-Be aware not to use bullet before it is initialized. For example, the following will result in an error because the `btGhostPairCallback` is created before the library is loaded.
+初期化が完了する前にBulletを使わないよう注意してください。例えば次のコードは、ライブラリがロードされる前に`btGhostPairCallback`が生成されてしまうため、エラーになります。
 ```java
 public class InvokeRuntimeExceptionTest {
   final static btGhostPairCallback ghostPairCallback = new btGhostPairCallback();
 }
 ```
 
-## Working with Bullet wrapper
-The wrapper tends to follow the original bullet class names. Meaning that most classes are prefixed with “bt”. There are a few exceptions on this, which are mostly nested structs. These are custom implemented directly into the `com.badlogic.gdx.physics.bullet` package. Unfortunately some nested structs and some base classes are not suitable for a one on one translation. See the custom classes section for more information on that. If you find a class that is missing you can post it on the forums or issue tracker (https://github.com/libgdx/libgdx/issues), so it can be added to the wrapper.
+## Bulletラッパーの基本
+このラッパーは、元のBulletのクラス名にできるだけ従う傾向があります。つまり、多くのクラス名は「bt」で始まります。いくつか例外もありますが、主にネストされた構造体（struct）です。これらは`com.badlogic.gdx.physics.bullet`パッケージ内に、カスタム実装として直接用意されています。残念ながら、一部のネストされた構造体や一部の基底クラスは、1対1での変換に向きません。詳しくは「カスタムクラス」のセクションを参照してください。もしラッパーに存在しないクラスを見つけた場合は、フォーラムまたはIssueトラッカー（https://github.com/libgdx/libgdx/issues）に投稿すれば、ラッパーに追加できるかもしれません。
 
-## Callbacks
+## コールバック
 
-Callbacks require some special attention. By default the wrapper only supports a one way interaction (from Java to C++). Callback interfaces, where C++ needs to call Java code are custom implemented. If you find a callback interface that isn't implemented yet, you can post it on the forums so it can be added to the wrapper.
+コールバックは特に注意が必要です。デフォルトでは、ラッパーは一方向（Java → C++）のやり取りのみをサポートします。C++側からJavaコードを呼び出す必要があるコールバック用インターフェースは、個別にカスタム実装されています。まだ実装されていないコールバック用インターフェースを見つけた場合は、フォーラムに投稿すればラッパーへ追加できるかもしれません。
 
-List of callback interfaces (might not be complete):
+コールバック用インターフェース一覧（完全ではない可能性があります）
  * `LocalShapeInfo`
  * `LocalRayResult`
  * `RayResultCallback`
@@ -38,47 +38,47 @@ List of callback interfaces (might not be complete):
  * `ContactListener`
  * `ContactCache`
 
-## Properties
-Properties are encapsulated by getter and setter methods. The naming of the getter and setter methods omits the `m_` prefix. For example, the `m_collisionObject` member of the native class `btCollisionObjectWrapper` is implemented as `getCollisionObject()` and `setCollisionObject(...)`.
+## プロパティ
+プロパティは`getter`／`setter`メソッドでカプセル化されています。`getter`／`setter`の命名では、`m_`プレフィックスは省略されます。例えば、ネイティブクラス`btCollisionObjectWrapper`の`m_collisionObject`メンバーは、`getCollisionObject()`と`setCollisionObject(...)`として実装されています。
 
-## Creating and destroying objects
-Every time you create a bullet class in Java it also creates the corresponding class in C++. While the Java object is maintained by the garbage collector, the C++ object isn’t. To avoid having orphaned C++ objects resulting in memory leaks, the C++ object is by default automatically destroyed when the Java object is destroyed by the garbage collector.
+## オブジェクトの生成と破棄
+Java でBulletクラスを生成すると、そのたびに対応するC++側のクラスも生成されます。Java側のオブジェクトはガベージコレクタによって管理されますが、C++側はそうではありません。孤立したC++オブジェクトが残ってメモリリークになるのを防ぐため、デフォルトではJavaオブジェクトがガベージコレクタによって破棄されるときに、C++オブジェクトも自動的に破棄されます。
 
-While this might be useful in some cases, it’s merely a fail-safe and you shouldn't rely on it. Since you can’t control the garbage collector, you can’t control _if_, _when_ and _in which order_ the objects are actually being destroyed. Therefore the wrapper logs an error when an object is automatically destroyed by the garbage collector. You can disable this error logging using the second argument of the `Bullet.init()` method, but you should preferably use the method in the following paragraph.
+ただしこれは便利な場合もある一方で、あくまでフェイルセーフ（fail-safe）であり、これに頼るべきではありません。ガベージコレクタは制御できないため、オブジェクトが実際に *破棄されるかどうか*／*いつ破棄されるか*／*どの順序で破棄されるか*を制御できません。そのため、ガベージコレクタによってオブジェクトが自動破棄された場合、ラッパーはエラーをログに出します。このエラーログは`Bullet.init()`の第2引数で無効化できますが、できれば次の段落で説明する方法を使うことを推奨します。
 
-In order to ensure correct garbage collection you should keep a reference to every object you create until it’s not needed anymore and then destroy it yourself. You can destroy the C++ object by calling the `.dispose()` method on the Java object, after which you should remove all references to the Java object since it’s unusable after that.
+正しく破棄を行うには、生成した各オブジェクトへの参照を「不要になるまで」保持し、不要になったら自分で破棄するべきです。Javaオブジェクトに対して`.dispose()`を呼ぶことでC++側のオブジェクトを破棄できます。`dispose()`後はJavaオブジェクトは使用できないため、参照もすべて外してください。
 
-The above is only true for the objects you are responsible of, which are all Bullet classes you create with the `new` keyword as well as classes you create using helper methods. You don’t have to dispose objects that are returned by regular methods or provided to you in callback methods.
+上記が当てはまるのは、あなたが責任を持つオブジェクトだけです。つまり`new`キーワードで作ったBulletクラスと、ヘルパーメソッドで生成したクラスです。通常のメソッド戻り値として返されるオブジェクトや、コールバックメソッドで渡されるオブジェクトは破棄する必要はありません。
 
-## Referencing objects
-As stated above, you should keep a reference to every Bullet class and call the dispose method when it’s no longer needed. When your application becomes more complex and objects are shared amongst multiple other objects, it can become difficult to keep track of references. Therefore the bullet wrapper support reference counting.
+## オブジェクト参照
+上で述べたとおり、各Bulletクラスへの参照を保持し、不要になったら`dispose`を呼ぶべきです。しかしアプリケーションが複雑になり、複数のオブジェクト間で共有されるようになると、参照の追跡が難しくなる場合があります。そこでBulletラッパーは参照カウントをサポートしています。
 
-Reference counting is disabled by default. To enable it, call `Bullet.init();` with the first argument set to true:
+参照カウントはデフォルトでは無効です。有効にするには、`Bullet.init();`を第1引数`true`で呼び出します。
 ```java
 Bullet.init(true);
 ```
 
-When using reference counting, you must call the `obtain()` method on each object you need to reference. When you no longer need to reference an object, you must call the `release()` method. The release method will dispose the object if it’s doesn't have any more references to it.
+参照カウントを使う場合、参照したい各オブジェクトに対して`obtain()`を必ず呼んでください。参照が不要になったら`release()`を呼びます。`release()`は、そのオブジェクトに他の参照が残っていなければ`dispose`します。
 
-Some wrapper classes help you in managing references. For example the `btCompoundShape` class obtains a reference to all its child shapes and releases them when it is disposed.
+いくつかのラッパークラスは参照管理を助けてくれます。たとえば`btCompoundShape`は子シェイプすべてへの参照を`obtain()`し、自身が`dispose`されるときにそれらを`release()`します。
 
-## Extending classes
-You can extend the bullet classes, but it’s recommended not to do so except for callback classes (in which case you should only override the intended methods). The information you add to a class is not available in C++. Furthermore the result of any method of the bullet wrapper that returns a class you’ve overridden will not implement that class. For example:
+## クラスの拡張
+Bulletのクラスは拡張できますが、コールバック用クラスを除いて基本的には推奨されません（コールバックの場合も、意図されたメソッドだけをオーバーライドしてください）。追加した情報はC++側には伝わりません。また、Bulletラッパーのメソッドが「あなたが拡張したクラス」を返すこともありません。
 ```java
 btCollisionShape shape = collisionObjectA.getCollisionShape();
 ```
 
-This will create a new Java btCollisionShape class which doesn’t implement any extended class.
+これは新しいJavaの`btCollisionShape`を生成しますが、あなたが拡張したクラスは実装されません。
 
-There is one exception to this for btCollisionObject, where the wrapper tries to reuse the same Java class. Furthermore the Java implementation of the btCollisionObject class adds a `userData` member which can be used to attach additional data to the object. To accomplish this the wrapper maintains an array with references to all btCollisionObject instances. You can access that array using the static field `btCollisionObject.instances`. Check the btCollisionObject `./Bullet Wrapper: Custom classes#btcollisionobject` section for detailed information on this.
+例外として`btCollisionObject`だけは、ラッパーが同じJavaクラスを再利用しようとします。さらにJava実装の`btCollisionObject`には、追加データを紐づけるための`userData`メンバーが追加されています。これを実現するため、ラッパーはすべての`btCollisionObject`インスタンス参照を配列で保持します。この配列には静的フィールド`btCollisionObject.instances`からアクセスできます。詳しくは`btCollisionObject`の「./Bullet Wrapper: Custom classes#btcollisionobject」セクションを参照してください。
 
-The upcast methods are not present because of a [issue](https://code.google.com/archive/p/libgdx/issues/1453). There is no need for them for classes that are created in java. These classes can directly be casted.
+upcast用メソッドは[このissue](https://code.google.com/archive/p/libgdx/issues/1453)のため提供されていません。Javaで生成したクラスについては、これらは不要です。これらのクラスは直接キャストできます。
 
-## Comparing classes
-You can compare wrapper classes using the `equals()` method, which checks if the classes both wrap the same native class. To get the pointer to the underlying C++ class you can use the `getCPointer` method of the specific object. You can also compare these pointers to check whether the Java classes wrap the same C++ class.
+## クラスの比較
+ラッパークラスは`equals()`メソッドで比較できます。これは、両者が同じネイティブクラスをラップしているかどうかをチェックします。基になるC++クラスへのポインタは、対象オブジェクトの`getCPointer`メソッドで取得できます。これらのポインタを比較することで、Java側のクラスが同じC++クラスをラップしているかどうかを確認することもできます。
 
-## Common classes
-Bullet uses some classes also available in the libGDX core. While these bullet classes are available for you to use, the wrapper tries to use the libGDX class where possible. Currently these are implemented for:
+## 共通クラス
+BulletはlibGDX coreにも存在するクラスをいくつか使います。これらのBulletクラスは利用可能ですが、ラッパーは可能な限りlibGDX側のクラスを使うようにしています。現在は次の対応が実装されています。
 
 | *Bullet* | *Libgdx* |
 |:--------:|:--------:|
@@ -88,37 +88,37 @@ Bullet uses some classes also available in the libGDX core. While these bullet c
 | btTransform | Matrix4 |
 | btScalar | float |
 
-<sub>Note that the conversion from Matrix4 to btTransform might lose some information, because btTransform only contains an origin and rotation. In addition, note that btScalar is synonym for the primitive type float.</sub>
+<sub>`Matrix4`から`btTransform`への変換では、`btTransform`が`origin`と`rotation`しか持たないため、一部情報が失われる可能性があります。また、`btScalar`はプリミティブ型`float`のシノニムです。</sub>
 
-To avoid creating objects for these common classes, the wrapper reuses the same instances. Therefore, be aware of the following two cases:
+これら共通クラス用のオブジェクト生成を避けるため、ラッパーは同じインスタンスを再利用します。したがって、次の2点に注意してください。
 
- 1. The result of wrapper methods that return such a class are overwritten by the next method that returns the same type:
+ 1. こうしたクラスを返すラッパーメソッドの戻り値は、同じ型を返す次の呼び出しによって上書きされます。
 ```java
-// Wrong method:
+// 間違ったケース
 Matrix4 transformA = collisionObjectA.getWorldTransform();
-// transformA now holds the worldTransform of collisionObjectA
+// transformAはcollisionObjectAのworldTransformを保持している
 Matrix4 transformB = collisionObjectB.getWorldTransform();
-// transformA and transformB are the same object and now holds the worldTransform of collsionObjectB
+// transformAとtransformBは同一オブジェクトで、いまはcollisionObjectBのworldTransformを保持している
 
-// Correct method:
+// 正しいケース
 transformA.set(collisionObjectA.getWorldTransform());
 transformB.set(collisionObjectB.getWorldTransform());
 ```
- 2. The arguments of interface callbacks with arguments of such a class are unusable after the call:
+ 2. こうしたクラスを引数として受け取るインターフェースコールバックの引数は、呼び出し後には使用できません。
 ```java
-// Wrong method:
+// 間違ったケース
 @Override
 public void setWorldTransform (final Matrix4 worldTrans) {
 	transform = worldTrans;
 }
-// Correct method:
+// 正しいケース
 @Override
 public void setWorldTransform (final Matrix4 worldTrans) {
 	transform.set(worldTrans);
 }
 ```
 
-## Using arrays
-Where possible the wrapper uses direct ByteBuffer objects to pass arrays from Java to C++. This avoids copying the array on the call and allows you to share the same byte buffer for both OpenGL ES and Bullet. If needed you can create a new ByteByffer using `BufferUtils.newUnsafeByteBuffer`, which you should manually delete using `BufferUtils.disposeUnsafeByteBuffer`.
+## 配列を使う
+可能な場合、ラッパーはJavaからC++へ配列を渡すのにダイレクト`ByteBuffer`を使います。これにより呼び出し時の配列コピーを避けられ、OpenGL ESとBulletの両方で同じバイトバッファを共有できます。必要なら `BufferUtils.newUnsafeByteBuffer`で新しい`ByteBuffer`を作成し、`BufferUtils.disposeUnsafeByteBuffer`で手動で削除してください。
 
-In cases where ByteBuffer can't be used or is unwanted, a normal array is used. By default this means that the array is copied using iteration from Java to C++ at start of the method and copied back at the end of the method. To avoid this overhead the wrapper tries to use the Java array directly from within C++ where possible using critical arrays. During such method Java garbage collecting is blocked. An example of such method is `btBroadphasePairArray.getCollisionObjects`.
+`ByteBuffer`が使えない、または使いたくない場合は通常の配列が使われます。デフォルトでは、配列はメソッド開始時にJavaからC++へ反復コピーされ、メソッド終了時にC++からJavaへコピーされます。このオーバーヘッドを避けるため、ラッパーは可能な場合、JNIのクリティカル配列（critical arrays）を使ってC++側からJava配列を直接利用しようとします。この方法を使うメソッドの実行中はJavaのガベージコレクションがブロックされます。こうしたメソッドの例が`btBroadphasePairArray.getCollisionObjects`です。
