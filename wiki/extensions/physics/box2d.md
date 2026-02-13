@@ -1,23 +1,23 @@
 ---
 title: Box2d
 ---
-# Setting up Box2D with libGDX
+# libGDXでBox2Dをセットアップする
 
-Box2D is a 2D physics library. It is one of the most popular physics libraries for 2D games and has been ported to many languages and many different engines, including libGDX. The Box2D implementation in libGDX is a thin Java wrapper around the C++ engine. Therefore, their [documentation](https://box2d.org/documentation/) may come in handy.
+Box2Dは2D物理演算ライブラリです。2Dゲーム向け物理ライブラリの中でも特に人気が高く、libGDXを含む多くの言語・エンジンへ移植されています。libGDXにおけるBox2Dの実装は、C++エンジンを最小限にラップしたJavaラッパーです。そのため、[Box2Dドキュメント](https://box2d.org/documentation/)が役に立つことがあります。
 
-Box2D is an extension and not included with libGDX by default. Thus a manual installation is required.
+Box2Dは拡張機能であり、libGDXにデフォルトでは含まれていません。したがって手動での導入が必要です。
 
-## Table of Contents
+## 目次
 
-  * [Initialization](/wiki/extensions/physics/box2d#initialization)
-  * [Creating a World](/wiki/extensions/physics/box2d#creating-a-world)
-  * [Debug Renderer](/wiki/extensions/physics/box2d#debug-renderer)
-  * [Stepping the simulation](/wiki/extensions/physics/box2d#stepping-the-simulation)
-  * [Rendering](/wiki/extensions/physics/box2d#rendering)
-  * [Objects/Bodies](/wiki/extensions/physics/box2d#objectsbodies)
-    * [Dynamic Bodies](/wiki/extensions/physics/box2d#dynamic-bodies)
-    * [Static Bodies](/wiki/extensions/physics/box2d#static-bodies)
-    * [Kinematic Bodies](/wiki/extensions/physics/box2d#kinematic-bodies)
+  * [初期化](/wiki/extensions/physics/box2d#initialization)
+  * [Worldの作成](/wiki/extensions/physics/box2d#creating-a-world)
+  * [デバッグレンダラー](/wiki/extensions/physics/box2d#debug-renderer)
+  * [シミュレーションを進める](/wiki/extensions/physics/box2d#stepping-the-simulation)
+  * [描画](/wiki/extensions/physics/box2d#rendering)
+  * [オブジェクト／ボディ](/wiki/extensions/physics/box2d#objectsbodies)
+    * [動的ボディ](/wiki/extensions/physics/box2d#dynamic-bodies)
+    * [静的ボディ](/wiki/extensions/physics/box2d#static-bodies)
+    * [キネマティックボディ](/wiki/extensions/physics/box2d#kinematic-bodies)
   * [Impulses/Forces](/wiki/extensions/physics/box2d#impulsesforces)
   * [Joints and Gears](/wiki/extensions/physics/box2d#joints-and-gears)
   * [Fixture Shapes](/wiki/extensions/physics/box2d#fixture-shapes)
@@ -27,31 +27,31 @@ Box2D is an extension and not included with libGDX by default. Thus a manual ins
   * [Resources](/wiki/extensions/physics/box2d#resources)
   * [Tools](/wiki/extensions/physics/box2d#tools)
 
-## Initialization
+## 初期化 {#initialization}
 
-To initialize Box2D it is necessary to call `Box2D.init()`. For backwards compatibility, creating a `World` for the first time will have the same effect, but using the `Box2D` class should be preferred.
+Box2Dを初期化するには`Box2D.init()`を呼ぶ必要があります。後方互換性のため、最初に`World`を作成したときにも同様の効果がありますが、`Box2D`クラスを使う方法を推奨します。
 
-## Creating a World
+## Worldの作成  {#creating-a-world}
 
-When setting up Box2D the first thing we need is a world. The world object is basically what holds all your physics objects/bodies and simulates the reactions between them. It does not however render the objects for you; for that you will use libGDX graphics functions. That said, libGDX does come with a Box2D debug renderer which is extremely handy for debugging your physics simulations, or even for testing your game-play before writing any rendering code.
+Box2Dをセットアップする際、最初に必要になるのは`World`です。`World`オブジェクトは、物理オブジェクト／ボディをすべて保持し、それらの間の反応をシミュレートするものです。ただし、オブジェクトの描画は行いません。描画にはlibGDXのグラフィックス機能を使います。とはいえ、libGDXにはBox2Dのデバッグレンダラーが用意されており、物理シミュレーションのデバッグや、レンダリングコードを書く前のゲームプレイ検証にも非常に便利です。
 
-To create the world we use the following code:
+Worldは次のコードで作成します。
 
 ```java
 World world = new World(new Vector2(0, -10), true);
 ```
 
-The first argument we supply is a 2D vector containing the gravity: 0 to indicate no gravity in the horizontal direction, and -10 is a downwards force like in real life (assuming your y axis points upwards). These values can be anything you like, but remember to stick to a constant scale. In Box2D 1 unit = 1 meter.
+第1引数は重力を表す2Dベクトルです。0は水平（x方向）の重力、-10は現実世界のような下向きの力（y軸が上向きの場合）を意味します。値は自由に決められますが、スケールは一定に保ってください。Box2Dでは1単位=1メートルです。
 
-The second value in the world creation is a boolean value which tells the world if we want objects to sleep or not. Generally we want objects to sleep as this conserves CPU usage, but there are situations where you might not want your objects to sleep.
+`World`作成時の第2引数は`boolean`で、オブジェクトをスリープさせるかどうかを指定します。通常はCPU使用量を抑えるためスリープを有効にしますが、状況によってはスリープさせたくないこともあります。
 
-It is advised to use the same scale you use for Box2D to draw graphics. This means drawing a Sprite with a width/height in meters. To scale up the graphics to make them visible, you should use a camera with a viewportWidth / viewportHeight also in meters. E.g: drawing a Sprite with a width of 2.0f (2 meters) and using a camera viewportWidth of 20.0f, the Sprite will fill 1/10th of the width on the window.
+Box2Dで使うスケールと、グラフィックス描画のスケールを揃えることが推奨されます。つまり、スプライト（sprite）の幅／高さもメートル単位で描くということです。見える大きさにするには、viewportWidth/viewportHeightもメートル単位のカメラを使って拡大します。例として、幅2.0f（2m）のスプライトを描き、カメラのviewportWidthを20.0fにすると、そのスプライトはウィンドウ幅の1/10を占めます。
 
-**A common mistake** is measuring your world in pixels instead of meters. Box2D objects can only travel so fast. If pixels are used (such as 640 by 480) instead of meters (such as 12 by 9), objects will always move slowly no matter what you do.
+**よくあるミス**は、メートルではなくピクセルで世界を測ってしまうことです。Box2Dのオブジェクトは移動速度に限界があります。メートル（例：12×9）の代わりにピクセル（例：640×480）を使ってしまうと、何をしても常に遅く動くように見えてしまいます。
 
-## Debug Renderer
+## デバッグレンダラー {#debug-renderer}
 
-The next thing we are going to do is setup our debug renderer. You generally will not use this in a released version of your game, but for testing purposes we will set it up now like so:
+次にデバッグレンダラーをセットアップします。リリース版では通常使いませんが、テスト目的で次のように作成します。
 
 ```java
 Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer();
@@ -59,28 +59,28 @@ Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer();
 
 
 
-## Stepping the simulation
+## シミュレーションを進める {#stepping-the-simulation}
 
-To update our simulation we need to tell our world to step. Stepping basically updates the world objects through time. The best place to call our step function is at the end of our `render()` loop. In a perfect world everyone's frame rate is the same
+シミュレーションを更新するには、`World`に`step`を呼び出します。`step`は、時間経過に沿って`World`内のオブジェクトを更新します。呼び出す場所としては、`render()`ループの最後が最適です。理想的な世界では、全員のフレームレートが同じですが……
 
 ```java
 world.step(1/60f, 6, 2);
 ```
 
-The first argument is the time-step, or the amount of time you want your world to simulate. In most cases you want this to be a fixed time step. libGDX recommends using a value between `1/60f` (which is 1/60th of a second) and `1/240f` (1/240th of a second).
+第1引数はタイムステップ、つまり`World`にシミュレートさせたい時間量です。多くの場合、固定タイムステップにします。libGDXは`1/60f`（1/60 秒）〜`1/240f`（1/240 秒）の値を推奨しています。
 
-The other two arguments are `velocityIterations` and `positionIterations`. For now we will leave these at `6` and `2`, but you can read more about them in the Box2D documentation.
+残り2つは`velocityIterations`と`positionIterations`です。ここではひとまず`6`と`2`のままにしますが、詳細はBox2Dドキュメントを参照してください。
 
-Stepping your simulation is a topic unto itself. See [this article](https://gafferongames.com/post/fix_your_timestep/) for an excellent discussion on the use of variable time steps.
+シミュレーションのステップは、それ自体が大きなテーマです。可変タイムステップの扱いについては、優れた解説として[この記事](https://gafferongames.com/post/fix_your_timestep/)を参照してください。
 
-The result might look similar to this:
+例えば、次のような実装になります。
 
 ```java
 private float accumulator = 0;
 
 private void doPhysicsStep(float deltaTime) {
-    // fixed time step
-    // max frame time to avoid spiral of death (on slow devices)
+    // 固定タイムステップ
+    // 遅い端末で、更新が追いつかず悪化する「スパイラル・オブ・デス」を防ぐため、フレーム時間の上限を設ける
     float frameTime = Math.min(deltaTime, 0.25f);
     accumulator += frameTime;
     while (accumulator >= Constants.TIME_STEP) {
@@ -90,111 +90,111 @@ private void doPhysicsStep(float deltaTime) {
 }
 ```
 
-## Rendering
+## 描画 {#rendering}
 
-It is recommended that you render all your graphics before you do your physics step, otherwise it will be out of sync. To do this with our debug renderer we do the following:
+物理ステップよりも先にすべてのグラフィックスを描画することが推奨されます。そうしないと同期がズレます。デバッグレンダラーで描画する場合は次のとおりです。
 
 ```java
 debugRenderer.render(world, camera.combined);
 ```
 
-The first argument is our Box2D world and the second argument is our libGDX camera.
+第1引数はBox2DのWorld、第2引数はlibGDXのカメラです。
 
 
 
-## Objects/Bodies
+## オブジェクト／ボディ {#objectsbodies}
 
-Now if you run your game it will be pretty boring as nothing happens. The world steps but we don’t see anything as we don’t have anything to interact with it. So now we’re going to add some objects.
+このままゲームを実行しても、何も起きないので退屈です。Worldはステップしているのに、相互作用する対象がないからです。そこでオブジェクトを追加していきます。
 
-In Box2D our objects are called _bodies_, and each body is made up of one or more _fixtures_, which have a fixed position and orientation within the body. Our fixtures can be any shape you can imagine or you can combine a variety of different shaped fixtures to make the shape you want.
+Box2Dではオブジェクトを*ボディ*（body）と呼びます。各ボディは1つ以上の*フィクスチャ*（fixture）から成り、フィクスチャはボディの中で固定の位置と向きを持ちます。フィクスチャの形状は自由で、複数の異なる形状を組み合わせて望む形にすることもできます。
 
-A fixture has a shape, density, friction and restitution attached to it. Shape is obvious. Density is the mass per square metre: a bowling ball is very dense, yet a balloon isn’t very dense at all as it is mainly filled with air. Friction is the amount of opposing force when the object rubs/slides along something: a block of ice would have a very low friction but a rubber ball would have a high friction. Restitution is how bouncy something is: a rock would have a very low restitution but a basketball would have a fairly high restitution. A body with a restitution of 0 will come to a halt as soon as it hits the ground, whereas a body with a restitution of 1 would bounce to the same height forever.
+フィクスチャには形状（shape）、密度（density）、摩擦（friction）、反発係数（restitution）が紐づきます。形状はそのまま。密度は平方メートルあたりの質量のことで、ボウリング球は密度が高い一方、風船はほとんど空気なので密度が低いです。摩擦は、物体が何かに擦れたり滑ったりする際の抵抗のことで、氷のブロックは摩擦が低く、ゴムボールは高いでしょう。反発係数は弾み具合のことで、岩は低く、バスケットボールは比較的高いです。反発係数0のボディは地面に当たるとすぐ止まり、反発係数1のボディは永遠に同じ高さまで跳ね続けます。
 
-Bodies come in three different types: dynamic, kinematic and static. Each type is described below.
+ボディには3種類あります：動的（dynamic）、キネマティック（kinematic）、静的（static）です。それぞれ以下で説明します。
 
 
-### Dynamic Bodies
+### 動的ボディ {#dynamic-bodies}
 
-Dynamic bodies are objects which move around and are affected by forces and other dynamic, kinematic and static objects. Dynamic bodies are suitable for any object which needs to move and be affected by forces.
+動的ボディ（dynamic body）は、動き回り、力の影響を受けるオブジェクトです。また、他の動的／キネマティック／静的オブジェクトの影響も受けます。力を受けて動く必要があるオブジェクトには、動的ボディが適しています。
 
-We have now learned about fixtures which make up our bodies, so let's get dirty and start to create some bodies and add fixtures to them!
+ここまでで、ボディを構成するフィクスチャについて学びました。では実際にボディを作り、フィクスチャを付けていきましょう。
 
 ```java
-// First we create a body definition
+// まずボディ定義を作成する
 BodyDef bodyDef = new BodyDef();
-// We set our body to dynamic, for something like ground which doesn't move we would set it to StaticBody
+// ボディを動的にする。地面のように動かないものは静的ボディにする
 bodyDef.type = BodyType.DynamicBody;
-// Set our body's starting position in the world
+// World内での初期位置を設定する
 bodyDef.position.set(5, 10);
 
-// Create our body in the world using our body definition
+// ボディ定義を使ってWorldにボディを作成する
 Body body = world.createBody(bodyDef);
 
-// Create a circle shape and set its radius to 6
+// 円形シェイプを作成し、半径を6にする
 CircleShape circle = new CircleShape();
 circle.setRadius(6f);
 
-// Create a fixture definition to apply our shape to
+// シェイプを適用するためのフィクスチャ定義を作成する
 FixtureDef fixtureDef = new FixtureDef();
 fixtureDef.shape = circle;
 fixtureDef.density = 0.5f;
 fixtureDef.friction = 0.4f;
-fixtureDef.restitution = 0.6f; // Make it bounce a little bit
+fixtureDef.restitution = 0.6f; // 少し弾むようにする
 
-// Create our fixture and attach it to the body
+// フィクスチャを作成し、ボディに取り付ける
 Fixture fixture = body.createFixture(fixtureDef);
 
-// Remember to dispose of any shapes after you're done with them!
-// BodyDef and FixtureDef don't need disposing, but shapes do.
+// 使い終わったシェイプは必ずdisposeすること！
+// BodyDefとFixtureDefはdispose不要だが、シェイプは必要。
 circle.dispose();
 ```
 
-Now we have created a ball like object and added it to our world. If you run the game now you should see a ball fall down the screen. This is still fairly boring though, as it has nothing to interact with. So let's create a floor for our ball to bounce on.
+これで、ボールのようなオブジェクトを作ってWorldに追加できました。ゲームを実行すると、ボールが画面の下へ落ちていくのが見えるはずです。とはいえ、まだ相互作用する相手がいないので退屈ですね。次は、ボールが跳ねる床を作りましょう。
 
 
 
-### Static Bodies
+### 静的ボディ {#static-bodies}
 
-Static bodies are objects which do not move and are not affected by forces. Dynamic bodies are affected by static bodies. Static bodies are perfect for ground, walls, and any object which does not need to move. Static bodies require less computing power.
+静的ボディ（static body）は、動かず、力の影響も受けないオブジェクトです。動的ボディは静的ボディの影響を受けます。静的ボディは地面や壁など、動く必要のないものに最適です。また、必要な計算量も少なくて済みます。
 
-Let's go ahead and create our floor as a static body. This is much like creating our dynamic body earlier.
+では、床を静的ボディとして作成してみましょう。手順は、先ほど動的ボディを作ったときとよく似ています。
 
 ```java
-// Create our body definition
+// ボディ定義を作成する
 BodyDef groundBodyDef = new BodyDef();  
-// Set its world position
+// World内での位置を設定する
 groundBodyDef.position.set(new Vector2(0, 10));  
 
-// Create a body from the definition and add it to the world
+// 定義からボディを作成してWorldに追加する
 Body groundBody = world.createBody(groundBodyDef);  
 
-// Create a polygon shape
+// ポリゴンシェイプを作成する
 PolygonShape groundBox = new PolygonShape();  
-// Set the polygon shape as a box which is twice the size of our view port and 20 high
-// (setAsBox takes half-width and half-height as arguments)
+// ビューポート幅の2倍で、高さ20の箱として設定する
+// （setAsBoxは、半分の幅と半分の高さを引数に取る）
 groundBox.setAsBox(camera.viewportWidth, 10.0f);
-// Create a fixture from our polygon shape and add it to our ground body  
+// ポリゴンシェイプからフィクスチャを作成し、床ボディに追加する
 groundBody.createFixture(groundBox, 0.0f);
-// Clean up after ourselves
+// 後片付け
 groundBox.dispose();
 ```
 
-See how we created a fixture without the need to define a `FixtureDef`? If all you need to specify is a shape and a density, the `createFixture` method has a useful overload for that.
+`FixtureDef`を定義しなくてもフィクスチャを作れたのが分かるでしょうか。指定したいのが「シェイプ」と「密度」だけであれば、`createFixture`には便利なオーバーロードが用意されています。
 
-Now if you run the game you should see a ball fall and then bounce on our newly created ground. Play around with some of the different values for the ball like density and restitution and see what happens.
+この状態でゲームを実行すると、ボールが落下し、新しく作った地面で跳ねるのが見えるはずです。密度や反発係数などの値をいろいろ変えて、挙動がどう変わるか試してみてください。
 
 
 
-### Kinematic Bodies
+### キネマティックボディ {#kinematic-bodies}
 
-Kinematic bodies are somewhat in between static and dynamic bodies. Like static bodies, they do not react to forces, but like dynamic bodies, they do have the ability to move. Kinematic bodies are great for things where you, the programmer, want to be in full control of a body's motion, such as a moving platform in a platform game.
+キネマティックボディ（kinematic bosy）は、静的ボディと動的ボディの中間のような存在です。静的ボディと同様に力には反応しませんが、動的ボディのように動くことはできます。プラットフォームゲームの動く足場のように、「プログラマがボディの動きを完全に制御したい」ものに向いています。
 
-It is possible to set the position on a kinematic body directly, but it's usually better to set a velocity instead, and letting Box2D take care of position updates.
+キネマティックボディは位置を直接設定することもできますが、一般的には速度を設定し、位置更新はBox2Dに任せるほうが良いでしょう。
 
-You can create a kinematic body in much the same way as the dynamic and static bodies above. Once created, you can control the velocity like this:
+キネマティックボディも、作り方は動的／静的ボディとほぼ同じです。作成後は、例えば次のように速度を制御できます。
 
 ```java
-// Move upwards at a rate of 1 meter per second
+// 1秒あたり1メートルで上方向へ移動する
 kinematicBody.setLinearVelocity(0.0f, 1.0f);
 ```
 
