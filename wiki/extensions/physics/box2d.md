@@ -13,19 +13,19 @@ Box2Dは拡張機能であり、libGDXにデフォルトでは含まれていま
   * [Worldの作成](/wiki/extensions/physics/box2d#creating-a-world)
   * [デバッグレンダラー](/wiki/extensions/physics/box2d#debug-renderer)
   * [シミュレーションを進める](/wiki/extensions/physics/box2d#stepping-the-simulation)
-  * [描画](/wiki/extensions/physics/box2d#rendering)
+  * [描画（レンダリング）](/wiki/extensions/physics/box2d#rendering)
   * [オブジェクト／ボディ](/wiki/extensions/physics/box2d#objectsbodies)
     * [動的ボディ](/wiki/extensions/physics/box2d#dynamic-bodies)
     * [静的ボディ](/wiki/extensions/physics/box2d#static-bodies)
     * [キネマティックボディ](/wiki/extensions/physics/box2d#kinematic-bodies)
-  * [Impulses/Forces](/wiki/extensions/physics/box2d#impulsesforces)
-  * [Joints and Gears](/wiki/extensions/physics/box2d#joints-and-gears)
-  * [Fixture Shapes](/wiki/extensions/physics/box2d#fixture-shapes)
-  * [Sprites and Bodies](/wiki/extensions/physics/box2d#sprites-and-bodies)
-  * [Sensors](/wiki/extensions/physics/box2d#sensors)
-  * [Contact Listeners](/wiki/extensions/physics/box2d#contact-listeners)
-  * [Resources](/wiki/extensions/physics/box2d#resources)
-  * [Tools](/wiki/extensions/physics/box2d#tools)
+  * [インパルス／力](/wiki/extensions/physics/box2d#impulsesforces)
+  * [ジョイントとギア](/wiki/extensions/physics/box2d#joints-and-gears)
+  * [フィクスチャ形状](/wiki/extensions/physics/box2d#fixture-shapes)
+  * [スプライトとボディ](/wiki/extensions/physics/box2d#sprites-and-bodies)
+  * [センサー](/wiki/extensions/physics/box2d#sensors)
+  * [衝突リスナー](/wiki/extensions/physics/box2d#contact-listeners)
+  * [参考資料](/wiki/extensions/physics/box2d#resources)
+  * [ツール](/wiki/extensions/physics/box2d#tools)
 
 ## 初期化 {#initialization}
 
@@ -90,7 +90,7 @@ private void doPhysicsStep(float deltaTime) {
 }
 ```
 
-## 描画 {#rendering}
+## 描画（レンダリング） {#rendering}
 
 物理ステップよりも先にすべてのグラフィックスを描画することが推奨されます。そうしないと同期がズレます。デバッグレンダラーで描画する場合は次のとおりです。
 
@@ -187,7 +187,7 @@ groundBox.dispose();
 
 ### キネマティックボディ {#kinematic-bodies}
 
-キネマティックボディ（kinematic bosy）は、静的ボディと動的ボディの中間のような存在です。静的ボディと同様に力には反応しませんが、動的ボディのように動くことはできます。プラットフォームゲームの動く足場のように、「プログラマがボディの動きを完全に制御したい」ものに向いています。
+キネマティックボディ（kinematic body）は、静的ボディと動的ボディの中間のような存在です。静的ボディと同様に力には反応しませんが、動的ボディのように動くことはできます。プラットフォームゲームの動く足場のように、「プログラマがボディの動きを完全に制御したい」ものに向いています。
 
 キネマティックボディは位置を直接設定することもできますが、一般的には速度を設定し、位置更新はBox2Dに任せるほうが良いでしょう。
 
@@ -198,86 +198,86 @@ groundBox.dispose();
 kinematicBody.setLinearVelocity(0.0f, 1.0f);
 ```
 
-## Impulses/Forces
+## インパルス／力 {#impulsesforces}
 
-Impulses and Forces are used to move a body in addition to gravity and collision.
+インパルス（impulse）と力（force）は、重力や衝突に加えてボディを動かすために使います。
 
-Forces occur gradually over time to change the velocity of a body. For example, a rocket lifting off would slowly have forces applied as the rocket slowly begins to accelerate.
+力は時間をかけて徐々に作用し、ボディの速度を変化させます。例えば、ロケットの離陸では、徐々に力が加わっていき、ゆっくり加速していきます。
 
-Impulses on the other hand make immediate changes to the body's velocity. For example, playing Pac-Man the character always moved at a constant speed and achieved instant velocity upon being moved.
+一方インパルスは、ボディの速度を即座に変化させます。例えば、パックマンのようにキャラクターが一定速度で移動し、入力と同時に速度が決まるような動きは、インパルスのイメージに近いでしょう。
 
-First you will need a Dynamic Body to apply forces/impulses to, see the [Dynamic Bodies](#dynamic_bodies) section above.
+インパルス／力を適用するには動的ボディが必要です。上の[動的ボディ](#dynamic-bodies)を参照してください。
 
-**Applying Force**
+**力を加える**
 
-Forces are applied in Newtons at a World Point. If the force is not applied to the center of mass, it will generate torque and affect the angular velocity.
+力は、World座標上の一点に対してニュートン（N）で加えます。力を重心に加えない場合、トルクが発生して角速度にも影響します。
 
 ```java
-// Apply a force of 1 meter per second on the X-axis at pos.x/pos.y of the body slowly moving it right
+// ボディのpos.x／pos.yに、X軸方向へ1（N）の力を加えて、ゆっくり右へ動かす
 dynamicBody.applyForce(1.0f, 0.0f, pos.x, pos.y, true);
 
-// If we always want to apply force at the center of the body, use the following
+// 常にボディ中心に力を加える場合
 dynamicBody.applyForceToCenter(1.0f, 0.0f, true);
 ```
 
-**Applying Impulse**
+**インパルスを加える**
 
-Impulses are just like Forces with the exception that they immediately modify the velocity of a body. As with forces, if the impulse is not applied at the center of a body, it will create torque which modifies angular velocity. Impulses are applied in Newton-seconds or kg-m/s.
+インパルスは、力と似ていますが「即座に」速度を変える点が異なります。力と同様、重心以外にインパルスを加えるとトルクが発生し、角速度が変化します。インパルスの単位はニュートン秒（N·s）またはkg·m/sです。
 
 ```java
-// Immediately set the X-velocity to 1 meter per second causing the body to move right quickly
+// X方向の速度を即座に1m/sにして、素早く右へ動かす
 dynamicBody.applyLinearImpulse(1.0f, 0, pos.x, pos.y, true);
 ```
 
-Keep in mind applying forces or impulses will wake the body. Sometimes this behavior is undesired. For example, you may be applying a steady force and want to allow the body to sleep to improve performance. In this case you can set the wake boolean value to false.
+また、力やインパルスを加えるとボディはスリープ解除されます。場合によっては望ましくないこともあります。例えば、一定の力を加え続けつつ、パフォーマンスのためにボディがスリープできるようにしたい場合などです。その場合は、`wake`引数を`false`にできます。
 
 ```java
-// Apply impulse but don't wake the body
+// インパルスを加えるが、スリープ解除しない
 dynamicBody.applyLinearImpulse(0.8f, 0, pos.x, pos.y, false);
 ```
 
-**Player Movement Example**
+**プレイヤー移動の例**
 
-In this example, we will make a player run left or right and accelerate to a maximum velocity, just like Sonic the Hedgehog. For this example we have already created a Dynamic Body named 'player'. In addition we have defined a MAX_VELOCITY variable so our player won't accelerate beyond this value. Now it's just a matter of applying a linear impulse when a key is pressed.
+この例では、ソニックのように、プレイヤーが左右に走って加速し、最大速度に達したらそれ以上加速しない動きを作ります。ここでは、すでに`player`という名前の動的ボディがあり、最大速度を示す`MAX_VELOCITY`変数も定義済みとします。あとは、キー入力時に線形インパルスを加えるだけです。
 
 ```java
 Vector2 vel = this.player.body.getLinearVelocity();
 Vector2 pos = this.player.body.getPosition();
 
-// apply left impulse, but only if max velocity is not reached yet
+// 左へのインパルス（まだ最大速度に達していない場合のみ）
 if (Gdx.input.isKeyPressed(Keys.A) && vel.x > -MAX_VELOCITY) {			
      this.player.body.applyLinearImpulse(-0.80f, 0, pos.x, pos.y, true);
 }
 
-// apply right impulse, but only if max velocity is not reached yet
+// 右へのインパルス（まだ最大速度に達していない場合のみ）
 if (Gdx.input.isKeyPressed(Keys.D) && vel.x < MAX_VELOCITY) {
      this.player.body.applyLinearImpulse(0.80f, 0, pos.x, pos.y, true);
 }
 ```
 
-## Joints and Gears
+## ジョイントとギア {#joints-and-gears}
 
-Every joint requires to have definition set up before creating it by box2d world. Using *initialize* helps with ensuring that all joint parameters are set.
+どのジョイント（joint）も、Box2DのWorldで作成する前に定義を設定する必要があります。`initialize`を使うと、ジョイントに必要なパラメータが一通り設定されるので便利です。
 
-Note that destroying the joint after the body will cause crash. Destroying the body also destroys joints connected to it.
+また、ボディを破棄した後にそのジョイントを破棄するとクラッシュの原因になります。ボディを破棄すると、そのボディに接続されているジョイントも一緒に破棄されるためです。
 
 ```java
 DistanceJointDef defJoint = new DistanceJointDef ();
 defJoint.length = 0;
 defJoint.initialize(bodyA, bodyB, new Vector2(0,0), new Vector2(128, 0));
 
-DistanceJoint joint = (DistanceJoint) world.createJoint(defJoints); // Returns subclass Joint.
+DistanceJoint joint = (DistanceJoint) world.createJoint(defJoints); // Jointのサブクラスが返る
 ```
 
-### DistanceJoint
+### 距離ジョイント
 
-Distance joint makes length between bodies constant.
+距離ジョイント（distance joint）は、2つのボディ間の距離を一定に保ちます。
 
-Distance joint definition requires defining an anchor point on both bodies and the non-zero length of the distance joint.
+距離ジョイントの定義では、両方のボディにアンカーポイントを設定し、距離ジョイントの長さ（0ではない値）を指定する必要があります。
 
-The definition uses local anchor points so that the initial configuration can violate the constraint slightly. This helps when saving and loading a game.
+この定義はローカル座標のアンカーポイントを使うため、初期状態が制約に対してわずかに矛盾していても構いません。これはゲームのセーブ／ロード時に役立ちます。
 
-**Do not use a zero or short length!**
+**長さを0や極端に短い値にしないでください！**
 
 ```java
 // DistanceJointDef.initialize (Body bodyA, Body bodyB, Vector2 anchorA, Vector2 anchorB)
@@ -287,9 +287,9 @@ defJoint.length = 0;
 defJoint.initialize(bodyA, bodyB, new Vector2(0,0), new Vector2(128, 0));
 ```
 
-### FrictionJoint
+### 摩擦ジョイント
 
-Friction joint is used for top-down friction. It provides 2D translational friction and angular friction.
+摩擦ジョイント（friction joint）は、トップダウン（見下ろし）視点の摩擦表現などに使えます。2Dの並進摩擦と角度方向の摩擦を提供します。
 
 ```java
 FrictionJointDef jointDef = new FrictionJointDef ();
@@ -298,16 +298,20 @@ jointDef.maxTorque = 1f;
 jointDef.initialize(bodyA, bodyB, anchor);
 ```
 
-### GearJoint
+### ギアジョイント
 
-A gear joint is used to connect two joints together. Either joint can be a revolute or prismatic joint. You specify a gear ratio to bind the motions together: coordinate1 + ratio * coordinate2 = constant The ratio can be negative or positive. If one joint is a revolute joint and the other joint is a prismatic joint, then the ratio will have units of length or units of 1/length.
+ギアジョイント（gear joint）は、2つのジョイントを連結するために使います。連結対象は回転（revolute）ジョイントでも並進（prismatic）ジョイントでも構いません。ギア比（ratio）を指定して、次の関係で動きを束ねます。
+
+coordinate1 + ratio * coordinate2 = constant
+
+ratioは正にも負にもできます。片方が回転ジョイントで、もう片方が並進ジョイントの場合、ratioは「長さ」または「1/長さ」の単位を持ちます。
 
 ```java
-GearJointDef jointDef = new GearJointDef (); // has no initialize
+GearJointDef jointDef = new GearJointDef (); // initializeはない
 ```
 
-### MotorJoint
-A motor joint is used to control the relative motion between two bodies. A typical usage is to control the movement of a dynamic body with respect to the ground.
+### モータージョイント
+モータージョイント（motor joint）は、2つのボディの相対運動を制御するために使います。典型的な用途は、地面に対して動的ボディの動きを制御することです。
 
 ```java
 MotorJointDef jointDef = new MotorJointDef ();
@@ -319,8 +323,8 @@ jointDef.maxTorque = 1f;
 jointDef.initialize(bodyA, bodyB);
 ```
 
-### MouseJoint
-The mouse joint is used in the testbed to manipulate bodies with the mouse. It attempts to drive a point on a body towards the current position of the cursor. There is no restriction on rotation.
+### マウスジョイント
+マウスジョイント（mouse joint）はテストベッドで、マウス操作によりボディを動かすために使われます。ボディ上の一点を、カーソルの現在位置に向かって引っ張るように動かします。回転には制限がありません。
 
 ```java
 MouseJointDef jointDef = new MouseJointDef();
@@ -330,9 +334,9 @@ MouseJoint joint = (MouseJoint) world.createJoint(jointDef);
 joint.setTarget(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
 ```
 
-### PrismaticJoint
+### 並進ジョイント
 
-A prismatic joint allows for relative translation of two bodies along a specified axis. A prismatic joint prevents relative rotation. Therefore, a prismatic joint has a single degree of freedom.
+並進ジョイント（prismatic joint）は、指定した軸に沿って2つのボディが相対的に平行移動できるようにします。一方で相対回転は防ぎます。つまり自由度は1つです。
 
 ```java
 PrismaticJointDef jointDef = new PrismaticJointDef ();
@@ -346,9 +350,9 @@ jointDef.maxMotorForce = 1.0f;
 jointDef.motorSpeed = 0.0f;
 ```
 
-### PulleyJoint
+### 滑車ジョイント
 
-A pulley is used to create an idealized pulley. The pulley connects two bodies to ground and to each other. As one body goes up, the other goes down. The total length of the pulley rope is conserved according to the initial configuration.
+滑車ジョイント（pulley joint）は、理想化した滑車を作るために使います。滑車は2つのボディを地面および互いに接続します。片方のボディが上がると、もう片方が下がります。滑車のロープ全長は、初期構成に基づいて保存されます。
 
 ```java
 JointDef jointDef = new JointDef ();
@@ -356,16 +360,16 @@ float ratio = 1.0f;
 jointDef.Initialize(myBody1, myBody2, groundAnchor1, groundAnchor2, anchor1, anchor2, ratio);
 ```
 
-### RevoluteJoint
+### 回転ジョイント
 
-A revolute joint forces two bodies to share a common anchor point, often called a hinge point. The revolute joint has a single degree of freedom: the relative rotation of the two bodies. This is called the joint angle
+回転ジョイント（revolute joint）は、2つのボディが共通のアンカーポイント（ヒンジ点）を共有するように強制します。回転ジョイントの自由度は1つで、2つのボディの相対回転です。これをジョイント角と呼びます。
 
 ```java
 RevoluteJointDef jointDef = new RevoluteJoint();
 jointDef.initialize(bodyA, bodyB, new Vector2(0,0), new Vector2(128, 0));
 
-jointDef.lowerAngle = -0.5f * b2_pi; // -90 degrees
-jointDef.upperAngle = 0.25f * b2_pi; // 45 degrees
+jointDef.lowerAngle = -0.5f * b2_pi; // -90度
+jointDef.upperAngle = 0.25f * b2_pi; // 45度
 
 jointDef.enableLimit = true;
 jointDef.enableMotor = true;
@@ -374,63 +378,63 @@ jointDef.maxMotorTorque = 10.0f;
 jointDef.motorSpeed = 0.0f;
 ```
 
-### RopeJoint
+### ロープジョイント
 
-A rope joint enforces a maximum distance between two points on two bodies. It has no other effect. Warning: if you attempt to change the maximum length during the simulation you will get some non-physical behavior. A model that would allow you to dynamically modify the length would have some sponginess, so I chose not to implement it that way. See b2DistanceJoint if you want to dynamically control length.
+ロープジョイント（rope joint）は、2つのボディ上の2点の最大距離を制限します。それ以外の効果はありません。注意：シミュレーション中に最大長を変更しようとすると、物理的でない挙動が発生します。長さを動的に変更できるモデルには「伸び（スポンジ感）」が必要になるため、この実装ではそうしないようにしています。長さを動的に制御したい場合は`b2DistanceJoint`を参照してください。
 
 ```java
-RopeJointDef jointDef = new RopeJointDef (); // has no initialize
+RopeJointDef jointDef = new RopeJointDef (); // initializeはない
 ```
 
-### WeldJoint
+### 溶接ジョイント
 
-A weld joint essentially glues two bodies together. A weld joint may distort somewhat because the island constraint solver is approximate.
+溶接ジョイント（weld joint）は、2つのボディを「接着」するようなジョイントです。アイランド制約ソルバが近似的であるため、溶接ジョイントは多少歪むことがあります。
 
 ```java
 WeldJointDef jointDef = new WeldJointDef ();
 jointDef.initialize(bodyA, bodyB, anchor);
 ```
 
-### WheelJoint
+### ホイールジョイント
 
-A wheel joint. This joint provides two degrees of freedom: translation along an axis fixed in bodyA and rotation in the plane. You can use a joint limit to restrict the range of motion and a joint motor to drive the rotation or to model rotational friction. This joint is designed for vehicle suspensions.
+ホイールジョイント（wheel joint）は、2つの自由度を提供します。ひとつはbodyAに固定された軸に沿った並進、もうひとつは平面内の回転です。ジョイントのリミットで可動範囲を制限でき、モーターで回転を駆動したり、回転摩擦をモデル化したりできます。車両のサスペンション向けに設計されています。
 
 ```java
 WheelJointDef jointDef = new WheelJointDef();
 jointDef.maxMotorTorque = 1f;
 jointDef.motorSpeed = 0f;
 jointDef.dampingRatio = 1f;
-jointDef.initialize(bodyA, bodyB, anchor, axis); // axis is Vector2(1,1)
+jointDef.initialize(bodyA, bodyB, anchor, axis); // axisはVector2(1,1)
 
 WheelJoint joint = (WheelJoint) physics.createJoint(jointDef);
 joint.setMotorSpeed(1f);
 ```
 
-## Fixture Shapes
+## フィクスチャ形状 {#fixture-shapes}
 
-As mentioned previously, a fixture has a shape, density, friction and restitution attached to it.
-Out of the box you can easily create boxes (as seen in the section [Static Bodies](/wiki/extensions/physics/box2d#static-bodies) section) and circle shapes (as seen in the [Dynamic Bodies](/wiki/extensions/physics/box2d#dynamic-bodies) section).
+前述のとおり、フィクスチャには形状（shape）、密度（density）、摩擦（friction）、反発係数（restitution）が紐づきます。
+Box2Dでは、標準機能だけでも箱（[静的ボディ](/wiki/extensions/physics/box2d#static-bodies)のセクション参照）や円形（[動的ボディ](/wiki/extensions/physics/box2d#dynamic-bodies)のセクション参照）の形状を簡単に作れます。
 
-You can programatically define more complex shapes using the following classes
+より複雑な形状は、次のクラスを使ってプログラムから定義できます。
 * ChainShape,
 * EdgeShape,
 * PolygonShape
 
-However using third party tools you can simply define your shapes and import them into your game.
+ただし、サードパーティ製ツールを使えば、形状をツール側で作ってゲームへ取り込むだけ、という運用もできます。
 
-### Importing Complex Shapes using box2d-editor
+### box2d-editorを使った複雑形状の取り込み
 
-[box2d-editor](https://github.com/julienvillegas/box2d-editor) is a free open source tool to define complex shapes and load them into your game.
-An example of how to import a shape into your game using box2d-editor is available on [Libgdx.info](https://libgdxinfo.wordpress.com/box2d-importing-complex-bodies/).
+[box2d-editor](https://github.com/julienvillegas/box2d-editor)は、複雑な形状を定義し、ゲームへ読み込むための無料・オープンソースのツールです。
+box2d-editorで作った形状をゲームへ取り込む例は、[Libgdx.info](https://libgdxinfo.wordpress.com/box2d-importing-complex-bodies/)にあります。
 
-Check out the [Tools section](/wiki/extensions/physics/box2d#Tools) for more tools.
+他のツールも知りたい場合は、[ツールのセクション](/wiki/extensions/physics/box2d#Tools)も参照してください。
 
-In a nutshell, if you are using Box2d-editor:
-* Create your shape within Box2d-editor.
-* Export your scene and copy the file into your asset folder.
-* Copy file BodyEditorLoader.java into your "core" module source folder.
+要するに、Box2d-editorを使う場合の流れはこうです。
+* Box2d-editorで形状を作成する
+* シーンをエクスポートし、生成されたファイルをassetsフォルダへコピーする
+* BodyEditorLoader.javaを「core」モジュールのソースフォルダへコピーする
 
-Then in your game you can do:
+するとゲーム側では、次のように書けます。
 
 ```java
 BodyEditorLoader loader = new BodyEditorLoader(Gdx.files.internal("box2d_scene.json"));
@@ -439,75 +443,74 @@ BodyDef bd = new BodyDef();
 bd.type = BodyDef.BodyType.KinematicBody;
 body = world.createBody(bd);
 
-// 2. Create a FixtureDef, as usual.
+// 2. いつも通りFixtureDefを作成する
 FixtureDef fd = new FixtureDef();
 fd.density = 1;
 fd.friction = 0.5f;
 fd.restitution = 0.3f;
 
-// 3. Create a Body, as usual.
+// 3. いつも通りボディに取り付ける
 loader.attachFixture(body, "gear", fd, scale);
 ```
 
-## Sprites and Bodies
+## スプライトとボディ {#sprites-and-bodies}
 
-The easiest way to manage a link between your sprites or game objects and Box2D is with Box2D’s User Data. You can set the user data to your game object and then update the object's position based on the Box2D body.
+スプライト／ゲームオブジェクトとBox2Dを結び付ける最も簡単な方法は、Box2Dのユーザーデータを使うことです。ゲームオブジェクトをユーザーデータとして設定しておき、Box2Dボディの位置に合わせてオブジェクト側を更新します。
 
-Setting a body's user data is easy
+ボディにユーザーデータを設定するのは簡単です。
 
 ```java
 body.setUserData(Object);
 ```
 
-This can be set to any Java object. It is also good to create your own game actor/object class which allows you to set a reference to its physics body.
+ここには任意のJavaオブジェクトを設定できます。物理ボディへの参照を保持できるよう、自分用のActor／Objectクラスを用意しておくのも良いでしょう。
 
-Fixtures can also have user data set to them in the same way.
+フィクスチャにも同様にユーザーデータを設定できます。
 
 ```java
 fixture.setUserData(Object);
 ```
 
-To update all your actors/sprites you can loop through all the world's bodies easily in your game/render loop.
+すべてのActor／Spriteを更新するには、ゲーム（またはrender）ループの中でWorld内のボディを走査するのが手軽です。
 
 ```java
-// Create an array to be filled with the bodies
-// (better don't create a new one every time though)
+// ボディを格納する配列を用意する
+// （毎回newしないほうが良い）
 Array<Body> bodies = new Array<Body>();
-// Now fill the array with all bodies
+// World内のボディを配列に詰める
 world.getBodies(bodies);
 
 for (Body b : bodies) {
-    // Get the body's user data - in this example, our user
-    // data is an instance of the Entity class
+    // ボディのユーザーデータを取得する（例：Entityクラスのインスタンス）
     Entity e = (Entity) b.getUserData();
 
     if (e != null) {
-        // Update the entities/sprites position and angle
+        // エンティティ／スプライトの位置と角度を更新する
         e.setPosition(b.getPosition().x, b.getPosition().y);
-        // We need to convert our angle from radians to degrees
+        // 角度はラジアン→度へ変換が必要
         e.setRotation(MathUtils.radiansToDegrees * b.getAngle());
     }
 }
 ```
 
-Then render your sprites using a libGDX `SpriteBatch` as usual.
+あとは通常どおり、libGDXの`SpriteBatch`でスプライトを描画してください。
 
-## Sensors
-Sensors are Bodies that do not produce automatic responses during a collision (such as applying force). This is useful when one needs to be in complete control of what happens when two shapes collide.
-For example, think of a drone that has some kind of circular distance of sight. This body should follow the drone but shouldn't have a physical reaction to it, or any other bodies. It should detect when some target is inside it's shape.
+## センサー {#sensors}
+センサー（sensor）は、衝突が起きても自動的な物理反応（力を加える等）を発生させないボディです。2つの形状が衝突したときの挙動を「完全に自分で制御したい」場合に便利です。
+例えば、ドローンが円形の索敵範囲を持っているとします。この範囲はドローンに追従する必要がありますが、ドローン自身や他のボディと物理的に反応してほしくはありません。必要なのは「ターゲットが範囲内に入ったかどうか」の検知だけです。
 
-To configure a body to be a sensor, set the 'isSensor' flag to true. An example would be:
+ボディをセンサーにするには、`isSensor`フラグを`true`にします。例えば次のように設定します。
 
 ```java
-//At the definition of the Fixture
+// Fixture定義時に設定する
 fixtureDef.isSensor = true;
 ```
 
-In order to listen to this sensor contact, we need to implement the ContactListener interface methods.
+このセンサー接触を監視するには、`ContactListener`インターフェースのメソッドを実装する必要があります。
 
-## Contact Listeners
-The Contact Listeners listen for collisions events on a specific fixture. The methods are passed a Contact object, which contain information about the two bodies involved.
-The beginContact method is called when the object overlaps another. When the objects are no longer colliding, the endContact method is called.
+## 衝突リスナー {#contact-listeners}
+衝突リスナー（contact listener）は、特定のフィクスチャで発生した衝突イベントを監視します。各メソッドには`Contact`オブジェクトが渡され、そこには衝突に関わった2つのボディに関する情報が入っています。
+`beginContact`はオブジェクト同士が重なったときに呼ばれ、衝突しなくなったときには`endContact`が呼ばれます。
 
 ```java
 public class ListenerClass implements ContactListener {
@@ -523,34 +526,34 @@ public class ListenerClass implements ContactListener {
 	};
 ```
 
-This class needs to be set as the world's contact listener in the screen's show() or init() method.
+このクラスは、screenの`show()`または`init()`メソッドでWorldの衝突リスナーとして設定する必要があります。
 
 ```java
 world.setContactListener(ListenerClass);
 ```
 
-We might get information about the bodies from the contact fixtures.
-Depending on the application design, the Entity class should be referenced in the Body or Fixture user data, so we can use it from the Contact and make some changes (e.g. change the player health).
+接触したフィクスチャからボディ情報を取得できる場合があります。
+アプリケーション設計によっては、Entityクラスの参照をボディやフィクスチャのユーザーデータに入れておき、Contactから取り出して必要な処理（例：プレイヤーの体力を減らす）を行えるようにしておくと良いでしょう。
 
-## Resources
+## 参考資料 {#resources}
 
-There are a lot of really good Box2D resources out there and most of the code can be easily converted to libgdx.
+Box2Dには優れた参考資料が多数あり、その多くのコードはlibGDX用にも比較的簡単に移植できます。
 
-  * A basic implementation and code sample for Box2D with Scene2D is also available on [LibGDX.info](https://libgdxinfo.wordpress.com/box2d-basic/).
-  * [Box2D documentation](https://box2d.org/documentation/) and [Discord](https://discord.com/invite/NKYgCBP) are a great place to find help.
-  * A really good [tutorial series on Box2D](https://www.iforce2d.net/b2dtut/). Covers a lot of different problems which you will more than likely run across in your game development.
+  * Scene2DとBox2Dを組み合わせた基本実装とコード例は、[LibGDX.info](https://libgdxinfo.wordpress.com/box2d-basic/)にもあります。
+  * [Box2Dドキュメント](https://box2d.org/documentation/)と[Discord](https://discord.com/invite/NKYgCBP)は、困ったときの助けになります。
+  * とても良い[Box2Dチュートリアル連載](https://www.iforce2d.net/b2dtut/)もあります。ゲーム開発で遭遇しがちな問題を幅広く扱っています。
 
-## Tools
+## ツール {#tools}
 
-The following is a list of tools for use with box2d and libgdx:
+box2dとlibGDXで使えるツール一覧です。
 
-### Free Open Source
+### 無料・オープンソース
 
   * [Physics Body Editor](https://github.com/julienvillegas/box2d-editor)
 
-Code sample available on [https://libgdxinfo.wordpress.com](https://libgdxinfo.wordpress.com/box2d-importing-complex-bodies//)
+コードサンプル： [https://libgdxinfo.wordpress.com](https://libgdxinfo.wordpress.com/box2d-importing-complex-bodies//)
 
-### Commercial
+### 商用
 
-  * [RUBE](https://www.iforce2d.net/rube/) editor for creating box2d worlds. Use[RubeLoader](https://github.com/indiumindeed/RubeLoader) for loading RUBE data into libgdx.
+  * [RUBE](https://www.iforce2d.net/rube/)：box2dのワールド作成用エディタ。RUBEデータをlibGDXに読み込むには[RubeLoader](https://github.com/indiumindeed/RubeLoader)を使用します。
   * [PhysicsEditor](https://www.codeandweb.com/physicseditor)
