@@ -24,7 +24,7 @@
       * [Bulletラッパーでモデルを使用する](/wiki/extensions/physics/bullet/bullet-wrapper-using-models)
       * [Bulletラッパーの使い方](/wiki/extensions/physics/bullet/bullet-wrapper-using-the-wrapper)
     * [Box2d](/wiki/extensions/physics/box2d)
-  * [人工知能（AI）](/wiki/extensions/artificial-intelligence)
+  * [AI](/wiki/extensions/artificial-intelligence)
   * [Gdx freetype](/wiki/extensions/gdx-freetype)
   * [gdx pay](/wiki/extensions/gdx-pay)
 * [ファイル操作](/wiki/file-handling)

@@ -1,8 +1,8 @@
 ---
 title: gdx pay
 ---
-# Gdx-Pay: cross-platform In-App purchasing
-Gdx-Pay aims to provide a cross-platform API for InApp purchasing. The gdx-pay project is a libGDX extension.
-Please refer to:
-* the [subproject gdx-pay](https://github.com/libgdx/gdx-pay)
-* the [gdx-pay-Wiki](https://github.com/libgdx/gdx-pay/wiki).
+# Gdx-Pay：クロスプラットフォームのアプリ内課金
+Gdx-Payは、アプリ内課金（In-App Purchasing）向けのクロスプラットフォームAPIを提供することを目的としています。gdx-payプロジェクトは、libGDXの拡張機能です。
+詳しくは以下を参照してください。
+* [サブプロジェクト gdx-pay](https://github.com/libgdx/gdx-pay)
+* [gdx-pay Wiki](https://github.com/libgdx/gdx-pay/wiki)

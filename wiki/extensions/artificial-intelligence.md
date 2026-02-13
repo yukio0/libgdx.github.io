@@ -1,8 +1,8 @@
 ---
-title: Artificial Intelligence
+title: AI
 ---
 ![images/64ae592a-55e2-11e4-8a31-31c2941ff995.png](/assets/wiki/images/64ae592a-55e2-11e4-8a31-31c2941ff995.png)
 
-Since libGDX 1.4.1, the [gdx-ai](https://github.com/libgdx/gdx-ai) extension has been moved to a separate repository under the libGDX umbrella. This allows us to have independent life-cycles. Besides offering some benefits in terms of project maintenance and visibility, this means that from now on the two projects will have distinct version numbers.
+libGDX1.4.1以降、拡張機能の[gdx-ai](https://github.com/libgdx/gdx-ai)は、libGDX配下の別リポジトリへ移されました。これにより、両プロジェクトは独立したライフサイクル（リリースサイクル）で運用できます。プロジェクトの保守や可視性の面でもいくつか利点があるほか、今後は両者がそれぞれ別のバージョン番号を持つことになります。
 
-Please refer to the [official gdx-ai wiki](https://github.com/libgdx/gdx-ai/wiki) for information on how to implement and design intelligent agents. _:video_game:
+知的エージェントの実装や設計については、[公式gdx-ai wiki](https://github.com/libgdx/gdx-ai/wiki)を参照してください。_:video_game:
