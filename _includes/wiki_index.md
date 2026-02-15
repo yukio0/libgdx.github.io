@@ -27,7 +27,7 @@
   * [AI](/wiki/extensions/artificial-intelligence)
   * [Gdx freetype](/wiki/extensions/gdx-freetype)
   * [gdx pay](/wiki/extensions/gdx-pay)
-* [ファイル操作](/wiki/file-handling)
+* [ファイルハンドル](/wiki/file-handling)
 * [グラフィックス](/wiki/graphics/graphics)
   * 2Dグラフィックス
     * ビットマップフォント

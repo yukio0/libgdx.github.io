@@ -56,7 +56,7 @@
 </div>
 </details>
 
-[ファイル操作](/wiki/file-handling)
+[ファイルハンドル](/wiki/file-handling)
 
 <details><summary>グラフィックス</summary>
 <div markdown="1">
