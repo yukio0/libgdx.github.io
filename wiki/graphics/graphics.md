@@ -1,18 +1,18 @@
 ---
-title: Graphics
+title: グラフィックス
 ---
-# REWRITE THIS
-This page needs to be rewritten.
+# 書き直しが必要
+このページは書き直しが必要です。
 
-# Introduction
+# はじめに
 
-The [Graphics](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/Graphics.html) module provides information about the current device display and application window as well as information about and access to the current OpenGL context. Specifically, information regarding screen size, pixel density, and frame-buffer properties such as color-depth, depth/stencil buffers, and anti-aliasing capabilities can all be found within this class. As with other common modules, access is provided via static fields of the [Gdx class](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/Gdx.html).
+[Graphics](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/Graphics.html)モジュールは、現在のデバイスのディスプレイおよびアプリケーションウィンドウに関する情報に加えて、現在のOpenGLコンテキストに関する情報と、そのコンテキストへのアクセス手段を提供します。具体的には、画面サイズ、ピクセル密度、そしてフレームバッファの特性（色深度、深度／ステンシルバッファ、アンチエイリアス対応など）に関する情報をこのクラスから取得できます。ほかの一般的なモジュールと同様に、[Gdxクラス](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/Gdx.html)のstaticフィールド経由でアクセスします。
 
-# OpenGL Context
+# OpenGLコンテキスト
 
-A particular use of this module concerns more direct access to the current OpenGL context for lower-level commands and queries.
+このモジュールの用途のひとつとして、より低レベルなコマンド実行や問い合わせのために、現在の OpenGLコンテキストへ直接アクセスすることが挙げられます。
 
-The following example accesses the context in an OpenGL ES2 application to set the viewport and clear the frame and depth buffers:
+次の例では、OpenGL ES2アプリケーションでコンテキストにアクセスし、ビューポート設定と、フレーム／深度バッファのクリアを行っています。
 
 ```java
 Gdx.gl20.glViewport( 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight() );
@@ -20,26 +20,26 @@ Gdx.gl20.glClearColor( 0, 0, 0, 1 );
 Gdx.gl20.glClear( GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT );
 ```
 
-Note the use of `getWidth()` / `getHeight()` to access the current application window dimensions in setting the viewport as well as the use of constants from the `GL20` class just as one would do in a regular OpenGL program. A key advantage in libGDX is the ability to access low level functionality whenever higher level abstraction does not suffice.
+ここでは、ビューポートを設定するために`getWidth()`/`getHeight()`を使って現在のアプリケーションウィンドウの寸法を取得している点、および通常のOpenGLプログラムと同様にGL20クラスの定数を使っている点に注目してください。libGDX の大きな利点は、高レベルの抽象化だけでは足りない場面で、必要に応じて低レベル機能へアクセスできるところです。
 
-Each version of OpenGL ES is available through its own respective interface as well as a GLCommon ( **that doesn't exist, this article needs to be rewritten!** ) interface for version agnostic commands. Note that use of [GL20](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/graphics/GL20.html) requires instructing the application to use OpenGL ES2 upon start-up.
+OpenGL ESの各バージョンは、それぞれ対応するインターフェースとして提供されます。また、バージョン非依存のコマンド向けにGLCommonインターフェースもある、という扱いになっています（**ただしこれは存在しません。このページは書き直しが必要です！**）。なお、[GL20](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/graphics/GL20.html)を使用するには、起動時にアプリケーションへOpenGL ES2を使うよう指示する必要があります。
 
-Access to the OpenGL Utility class ( **that doesn't exist, this article needs to be rewritten!** ) is also provided, although this functionality may be better handled through Libgdx's own [Orthographic](https://github.com/libgdx/libgdx/tree/master/gdx/src/com/badlogic/gdx/graphics/OrthographicCamera.java) and [Perspective](https://github.com/libgdx/libgdx/tree/master/gdx/src/com/badlogic/gdx/graphics/PerspectiveCamera.java) camera classes. There is also a simple method for querying support for named extensions in `supportsExtension()`. Just supply the name of the extension to determine support on the current device.
+OpenGL Utilityクラスへのアクセスも提供されます（**存在しません。このページは書き直しが必要です！**）が、実際には、この手の機能はlibGDX独自の[Orthographic](https://github.com/libgdx/libgdx/tree/master/gdx/src/com/badlogic/gdx/graphics/OrthographicCamera.java)／[Perspective](https://github.com/libgdx/libgdx/tree/master/gdx/src/com/badlogic/gdx/graphics/PerspectiveCamera.java)カメラクラスで扱ったほうがよいでしょう。拡張機能の対応状況を問い合わせる簡単な方法として`supportsExtension()`もあります。拡張機能名を渡すだけで、現在のデバイスでサポートされているか判定できます。
 
-# Frame Time
+# フレーム時間
 
-One particularly useful method in the Graphics class is `getDeltaTime()`, which provides the time elapsed since the last rendered frame. This can be useful for time-based animation when frame independence is not necessary. For instance [Actor](https://github.com/libgdx/libgdx/tree/master/gdx/src/com/badlogic/gdx/scenes/scene2d/Actor.java) or [UI](https://github.com/libgdx/libgdx/tree/master/gdx/src/com/badlogic/gdx/#gdx%2Fscenes%2Fscene2d%2Fui) animation in a [Stage](https://github.com/libgdx/libgdx/tree/master/gdx/src/com/badlogic/gdx/scenes/scene2d/Stage.java) instance might be controlled by a call such as the following in the application's render method:
+Graphicsクラスで特に便利なメソッドのひとつが`getDeltaTime()`です。これは前回フレームを描画してからの経過時間を返します。フレーム非依存（固定タイムステップ等）が不要な場合の、時間ベースのアニメーションに役立ちます。たとえば、[Stage](https://github.com/libgdx/libgdx/tree/master/gdx/src/com/badlogic/gdx/scenes/scene2d/Stage.java)の中で動く [Actor](https://github.com/libgdx/libgdx/tree/master/gdx/src/com/badlogic/gdx/scenes/scene2d/Actor.java)や[UI](https://github.com/libgdx/libgdx/tree/master/gdx/src/com/badlogic/gdx/#gdx%2Fscenes%2Fscene2d%2Fui)のアニメーションは、アプリケーションの`render`メソッド内で次のように制御できます。
 
 ```java
 stage.act( Math.min( Gdx.graphics.getDeltaTime(), 1/30 ) );
 ```
 
-Notice the use of a maximum time step of 1/30 seconds. This is to avoid potentially large jerks in the resulting animation. This illustrates the fact that while `getDeltaTime()` can be useful for simple animations, it is still frame dependent and more sensitive actions such as game logic or physics simulation may benefit from [other timing strategies](https://gafferongames.com/post/fix_your_timestep/).
+ここでは最大タイムステップを1/30秒に制限しています。これは、極端に大きな時間差が発生したときにアニメーションがガクッと飛ぶ（大きなジャークが出る）のを避けるためです。この例が示す通り、`getDeltaTime()`は単純なアニメーションには便利ですが、依然としてフレーム依存です。ゲームロジックや物理シミュレーションのような敏感な処理では、[別のタイミング戦略](https://gafferongames.com/post/fix_your_timestep/)を採用したほうがよい場合があります。
 
-Another useful method is `getFramesPerSecond()`, which returns a running average of the current frame-rate for simple diagnostic purposes. However for more serious profiling efforts, the use of [FPSLogger](https://github.com/libgdx/libgdx/tree/master/gdx/src/com/badlogic/gdx/graphics/FPSLogger.java) is recommended.
+もうひとつ便利なのが`getFramesPerSecond()`で、現在のフレームレートの移動平均を返します。簡単な診断用途には十分ですが、より本格的にプロファイリングしたい場合は[FPSLogger](https://github.com/libgdx/libgdx/tree/master/gdx/src/com/badlogic/gdx/graphics/FPSLogger.java)の利用が推奨されます。
 
-# Platform Differences
+# プラットフォーム差異
 
-On the desktop, the Graphics class also provides the ability to set a window's icon and title values. Obviously these methods have no effect on platforms which lack an icon or title.
+デスクトップでは、Graphicsクラスを使ってウィンドウのアイコンやタイトルを設定できます。もちろん、アイコンやタイトルという概念がないプラットフォームでは、これらのメソッドは効果がありません。
 
-The methods `setDisplayMode()` and `setVSync()` set the display mode to full-screen/windowed and enable/disable vertical display sync respectively. Keep in mind these methods have effects only on certain platforms.
+`setDisplayMode()`と`setVSync()`は、それぞれ表示モードをフルスクリーン／ウィンドウに切り替え、垂直同期（VSync）を有効／無効にします。これらのメソッドが影響するのは一部プラットフォームに限られる点に注意してください。
