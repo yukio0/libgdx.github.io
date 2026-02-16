@@ -1,39 +1,39 @@
 ---
-title: Bitmap fonts
+title: ビットマップフォント
 ---
-libGDX makes use of bitmap files (pngs) to render fonts. Each glyph in the font has a corresponding TextureRegion.
+libGDXは、フォントの描画にビットマップ画像ファイル（PNG）を利用します。フォント内の各グリフ（文字）には、対応する`TextureRegion`が割り当てられています。
 
-[BitmapFont class](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/graphics/g2d/BitmapFont.html) [(code)](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/graphics/g2d/BitmapFont.java)
+[BitmapFontクラス](https://javadoc.io/doc/com.badlogicgames.gdx/gdx/latest/com/badlogic/gdx/graphics/g2d/BitmapFont.html) [(コード)](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/graphics/g2d/BitmapFont.java)
 
-BitmapFont was refactored for the libGDX 1.5.6 release. [This blog post](https://web.archive.org/web/20200928220256/https://www.badlogicgames.com/wordpress/?p=3658) has details about the changes and also a small example showing how to move from pre 1.5.6 code to the new API.
+`BitmapFont`はlibGDX 1.5.6のリリースでリファクタリングされました。変更点の詳細と、1.5.6未満のコードから新APIへ移行する小さな例については、[このブログ記事](https://web.archive.org/web/20200928220256/https://www.badlogicgames.com/wordpress/?p=3658)を参照してください。
 
-A tutorial on using BitmapFont is available on [https://libgdxinfo.wordpress.com](https://libgdxinfo.wordpress.com/basic-label/)
+`BitmapFont`の使い方に関するチュートリアルは、[https://libgdxinfo.wordpress.com](https://libgdxinfo.wordpress.com/basic-label/)にあります。
 
-## File format specifications for the font file
+## フォントファイルのファイル形式仕様
 
-References point to bmFont being originally created by Andreas Jönsson over at [AngelCode](https://www.angelcode.com/)
+参照によると、BMFontはもともと[AngelCode](https://www.angelcode.com/)のAndreas Jönsson によって作られたとされています。
 
-[BMFont](https://www.angelcode.com/products/bmfont/doc/file_format.html) - the original specification for the file format.
+[BMFont](https://www.angelcode.com/products/bmfont/doc/file_format.html) - ファイル形式の元祖仕様
 
-[Glyph Designer](https://web.archive.org/web/20160830115758/https://71squared.com/blog/bitmap-font-file-format) - Details about output, include a binary format.
+[Glyph Designer](https://web.archive.org/web/20160830115758/https://71squared.com/blog/bitmap-font-file-format) - 出力の詳細（バイナリ形式も含む）
 
 
-## Tools for Creating Bitmaps
+## ビットマップ作成ツール
 
-[Hiero](/wiki/tools/hiero) - a utility for converting a system font to a bitmap
+[Hiero](/wiki/tools/hiero) - システムフォントをビットマップに変換するユーティリティ
 
-[ShoeBox](https://renderhjs.net/shoebox/)  - lets you load customized glyphs from an image, and then create a bitmap font from them. [There's a great tutorial for using it with libgdx](https://www.youtube.com/watch?v=dxPf1M7YORU).
+[ShoeBox](https://renderhjs.net/shoebox/)  - 画像からカスタマイズしたグリフを読み込み、それらからビットマップフォントを作成できます。[libGDXでの使い方の良いチュートリアル動画](https://www.youtube.com/watch?v=dxPf1M7YORU)もあります。
 
-[Glyph Designer](https://www.71squared.com/en/glyphdesigner) - a commercial bitmap font tool with a wide variety of options for shadows, gradients, stroke, etc.
+[Glyph Designer](https://www.71squared.com/en/glyphdesigner) - 影、グラデーション、ストロークなど幅広いオプションを備えた商用ビットマップフォントツール。
 
-[Littera](https://kvazars.com/littera) - online bitmap font generator, with a great amount of customizations (needs Adobe Flash).
+[Littera](https://kvazars.com/littera) - オンラインのビットマップフォント生成ツール。カスタマイズ項目が豊富です（Adobe Flash が必要）。
 
-## Other Tools
+## その他のツール
 
-[FreeTypeFontGenerator](https://web.archive.org/web/20200423064636/ttp://www.badlogicgames.com/wordpress/?p=2300) - generating bitmaps for fonts instead of supplying a pre-rendered bitmap made by utilities like Hiero
+[FreeTypeFontGenerator](https://web.archive.org/web/20200423064636/ttp://www.badlogicgames.com/wordpress/?p=2300) - Hiero のようなユーティリティで事前にレンダリング済みのビットマップを用意する代わりに、フォントからビットマップを生成します
 
-Examples
-: [(more)](https://github.com/libgdx/libgdx/blob/master/tests/gdx-tests/src/com/badlogic/gdx/tests/extensions/InternationalFontsTest.java)
+例
+: [(さらに見る)](https://github.com/libgdx/libgdx/blob/master/tests/gdx-tests/src/com/badlogic/gdx/tests/extensions/InternationalFontsTest.java)
 
 	FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("data/unbom.ttf"));
 
@@ -50,15 +50,15 @@ Examples
 
 
 
-[Distance field fonts](/wiki/graphics/2d/fonts/distance-field-fonts) - useful for scaling/rotating fonts without ugly artifacts
+[Distance field fonts](/wiki/graphics/2d/fonts/distance-field-fonts) - 拡大・回転しても汚いアーティファクトが出にくく、フォントのスケーリングに便利です
 
-[gdx-smart-font](https://github.com/jrenner/gdx-smart-font) - unofficial libGDX addon for automatically generating and caching bitmap fonts based on screen size. (Uses FreeTypeFontGenerator)
+[gdx-smart-font](https://github.com/jrenner/gdx-smart-font) - 画面サイズに応じてビットマップフォントを自動生成・キャッシュする非公式のlibGDXアドオン（`FreeTypeFontGenerator`を使用）
 
-## Fonts in 3D space
-While libGDX does not support placing text in 3D space directly, it is still possible to do so relatively easily. Check [this gist](https://gist.github.com/Darkyenus/e9427b0655816d2a521227cb9313d303) for an example. Note that such text won't be occluded by objects in front of it, as `SpriteBatch` draws with constant `z`, but it would not be hard to fix that with a custom shader, that would set the appropriate 'z' from an uniform.
+## 3D空間内のフォント
+libGDXはテキストを3D空間に直接配置する機能を提供していませんが、それでも比較的簡単に実現できます。例として、[このgist](https://gist.github.com/Darkyenus/e9427b0655816d2a521227cb9313d303)を参照してください。なお、`SpriteBatch`は一定の`z`で描画するため、手前にあるオブジェクトによるオクルージョン（隠れ）が発生しません。ただし、適切な`z`をuniformから設定するカスタムシェーダーを用意すれば、修正はそれほど難しくありません。
 
-## Fixed-Width Fonts
-Fonts that need to be displayed with the same width for every glyph present a special problem. The initial blank space at left before narrow chars such as `|` won't be shown by default, and the narrow char will "cling" to just after the previous char, without the intended blank space. This also can cause issues with the width of that char being smaller, and that makes multiple lines of text unaligned with each other. There's an existing `BitmapFont#setFixedWidthGlyphs(CharSequence)` method, which solves all this for the chars you have in the given `CharSequence` (usually a String). The catch is, you need to list every glyph in the font that needs to have the same width, and this can be a significant hassle for large fonts. If you're sticking to ASCII or a small extension of it, Hiero has ASCII and NeHe buttons to fill the text field with those common smaller character sets, and you can copy that text into a String you pass to setFixedWidthGlyphs(). If you have a fixed-width font where the list of all chars that you could use is very large or unknown, you can use this code to set every glyph to fixed-width, using the largest glyph width for every glyph:
+## 等幅フォント
+すべてのグリフを同じ幅で表示しなければならないフォント（等幅フォント）は、少し厄介な問題があります。たとえば`|`のように細い文字の左側にある「初期の空白」は、デフォルトでは表示されません。その結果、その細い文字が直前の文字に“くっつく”ように並び、本来意図した空白が入らなくなります。さらに、その文字の幅が小さいことで、複数行のテキストが互いに揃わないといった問題も起こりえます。これを解決するために、`BitmapFont#setFixedWidthGlyphs(CharSequence)`という既存メソッドがあります。指定した`CharSequence`（通常は`String`）に含まれる文字について、これらの問題をまとめて解消できます。ただし注意点として、「同じ幅にしたいグリフを、フォント内の該当文字すべて列挙する必要がある」ため、大きなフォントだと手間が増えます。ASCIIあるいはその小さな拡張程度で済むなら、HieroにはASCIIやNeHeのボタンがあり、よく使う小さめの文字セットでテキストフィールドを埋められます。それをコピーして、`setFixedWidthGlyphs()`に渡すStringとして使うとよいでしょう。一方、等幅にしたい文字の全リストが非常に多い／未知である等幅フォントの場合は、次のコードで「すべてのグリフを等幅化」できます。最大のグリフ幅を全グリフに適用します。
 ```java
         public static void setAllFixedWidth(BitmapFont font) {
             BitmapFont.BitmapFontData data = font.getData();
