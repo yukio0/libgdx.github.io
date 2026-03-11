@@ -16,13 +16,17 @@ toc_sticky: false
 
 {% include breadcrumbs.html %}
 
-# Upcoming
+# Ongoing
 If you want to stay up to date – join the official [libGDX Discord](/community/discord/)!
 
 ## March 2026
 Suggestions: 8th – 10th  
 Voting: 12th – 14th  
 Jam: 15th – 21st
+
+<big>[Enter here!](https://itch.io/jam/libgdx-jam-36)</big>
+
+# Upcoming
 
 ## June 2026
 ***The Pixel Playground Jam***  
