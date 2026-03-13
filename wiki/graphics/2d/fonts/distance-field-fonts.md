@@ -1,23 +1,23 @@
 ---
-title: Distance field fonts
+title: 距離フィールドフォント
 ---
-## rendering super-smooth scalable bitmap fonts
+## 超なめらかにスケールできるビットマップフォントの描画
 
-Signed distance field rendering is a technique used in Team Fortress 2, and documented by Chris Green of Valve in the SIGGRAPH 2007 paper [Improved Alpha-Tested Magniﬁcation for Vector Textures and Special Effects.](https://steamcdn-a.akamaihd.net/apps/valve/2007/SIGGRAPH2007_AlphaTestedMagnification.pdf) It allows you to render bitmap fonts without jagged edges even at high magnifications. This article describes how to implement the technique in libgdx.
+符号付き距離フィールド（Signed Distance Field）レンダリングは、「Team Fortress 2」で使われた技法で、ValveのChris GreenがSIGGRAPH 2007の論文「[Improved Alpha-Tested Magnification for Vector Textures and Special Effects](https://steamcdn-a.akamaihd.net/apps/valve/2007/SIGGRAPH2007_AlphaTestedMagnification.pdf)」で解説しています。これを使うと、高倍率で拡大してもギザギザ（ジャギー）が出にくいビットマップフォントを描画できます。この記事では、この技法をlibgdxで実装する方法を説明します。
 
-# Introduction
+# はじめに
 
-Traditional bitmap fonts work fine if the pixels in the font map 1:1 onto screen pixels. However, they look bad when rotated, and increasingly worse when scaled up. Either you end up seeing individual pixels, or you turn on linear interpolation and end up with a smudgy blur instead.
+従来のビットマップフォントは、フォント画像のピクセルが画面ピクセルに1:1で対応している場合は問題なく見えます。しかし、回転させると見栄えが悪くなり、拡大すればするほど劣化します。結局、ピクセルの粒が見えてしまうか、線形補間を有効にして今度はぼやけたにじみになってしまうか、どちらかになりがちです。
 
-Using a distance field font lets you render text that remains crisp even under rotations and other arbitrary transforms, even blown up to a large magnification, without notable extra run-time cost. You can see the difference below:
+距離フィールドフォントを使うと、回転や任意の変形をかけても、また大きく拡大しても、追加の実行時コストをほとんど増やさずに文字の輪郭をシャープに保てます。違いは次のとおりです。
 
 ![images/distance-field-fonts.png](/assets/wiki/images/distance-field-fonts.png)
 
-The same technique can also be used to draw symbols, logos, anything. The major drawback is that it works only for monochrome images; it is not possible to use this technique for arbitrary color images.
+同じ技法は、記号やロゴなど、さまざまなものの描画にも使えます。大きな欠点は、単色（モノクロ）画像にしか使えないことです。任意のフルカラー画像にこの技法をそのまま適用することはできません。
 
-There is an example of rendering in the libGDX source code. Check out `com.badlogic.gdx.tests.BitmapFontDistanceFieldTest` in the `gdx-tests` project. It was used to produce the above screenshot. There's also [`com.badlogic.gdx.graphics.g2d.DistanceFieldFont.java`](https://github.com/libgdx/libgdx/blob/master/tests/gdx-tests/src/com/badlogic/gdx/tests/BitmapFontDistanceFieldTest.java) class if you want to jump directly to usage.
+libGDXのソースコードには描画例があります。`gdx-tests`プロジェクト内の`com.badlogic.gdx.tests.BitmapFontDistanceFieldTest`を確認してください。上のスクリーンショットはそれで作られています。使い方だけ先に見たい場合は、[`com.badlogic.gdx.graphics.g2d.DistanceFieldFont.java`](https://github.com/libgdx/libgdx/blob/master/tests/gdx-tests/src/com/badlogic/gdx/tests/BitmapFontDistanceFieldTest.java)クラスも参照できます。
 
-# How does it work?
+# 仕組みは？
 
 The idea is pretty simple. Instead of providing a (possibly anti-aliased) black and white image of the font, we pre-process it to produce a _signed distance field_. The rightmost column in the screenshot above shows what our font image looks like after pre-processing.
 
