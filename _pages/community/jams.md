@@ -16,17 +16,8 @@ toc_sticky: false
 
 {% include breadcrumbs.html %}
 
-# Ongoing
-If you want to stay up to date – join the official [libGDX Discord](/community/discord/)!
-
-## March 2026
-Suggestions: 8th – 10th  
-Voting: 12th – 14th  
-Jam: 15th – 21st
-
-<big>[Enter here!](https://itch.io/jam/libgdx-jam-36)</big>
-
 # Upcoming
+If you want to stay up to date – join the official [libGDX Discord](/community/discord/)!
 
 ## June 2026
 ***The Pixel Playground Jam***  
@@ -62,6 +53,7 @@ We encourage camaraderie, teamwork, and good sportsmanship with a side of well-i
 <br/>
 
 # Past Jams
+* [That's a Weapon?](https://itch.io/jam/libgdx-jam-36) (March 2026)
 * [BRIDGES](https://itch.io/jam/libgdx-jam-35) (December 2025)
 * [Dungeons](https://itch.io/jam/libgdx-jam-34) (September 2025)
 * [Nature's Revenge](https://itch.io/jam/libgdx-jam-33) (June 2025)
